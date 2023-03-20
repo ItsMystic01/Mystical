@@ -1,0 +1,18 @@
+---
+- name: "Admin"
+  prefix: "&4[&cAdmin&4]"
+  permissions:
+  - "example.permission1"
+  - "example.permission2"
+  isDefault: false
+- name: "Moderator"
+  prefix: "&1[&9Moderator&1]"
+  permissions:
+  - "example.permission3"
+  - "example.permission4"
+  isDefault: false
+- name: "Member"
+  prefix: "&f[&cMember&f]"
+  permissions:
+    - "example.permission3"
+  isDefault: false
