@@ -1,5 +1,6 @@
 package mys.serone.mystical.commands;
 
+import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -11,9 +12,12 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
 public class Rename implements CommandExecutor {
-    public ChatFunctions chatFunctions = new ChatFunctions();
+    private final Mystical PLUGIN;
+
+    public Rename(Mystical plugin) { this.PLUGIN = plugin; }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
         if (!(sender instanceof Player)) {
             return true;
         }

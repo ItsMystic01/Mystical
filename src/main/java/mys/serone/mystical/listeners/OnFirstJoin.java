@@ -13,7 +13,6 @@ import java.sql.*;
 
 public class OnFirstJoin implements Listener {
     private final Mystical PLUGIN;
-    public ChatFunctions chatFunctions = new ChatFunctions();
 
     public OnFirstJoin(Mystical plugin) {
         this.PLUGIN = plugin;
@@ -21,6 +20,7 @@ public class OnFirstJoin implements Listener {
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
         Player player = event.getPlayer();
         String uuid = player.getUniqueId().toString();
 

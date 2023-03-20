@@ -21,11 +21,13 @@ import java.util.List;
 
 public class Menu implements Listener, CommandExecutor {
 
+    private final Mystical PLUGIN;
+
     public Menu(Mystical plugin) {
         Bukkit.getPluginManager().registerEvents(this, plugin);
+        this.PLUGIN = plugin;
     }
 
-    public ChatFunctions chatFunctions = new ChatFunctions();
     @EventHandler
     public void onInventoryClick(InventoryClickEvent event) {
         if(!event.getView().getTitle().equals("Menu")) {
@@ -43,9 +45,9 @@ public class Menu implements Listener, CommandExecutor {
         event.setCancelled(true);
     }
 
-
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+            ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
         if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can run this command");
             return true;

@@ -1,5 +1,6 @@
 package mys.serone.mystical.rankSystem;
 
+import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
@@ -7,7 +8,6 @@ import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-
 import java.io.File;
 import java.io.IOException;
 import java.sql.Connection;
@@ -21,23 +21,45 @@ import java.util.List;
 public class RanksManager {
     private final List<Rank> RANKS;
     private final File RANKS_FILE;
-    public ChatFunctions chatFunctions = new ChatFunctions();
+    private final Mystical PLUGIN;
 
-    public RanksManager(File ranksFile) {
-        this.RANKS_FILE = ranksFile;
+    public RanksManager(Mystical plugin) {
+        this.PLUGIN = plugin;
+        this.RANKS_FILE = new File(plugin.getDataFolder().getAbsolutePath() + "/ranks.yml");
+        if (!RANKS_FILE.exists()) {
+            try {
+                boolean created = RANKS_FILE.createNewFile();
+                if (created) {
+                    System.out.println("File created successfully");
+                } else {
+                    System.out.println("File already exists");
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
         this.RANKS = loadRanksFromFile();
     }
 
     private List<Rank> loadRanksFromFile() {
+        List<Rank> ranks = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
-            return mapper.readValue(RANKS_FILE, new TypeReference<List<Rank>>() {
-            });
-        } catch (IOException e) {
+            if (RANKS_FILE.length() == 0) {
+                System.out.println("Ranks file is empty.");
+                return ranks;
+            }
+            ranks = mapper.readValue(RANKS_FILE, new TypeReference<List<Rank>>() {});
+        } catch (JsonParseException e) {
+            System.out.println("Ranks file has invalid formatting.");
             e.printStackTrace();
-            return new ArrayList<>();
+        } catch (IOException e) {
+            System.out.println("Error loading ranks file.");
+            e.printStackTrace();
         }
+        return ranks;
     }
+
 
     public List<Rank> getRanks() {
         return RANKS;
@@ -62,9 +84,9 @@ public class RanksManager {
     }
 
     public void addRank(Mystical plugin, Player player, Rank rank, CommandSender sender) {
-
-            String playerUUID = player.getUniqueId().toString();
-            try(Connection connection = plugin.getConnection()) {
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
+        String playerUUID = player.getUniqueId().toString();
+        try(Connection connection = plugin.getConnection()) {
             PreparedStatement statement = connection.prepareStatement("SELECT player_rank FROM player_info WHERE player_uuid = ?");
             statement.setString(1, playerUUID);
             ResultSet resultSet = statement.executeQuery();

@@ -1,6 +1,5 @@
 package mys.serone.mystical.commands;
 
-import mys.serone.mystical.functions.ChatFunctions;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -15,8 +14,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class Kit implements CommandExecutor {
-
-    public ChatFunctions chatFunctions = new ChatFunctions();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {

@@ -1,5 +1,6 @@
 package mys.serone.mystical.permissionCommands;
 
+import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
@@ -14,11 +15,12 @@ import java.util.List;
 import java.util.Set;
 
 public class PlayerPermission implements CommandExecutor {
+    private final Mystical PLUGIN;
 
-    public ChatFunctions chatFunctions = new ChatFunctions();
+    public PlayerPermission(Mystical plugin) { this.PLUGIN = plugin; }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
         Player player = Bukkit.getPlayer(sender.getName());
 
         if (player == null) {

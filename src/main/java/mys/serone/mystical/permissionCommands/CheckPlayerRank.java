@@ -16,14 +16,13 @@ import java.util.List;
 
 public class CheckPlayerRank implements CommandExecutor {
     private final Mystical PLUGIN;
-    public ChatFunctions chatFunctions = new ChatFunctions();
     public CheckPlayerRank(Mystical plugin) {
         this.PLUGIN = plugin;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
         if (args.length < 1) { chatFunctions.commandSyntaxError( (Player) sender, "/checkPlayerRank [username]"); return true; }
         Player player = PLUGIN.getServer().getPlayer(args[0]);
         if (player == null) { chatFunctions.rankChat((Player) sender, "Player not found."); return true; }

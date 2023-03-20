@@ -14,12 +14,11 @@ public class Pay implements CommandExecutor {
     public Pay(Mystical plugin) {
         this.PLUGIN = plugin;
     }
-
-    public ChatFunctions chatFunctions = new ChatFunctions();
     public EconomyFunctions economyFunctions = new EconomyFunctions();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
         if (!(sender instanceof Player)) {
             return true;
         }

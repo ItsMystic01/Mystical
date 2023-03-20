@@ -25,23 +25,23 @@ public class CommandEntry {
         new NPCHandler();
 
         CommandExecutor[] commandExecutors = {
-                new Fly(),
-                new Creative(),
+                new Fly(plugin),
+                new Creative(plugin),
                 new Kit(),
                 new Menu(plugin),
-                new Spawn(spawnUtil),
-                new SetSpawn(spawnUtil),
-                new Rename(),
-                new Help(plugin),
+                new Spawn(plugin, spawnUtil),
+                new SetSpawn(plugin, spawnUtil),
+                new Rename(plugin),
+                new Help(plugin, plugin),
                 new Balance(plugin),
                 new GiveCoins(plugin),
                 new RemoveCoins(plugin),
                 new Pay(plugin),
-                new PlayerPermission(),
+                new PlayerPermission(plugin),
                 new GiveRank(plugin),
-                new CheckAllRank(),
-                new CreateRank(),
-                new DeleteRank(),
+                new CheckAllRank(plugin),
+                new CreateRank(plugin),
+                new DeleteRank(plugin),
                 new CheckPlayerRank(plugin),
                 new Message(plugin)
         };

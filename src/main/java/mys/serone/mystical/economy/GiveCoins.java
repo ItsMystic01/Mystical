@@ -9,13 +9,10 @@ import org.jetbrains.annotations.NotNull;
 
 public class GiveCoins implements CommandExecutor {
     private final Mystical PLUGIN;
-    public ChatFunctions chatFunctions = new ChatFunctions();
-    public GiveCoins(Mystical plugin) {
-        this.PLUGIN = plugin;
-    }
-
+    public GiveCoins(Mystical plugin) { this.PLUGIN = plugin; }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
 
         Player player = (Player) sender;
 

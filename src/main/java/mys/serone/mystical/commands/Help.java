@@ -1,5 +1,6 @@
 package mys.serone.mystical.commands;
 
+import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -14,13 +15,15 @@ import java.util.Map;
 
 public class Help implements CommandExecutor {
     private final JavaPlugin PLUGIN;
-    public ChatFunctions chatFunctions = new ChatFunctions();
-    public Help(JavaPlugin plugin) {
-        this.PLUGIN = plugin;
+    private final Mystical Plugin;
+    public Help(JavaPlugin javaPlugin, Mystical plugin) {
+        this.PLUGIN = javaPlugin;
+        this.Plugin = plugin;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        ChatFunctions chatFunctions = new ChatFunctions(Plugin);
         if (!(sender instanceof Player)) {
             return true;
         }

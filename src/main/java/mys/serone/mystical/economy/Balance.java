@@ -12,14 +12,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class Balance implements CommandExecutor {
-    public ChatFunctions chatFunctions = new ChatFunctions();
     private final Mystical PLUGIN;
-    public Balance(Mystical plugin) {
-        this.PLUGIN = plugin;
-    }
 
+    public Balance(Mystical plugin) { this.PLUGIN = plugin; }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
         if (!(sender instanceof Player)) {
             sender.sendMessage("Only players can use this command.");
             return true;

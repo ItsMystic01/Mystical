@@ -1,18 +1,21 @@
 package mys.serone.mystical.functions;
 
+import mys.serone.mystical.Mystical;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import java.io.File;
 import java.util.List;
 
 public class ChatFunctions {
 
+    private final Mystical PLUGIN;
     public static final String ECONOMY_PREFIX = "&6[&aEconomy&6] &l| ";
     public static final String SYNTAX_ERROR_PREFIX = "&b[&3Syntax Error&b] &l| ";
     public static final String GENERAL_PREFIX = "&6[&eServer&6] &l| ";
     public static final String PERMISSION_PREFIX = "&b[&3Permission&b] &l| ";
     public static final String RANK_PREFIX = "&b[&3Rank&b] &l| ";
+
+    public ChatFunctions(Mystical plugin) { this.PLUGIN = plugin; }
 
     public void informationChat(Player player, String message) {
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', GENERAL_PREFIX + "&f" + message));
@@ -45,7 +48,7 @@ public class ChatFunctions {
     }
 
     public void playerRankChat(Player player, List<String> rank) {
-        RanksManager ranksManager = new RanksManager(new File("C:/Users/ItsMystic01/Downloads/MyJava/Spigot/src/main/resources/ranks.yml"));
+        RanksManager ranksManager = new RanksManager(PLUGIN);
         StringBuilder userRank = new StringBuilder();
         for ( String perRank : rank ) {
             userRank.append(ranksManager.getRank(perRank).getPrefix());

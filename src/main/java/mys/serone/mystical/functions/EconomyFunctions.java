@@ -8,7 +8,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 
 public class EconomyFunctions {
-    public ChatFunctions chatFunctions = new ChatFunctions();
+    public ChatFunctions chatFunctions = new ChatFunctions(null);
     public void updateCoins(Mystical plugin, Player player, Player target, String targetUuid, double amount, Command command) {
 
         try (PreparedStatement statement = plugin.getConnection().prepareStatement(

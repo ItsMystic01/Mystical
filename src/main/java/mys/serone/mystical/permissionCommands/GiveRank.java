@@ -10,18 +10,15 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.io.File;
-
 public class GiveRank implements CommandExecutor {
     private final Mystical PLUGIN;
     public GiveRank(Mystical plugin) {
         this.PLUGIN = plugin;
     }
-    public ChatFunctions chatFunctions = new ChatFunctions();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
         if (args.length < 2) { chatFunctions.commandSyntaxError( (Player) sender, "/giveRank [Player] [Rank Name]"); return true; }
 
         Player player = PLUGIN.getServer().getPlayer(args[0]);
@@ -29,7 +26,7 @@ public class GiveRank implements CommandExecutor {
 
         String rankName = args[1];
 
-        RanksManager ranksManager = new RanksManager(new File("C:/Users/ItsMystic01/Downloads/MyJava/Spigot/src/main/resources/ranks.yml"));
+        RanksManager ranksManager = new RanksManager(PLUGIN);
 
         Rank rank = ranksManager.getRank(rankName);
         if (rank == null) { chatFunctions.rankChat((Player) sender, "Rank does not exist"); return true; }
