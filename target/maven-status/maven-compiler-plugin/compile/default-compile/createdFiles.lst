@@ -22,7 +22,6 @@ mys\serone\mystical\util\ConfigUtil.class
 mys\serone\mystical\permissionCommands\CheckAllRank.class
 mys\serone\mystical\permissionCommands\PlayerPermission.class
 mys\serone\mystical\rankSystem\RanksManager.class
-mys\serone\mystical\handlers\NPCHandler.class
 mys\serone\mystical\handlers\Menu.class
 mys\serone\mystical\functions\EconomyFunctions.class
 mys\serone\mystical\listeners\OnFirstJoin.class

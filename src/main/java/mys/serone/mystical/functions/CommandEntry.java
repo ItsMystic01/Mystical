@@ -7,7 +7,6 @@ import mys.serone.mystical.economy.GiveCoins;
 import mys.serone.mystical.economy.Pay;
 import mys.serone.mystical.economy.RemoveCoins;
 import mys.serone.mystical.handlers.Menu;
-import mys.serone.mystical.handlers.NPCHandler;
 import mys.serone.mystical.handlers.TorchHandler;
 import mys.serone.mystical.permissionCommands.*;
 import mys.serone.mystical.util.SpawnUtil;
@@ -22,7 +21,6 @@ public class CommandEntry {
 
         SpawnUtil spawnUtil = new SpawnUtil(plugin);
         new TorchHandler(plugin);
-        new NPCHandler();
 
         CommandExecutor[] commandExecutors = {
                 new Fly(plugin),

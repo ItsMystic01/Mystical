@@ -81,10 +81,6 @@
           <id>sonatype</id>
           <url>https://oss.sonatype.org/content/groups/public/</url>
       </repository>
-      <repository>
-          <id>citizens-repo</id>
-          <url>https://maven.citizensnpcs.co/repo</url>
-      </repository>
   </repositories>
 
   <dependencies>
@@ -109,12 +105,6 @@
           <artifactId>annotations</artifactId>
           <version>24.0.0</version>
           <scope>compile</scope>
-      </dependency>
-      <dependency>
-          <groupId>net.citizensnpcs</groupId>
-          <artifactId>citizensapi</artifactId>
-          <version>2.0.31-SNAPSHOT</version>
-          <scope>provided</scope>
       </dependency>
   </dependencies>
 </project>
