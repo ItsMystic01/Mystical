@@ -1,26 +1,22 @@
 package mys.serone.mystical.economy;
 
 import mys.serone.mystical.Mystical;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
+import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
+import org.bukkit.command.*;
 import org.bukkit.entity.Player;
-import mys.serone.mystical.functions.*;
 import org.jetbrains.annotations.NotNull;
 
 public class RemoveCoins implements CommandExecutor {
     private final Mystical PLUGIN;
-    public RemoveCoins(Mystical plugin) {
-        this.PLUGIN = plugin;
-    }
-
+    public RemoveCoins(Mystical plugin) { this.PLUGIN = plugin; }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
 
         Player player = (Player) sender;
 
-        if(!(player.hasPermission("mystic.playerCoins.manageCoins"))) { chatFunctions.commandPermissionError(player); return false; }
+        if(!(player.hasPermission("mystic.playerCoins.manageCoins"))) { chatFunctions.commandPermissionError(player); return true; }
 
         if (args.length < 2) {
             chatFunctions.commandSyntaxError(player, "/removeCoins [player] [amount]");
@@ -46,9 +42,12 @@ public class RemoveCoins implements CommandExecutor {
 
         String userUUID = player.getUniqueId().toString();
 
-        EconomyFunctions economyFunctions = new EconomyFunctions();
-        economyFunctions.updateCoins(PLUGIN, player, target, userUUID, amount, command);
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
+        double userCoins = playerInfoManager.getPlayerCoins(userUUID);
+        double newBalance = userCoins - amount;
+        playerInfoManager.updatePlayerCoins(userUUID, newBalance);
 
+        chatFunctions.adminEconomyChat(player, target, "Deducted", newBalance, amount);
         return true;
     }
 }

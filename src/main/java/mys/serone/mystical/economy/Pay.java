@@ -2,7 +2,7 @@ package mys.serone.mystical.economy;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
-import mys.serone.mystical.functions.EconomyFunctions;
+import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -14,7 +14,6 @@ public class Pay implements CommandExecutor {
     public Pay(Mystical plugin) {
         this.PLUGIN = plugin;
     }
-    public EconomyFunctions economyFunctions = new EconomyFunctions();
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
@@ -52,7 +51,20 @@ public class Pay implements CommandExecutor {
             return true;
         }
 
-        economyFunctions.payCoins(PLUGIN, player, recipient, senderUuid, recipientUuid, amount);
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
+        Double senderCoins = playerInfoManager.getPlayerCoins(senderUuid);
+        Double recipientCoins = playerInfoManager.getPlayerCoins(recipientUuid);
+
+        if (senderCoins < amount) { chatFunctions.commandSyntaxError(player, "Insufficient Balance."); return true;}
+
+
+        Double senderNewBalance = senderCoins - amount;
+        playerInfoManager.updatePlayerCoins(senderUuid, senderNewBalance);
+
+        Double recipientNewBalance = recipientCoins + amount;
+        playerInfoManager.updatePlayerCoins(recipientUuid, recipientNewBalance);
+        player.sendMessage(chatFunctions.payerEconomyChat(recipient, amount));
+        recipient.sendMessage(chatFunctions.recipientEconomyChat(player, amount));
 
         return true;
     }

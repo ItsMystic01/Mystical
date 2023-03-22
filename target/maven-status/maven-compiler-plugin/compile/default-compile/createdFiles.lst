@@ -2,6 +2,8 @@ mys\serone\mystical\economy\Pay.class
 mys\serone\mystical\commands\Rename.class
 mys\serone\mystical\handlers\TorchHandler.class
 mys\serone\mystical\permissionCommands\CheckPlayerRank.class
+mys\serone\mystical\playerInfoSystem\PlayerInfoManager.class
+mys\serone\mystical\ConfigurationSystem\Configuration.class
 mys\serone\mystical\commands\Fly.class
 mys\serone\mystical\commands\Message.class
 mys\serone\mystical\commands\Creative.class
@@ -19,13 +21,16 @@ mys\serone\mystical\commands\SetSpawn.class
 mys\serone\mystical\commands\Spawn.class
 mys\serone\mystical\permissionCommands\DeleteRank.class
 mys\serone\mystical\util\ConfigUtil.class
+mys\serone\mystical\ConfigurationSystem\ConfigurationManager$1.class
 mys\serone\mystical\permissionCommands\CheckAllRank.class
 mys\serone\mystical\permissionCommands\PlayerPermission.class
 mys\serone\mystical\rankSystem\RanksManager.class
 mys\serone\mystical\handlers\Menu.class
-mys\serone\mystical\functions\EconomyFunctions.class
 mys\serone\mystical\listeners\OnFirstJoin.class
 mys\serone\mystical\Mystical.class
+mys\serone\mystical\playerInfoSystem\PlayerInfoManager$1.class
+mys\serone\mystical\ConfigurationSystem\ConfigurationManager.class
+mys\serone\mystical\playerInfoSystem\PlayerInfo.class
 mys\serone\mystical\util\SpawnUtil.class
 mys\serone\mystical\commands\Help.class
 mys\serone\mystical\commands\Kit.class

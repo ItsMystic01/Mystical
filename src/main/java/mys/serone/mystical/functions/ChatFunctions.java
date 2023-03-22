@@ -30,9 +30,9 @@ public class ChatFunctions {
     }
 
     public void adminEconomyChat(Player player, Player target, String status, double newBalance, double amount) {
-        target.sendMessage(ChatColor.translateAlternateColorCodes('&', ECONOMY_PREFIX + "&a$" + amount + "&f has been " + status.toLowerCase() + " to your account."));
+        target.sendMessage(ChatColor.translateAlternateColorCodes('&', ECONOMY_PREFIX + "&fBalance " + status + ": &a$" + amount));
         target.sendMessage(ChatColor.translateAlternateColorCodes('&', ECONOMY_PREFIX + "&fBalance: &a$" + newBalance));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', ECONOMY_PREFIX + "&f" + status + " Balance to &c" + target.getName() + "&r&f: &a$" + amount));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', ECONOMY_PREFIX + "&fBalance " + status + " &c(" + target.getName() + ")&r&f: &a$" + amount));
     }
 
     public void balanceEconomyChat(Player player, double balance) {
@@ -51,7 +51,13 @@ public class ChatFunctions {
         RanksManager ranksManager = new RanksManager(PLUGIN);
         StringBuilder userRank = new StringBuilder();
         for ( String perRank : rank ) {
-            userRank.append(ranksManager.getRank(perRank).getPrefix());
+            String rankPrefix;
+            if (ranksManager.getRank(perRank) == null || ranksManager.getRank(perRank).getPrefix() == null) {
+                rankPrefix = "&c[&fInvalid Rank&c]";
+            } else {
+                rankPrefix = ranksManager.getRank(perRank).getPrefix();
+            }
+            userRank.append(rankPrefix);
             userRank.append(" ");
         }
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', RANK_PREFIX + "&r" + userRank));

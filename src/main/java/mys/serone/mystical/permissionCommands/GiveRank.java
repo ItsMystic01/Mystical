@@ -2,6 +2,7 @@ package mys.serone.mystical.permissionCommands;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.Rank;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.command.Command;
@@ -30,7 +31,11 @@ public class GiveRank implements CommandExecutor {
 
         Rank rank = ranksManager.getRank(rankName);
         if (rank == null) { chatFunctions.rankChat((Player) sender, "Rank does not exist"); return true; }
-        ranksManager.addRank(PLUGIN, player, rank, sender);
+
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
+
+        playerInfoManager.updatePlayerRankList(player, sender, rankName);
+
         return true;
     }
 }

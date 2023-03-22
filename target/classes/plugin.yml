@@ -7,8 +7,6 @@ commands:
   fly:
     description: Toggles fly.
     aliases: [ flight ]
-    permission: fly
-    permission-message: No permission
   creative:
     description: Toggles game mode.
     aliases: [ gm1 ]

@@ -2,7 +2,7 @@ package mys.serone.mystical.economy;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
-import mys.serone.mystical.functions.EconomyFunctions;
+import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public class GiveCoins implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if(!(player.hasPermission("mystic.playerCoins.manageCoins"))) { chatFunctions.commandPermissionError(player); return false; }
+        if(!(player.hasPermission("mystical.manageCoins"))) { chatFunctions.commandPermissionError(player); return true; }
 
         if (args.length < 2) {
             chatFunctions.commandSyntaxError(player, "/giveCoins [player] [amount]");
@@ -40,12 +40,14 @@ public class GiveCoins implements CommandExecutor {
             return true;
         }
 
-        String userUUID = player.getUniqueId().toString();
+        String userUUID = target.getUniqueId().toString();
 
-        EconomyFunctions economyFunctions = new EconomyFunctions();
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
+        double userCoins = playerInfoManager.getPlayerCoins(userUUID);
+        double newBalance = userCoins + amount;
+        playerInfoManager.updatePlayerCoins(userUUID, newBalance);
 
-        economyFunctions.updateCoins(PLUGIN, player, target, userUUID, amount, command);
-
+        chatFunctions.adminEconomyChat(player, target, "Added", newBalance, amount);
         return true;
     }
 }
