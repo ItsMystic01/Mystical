@@ -1,0 +1,63 @@
+name: Mystical
+version: '${project.version}'
+main: mys.serone.mystical.Mystical
+api-version: 1.18
+authors: [ ItsMystic01 ]
+commands:
+  fly:
+    description: Toggles fly.
+    aliases: [ flight ]
+  creative:
+    description: Toggles game mode.
+    aliases: [ gm1 ]
+  kit:
+    description: Gives a kit
+    aliases: [ kits ]
+  menu:
+    description: Opens up a menu.
+    aliases: [ menus, selector ]
+  spawn:
+    description: Teleports you to the server spawn.
+    aliases: [ s ]
+  setSpawn:
+    description: Sets the server spawn.
+    aliases: [ spawnset ]
+  rename:
+    description: Rename an item in hand.
+    aliases: [ itemrename ]
+  help:
+    description: Shows all the list of commands available.
+    aliases: [ commands ]
+  balance:
+    description: Shows the balance of the user.
+    aliases: [ coins ]
+  giveCoins:
+    description: Gives coins to a user's balance.
+    aliases: [ addbalance ]
+  removeCoins:
+    description: Removes coins from a user's balance.
+    aliases: [ removebalance ]
+  pay:
+    description: Pay mentioned user a desired amount within balance.
+    aliases: [ expend ]
+  playerPermission:
+    description: Gets all the permission a certain player has.
+    aliases: [ permissionplayer ]
+  giveRank:
+    description: Gives rank to a certain player.
+    aliases: [ giverole ]
+  checkAllRank:
+    description: Gives all existing ranks.
+    aliases: [ rankall, allrank ]
+  createRank:
+    description: Creates a new rank.
+    aliases: [ newrank ]
+  deleteRank:
+    description: Deletes an existing rank.
+    aliases: [ eradicaterank ]
+  checkPlayerRank:
+    description: Checks the rank a certain player has.
+    aliases: [ playerrank ]
+  message:
+    description: Messages a user privately.
+    aliases: [ msg, tell ]
