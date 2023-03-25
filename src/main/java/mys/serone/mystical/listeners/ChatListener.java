@@ -31,7 +31,10 @@ public class ChatListener implements Listener {
         String prefix;
         try {
             prefix = ranksManager.getRank(playerRankList.get(0)).getPrefix();
-        } catch (NullPointerException e) {
+            if (prefix == null) {
+                prefix = "&4[&cRank Not Found&4]";
+            }
+        } catch (Exception e) {
             prefix = "&4[&cRank Not Found&4]";
         }
 

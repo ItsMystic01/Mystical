@@ -16,7 +16,7 @@ public class RemoveCoins implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if(!(player.hasPermission("mystic.playerCoins.manageCoins"))) { chatFunctions.commandPermissionError(player); return true; }
+        if(!(player.hasPermission("mystical.manageCoins"))) { chatFunctions.commandPermissionError(player); return true; }
 
         if (args.length < 2) {
             chatFunctions.commandSyntaxError(player, "/removeCoins [player] [amount]");

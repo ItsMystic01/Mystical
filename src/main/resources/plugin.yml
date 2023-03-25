@@ -64,3 +64,6 @@ commands:
   giveItem:
     description: Gives the user an item
     aliases: [ gt ]
+  giveKit:
+    description: Gives the user their kit
+    aliases: [ gk ]

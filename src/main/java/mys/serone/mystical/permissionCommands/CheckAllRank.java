@@ -20,10 +20,9 @@ public class CheckAllRank implements CommandExecutor {
         List<Rank> allRanks = ranksManager.getRanks();
 
         for (Rank rank : allRanks) {
-            sender.sendMessage(rank.getName());
-            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', rank.getPrefix()));
-            sender.sendMessage(rank.getPermissions().toString());
-            sender.sendMessage(String.valueOf(rank.getIsDefault()));
+            String rankPrefix = rank.getPrefix();
+            if (rankPrefix == null) { rankPrefix = "&c[&fInvalid Rank&c]"; System.out.println("Incomplete/Invalid rank format in ranks.yml"); }
+            sender.sendMessage(ChatColor.translateAlternateColorCodes('&', rankPrefix));
         }
         return true;
     }

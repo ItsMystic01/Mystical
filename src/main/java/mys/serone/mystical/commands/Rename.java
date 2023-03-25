@@ -29,7 +29,6 @@ public class Rename implements CommandExecutor {
             chatFunctions.commandSyntaxError(player, "You need to hold an item in your hand.");
             return true;
         }
-
         if (args.length < 1) {
             chatFunctions.commandSyntaxError(player, "/rename [name]");
             return true;

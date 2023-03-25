@@ -42,9 +42,11 @@ public class RanksManager {
             ranks = mapper.readValue(RANKS_FILE, new TypeReference<List<Rank>>() {});
         } catch (JsonParseException e) {
             System.out.println("Ranks file has invalid formatting.");
+            System.out.println(e.getMessage());
             e.printStackTrace();
         } catch (IOException e) {
             System.out.println("Error loading ranks file.");
+            System.out.println(e.getMessage());
             e.printStackTrace();
         }
         return ranks;
