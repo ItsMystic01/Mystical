@@ -41,7 +41,8 @@ public class CommandEntry {
                 new CreateRank(plugin),
                 new DeleteRank(plugin),
                 new CheckPlayerRank(plugin),
-                new Message(plugin)
+                new Message(plugin),
+                new GiveKit(plugin)
         };
 
         for (CommandExecutor executor : commandExecutors) {
