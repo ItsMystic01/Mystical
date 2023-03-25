@@ -61,3 +61,6 @@ commands:
   message:
     description: Messages a user privately.
     aliases: [ msg, tell ]
+  giveItem:
+    description: Gives the user an item
+    aliases: [ gt ]
