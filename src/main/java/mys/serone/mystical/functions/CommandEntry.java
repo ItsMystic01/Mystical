@@ -42,7 +42,7 @@ public class CommandEntry {
                 new DeleteRank(plugin),
                 new CheckPlayerRank(plugin),
                 new Message(plugin),
-                new GiveKit(plugin)
+                new GiveItem(plugin)
         };
 
         for (CommandExecutor executor : commandExecutors) {
