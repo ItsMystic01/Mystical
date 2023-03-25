@@ -6,6 +6,7 @@ import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
 import mys.serone.mystical.playerInfoSystem.PlayerInfo;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
+import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -59,7 +60,15 @@ public class OnFirstJoin implements Listener {
             uuidList.add(userUUID);
         }
 
-        if (!(uuidList.contains(uuid))) {
+        if (uuidList.contains(uuid)) {
+            List<String> playerJoinedRankList = playerInfoManager.getPlayerRankList(uuid);
+            RanksManager ranksManager = new RanksManager(PLUGIN);
+            for (String rank : playerJoinedRankList) {
+                for (String rankPerm : ranksManager.getRank(rank).getPermissions()) {
+                    player.addAttachment(PLUGIN, rankPerm, true);
+                }
+            }
+        } else {
             List<String> defaultRank = new ArrayList<>();
             defaultRank.add(finalDefaultRank);
             playerInfo.setUserCoins(1000.0);
@@ -67,6 +76,7 @@ public class OnFirstJoin implements Listener {
             playerInfo.setPlayerUUID(uuid);
             playerInfoManager.createPlayerInfo(playerInfo);
             chatFunctions.informationChat(player, "You have received &a$1000&f coins for your first join.");
+
         }
     }
 }
