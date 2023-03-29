@@ -19,9 +19,14 @@ public class Message implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
+        RanksManager ranksManager = new RanksManager(PLUGIN);
+
         if (!(sender instanceof Player)) {
             return true;
         }
+
+        if (!sender.hasPermission("mystical.message")) { chatFunctions.commandPermissionError((Player) sender); return true; }
 
         Player player = (Player) sender;
 
@@ -35,17 +40,14 @@ public class Message implements CommandExecutor {
         String playerUUID = player.getUniqueId().toString();
         String targetUUID = targetPlayer.getUniqueId().toString();
 
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
         List<String> senderRankList = playerInfoManager.getPlayerRankList(playerUUID);
         List<String> recipientRankList = playerInfoManager.getPlayerRankList(targetUUID);
 
-        RanksManager ranksManager = new RanksManager(PLUGIN);
         String senderPrefix = ranksManager.getRank(senderRankList.get(0)).getPrefix();
         String recipientPrefix = ranksManager.getRank(recipientRankList.get(0)).getPrefix();
         String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
         chatFunctions.messageChat(player, senderPrefix, targetPlayer, recipientPrefix, message);
-
 
         return true;
     }

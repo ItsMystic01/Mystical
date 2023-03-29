@@ -5,6 +5,7 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import mys.serone.mystical.Mystical;
+import mys.serone.mystical.functions.ChatFunctions;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import java.io.File;
@@ -106,9 +107,10 @@ public class PlayerInfoManager {
     }
 
     public void updatePlayerRankList(Player player, CommandSender sender, String rankToAdd) {
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
         PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
          List<String> playerRankList = playerInfoManager.getPlayerRankList(player.getUniqueId().toString());
-         if (playerRankList.contains(rankToAdd)) { sender.sendMessage(player.getDisplayName() + " already has that rank.");}
+         if (playerRankList.stream().anyMatch(s -> s.equalsIgnoreCase(rankToAdd))) { chatFunctions.rankChat((Player) sender, player.getDisplayName() + " already has that rank."); }
          playerRankList.add(rankToAdd);
          savePlayerInfoToFile();
     }

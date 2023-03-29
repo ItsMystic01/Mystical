@@ -14,7 +14,7 @@ public class ChatFunctions {
     public static final String GENERAL_PREFIX = "&6[&eServer&6] &l| ";
     public static final String PERMISSION_PREFIX = "&b[&3Permission&b] &l| ";
     public static final String RANK_PREFIX = "&b[&3Rank&b] &l| ";
-
+    public static final String CONFIGURATION_ERROR_PREFIX = "&f[&cMystical&f] &l| &r";
     public ChatFunctions(Mystical plugin) { this.PLUGIN = plugin; }
 
     public void informationChat(Player player, String message) {
@@ -72,6 +72,10 @@ public class ChatFunctions {
                 + targetPlayer.getDisplayName() + "&7: ") + message);
         targetPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', "&dFrom &r" + targetPrefix +
                 " " + player.getDisplayName() + "&7: ") + message);
+    }
+
+    public void configurationError(Player player, String message) {
+        player.sendMessage(CONFIGURATION_ERROR_PREFIX + message);
     }
 
 }

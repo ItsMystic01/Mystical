@@ -19,14 +19,15 @@ public class ChatListener implements Listener {
 
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
+
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
+        RanksManager ranksManager = new RanksManager(PLUGIN);
+
         Player player = event.getPlayer();
         String message = event.getMessage();
         String playerUUID = player.getUniqueId().toString();
 
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
         List<String> playerRankList = playerInfoManager.getPlayerRankList(playerUUID);
-
-        RanksManager ranksManager = new RanksManager(PLUGIN);
 
         String prefix;
         try {

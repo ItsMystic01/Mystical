@@ -18,9 +18,12 @@ public class Pay implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
         if (!(sender instanceof Player)) {
             return true;
         }
+
+        if (!sender.hasPermission("mystical.pay")) { chatFunctions.commandPermissionError((Player) sender); return true; }
 
         Player player = (Player) sender;
         if (args.length != 2) {
@@ -51,12 +54,10 @@ public class Pay implements CommandExecutor {
             return true;
         }
 
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
         Double senderCoins = playerInfoManager.getPlayerCoins(senderUuid);
         Double recipientCoins = playerInfoManager.getPlayerCoins(recipientUuid);
 
         if (senderCoins < amount) { chatFunctions.commandSyntaxError(player, "Insufficient Balance."); return true;}
-
 
         Double senderNewBalance = senderCoins - amount;
         playerInfoManager.updatePlayerCoins(senderUuid, senderNewBalance);

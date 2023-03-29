@@ -1,5 +1,10 @@
 package mys.serone.mystical.commands;
 
+import mys.serone.mystical.Mystical;
+import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
+import mys.serone.mystical.rankSystem.Rank;
+import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.command.Command;
@@ -7,103 +12,107 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
+import java.util.List;
 
 public class Kit implements CommandExecutor {
+    private final Mystical PLUGIN;
+
+    public Kit(Mystical plugin) {
+        this.PLUGIN = plugin;
+    }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            return true;
-        }
+
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
+        RanksManager ranksManager = new RanksManager(PLUGIN);
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
 
         Player player = (Player) sender;
 
-        Map<Enchantment, Integer> weaponEnchantmentList = new HashMap<>();
+        if (!sender.hasPermission("mystical.kit")) { chatFunctions.commandPermissionError((Player) sender); return true; }
 
-        weaponEnchantmentList.put(Enchantment.DAMAGE_ALL, 5);
-        weaponEnchantmentList.put(Enchantment.DURABILITY, 5);
-        weaponEnchantmentList.put(Enchantment.LOOT_BONUS_MOBS, 4);
-        weaponEnchantmentList.put(Enchantment.FIRE_ASPECT, 3);
-        weaponEnchantmentList.put(Enchantment.MENDING, 1);
+        List<String> list = playerInfoManager.getPlayerRankList(player.getUniqueId().toString());
 
-        ItemStack weaponPiece = new ItemStack(Material.NETHERITE_SWORD, 1);
-        weaponPiece.addUnsafeEnchantments(weaponEnchantmentList);
-        ItemMeta weaponPieceMeta = weaponPiece.getItemMeta();
+        if (args.length < 1) { chatFunctions.commandSyntaxError(player, "Usage: /kit [rank]"); return true;}
+        String rankKitToGet = args[0];
+        Rank rank = ranksManager.getRank(rankKitToGet);
+        if (rank == null) { chatFunctions.rankChat(player, "Kit does not exist."); return true; }
+        if (list.stream().noneMatch(s -> s.equalsIgnoreCase(rankKitToGet))) { chatFunctions.rankChat(player, "You do not have access to that rank kit."); return true; }
 
-        assert weaponPieceMeta != null;
-
-        StringBuilder weaponNewName = new StringBuilder();
-
-        String[] weaponSplitName = Material.NETHERITE_SWORD.name().toLowerCase().split("_");
-        for (String itemName : weaponSplitName) {
-            weaponNewName.append(itemName.substring(0, 1).toUpperCase()).append(itemName.substring(1)).append(" ");
+        List<Map<String, Object>> kit = rank.getKit();
+        if (kit == null || kit.size() == 0) {
+            System.out.println(rank.getName() + " does not have a kit in ranks.yml");
+            chatFunctions.informationChat(player, rank.getName() + " does not have an existing rank.");
+            return true;
         }
+        String kitName = rank.getKitName();
 
-        weaponPieceMeta.setDisplayName(ChatColor.BLUE + weaponNewName.toString());
-        weaponPiece.setItemMeta(weaponPieceMeta);
-        player.getInventory().addItem(weaponPiece);
+        String itemName;
+        Material materialName = null;
+        String enchantmentNameLowerCase;
+        int enchantmentLevel;
 
-        Object[] toolList = {Material.NETHERITE_PICKAXE, Material.NETHERITE_SHOVEL, Material.NETHERITE_AXE};
-        Object[] armorList = {Material.NETHERITE_HELMET, Material.NETHERITE_CHESTPLATE, Material.NETHERITE_LEGGINGS, Material.NETHERITE_BOOTS};
+        for (Map<String, Object> firstMap : kit) {
+            itemName = firstMap.keySet().toString().replace("[", "").replace("]", "");
+            String[] itemAttributes = firstMap.get(itemName).toString().replace("[", "").replace("]", "").split(", ");
+            List<String> listOfEnchantments = new ArrayList<>();
+            List<Integer> listOfLevels = new ArrayList<>();
+            for (String enchantAndLevel : itemAttributes) {
 
-        for (Object toolItem : toolList) {
-            Map<Enchantment, Integer> toolEnchantmentList = new HashMap<>();
+                try {
+                    String[] separatedEnchantAndLevel = enchantAndLevel.split(":");
 
-            toolEnchantmentList.put(Enchantment.DIG_SPEED, 5);
-            toolEnchantmentList.put(Enchantment.DURABILITY, 5);
-            toolEnchantmentList.put(Enchantment.LOOT_BONUS_BLOCKS, 4);
-            toolEnchantmentList.put(Enchantment.MENDING, 1);
-
-            ItemStack toolPiece = new ItemStack((Material) toolItem, 1);
-            toolPiece.addUnsafeEnchantments(toolEnchantmentList);
-            ItemMeta toolPieceMeta = toolPiece.getItemMeta();
-
-            assert toolPieceMeta != null;
-
-            StringBuilder itemNewName = new StringBuilder();
-
-            String[] splitItemName = ((Material) toolItem).name().toLowerCase().split("_");
-            for (String itemName : splitItemName) {
-                itemNewName.append(itemName.substring(0, 1).toUpperCase()).append(itemName.substring(1)).append(" ");
+                    enchantmentNameLowerCase = "minecraft:" + separatedEnchantAndLevel[0].toLowerCase();
+                    listOfEnchantments.add(enchantmentNameLowerCase);
+                    enchantmentLevel = Integer.parseInt(separatedEnchantAndLevel[1]);
+                    listOfLevels.add(enchantmentLevel);
+                    materialName = Material.getMaterial(itemName.toUpperCase());
+                } catch (Exception e) {
+                    System.out.println(itemName + " in " + rank.getName() + " rank in ranks.yml has invalid Enchant and/or Enchant Level");
+                }
             }
-
-            toolPieceMeta.setDisplayName(ChatColor.BLUE + itemNewName.toString());
-            toolPiece.setItemMeta(toolPieceMeta);
-            player.getInventory().addItem(toolPiece);
+            giveMysticalKit(player, materialName, kitName, listOfEnchantments, listOfLevels, itemName);
         }
-
-        for (Object armorItem : armorList) {
-            Map<Enchantment, Integer> armorEnchantmentList = new HashMap<>();
-
-            armorEnchantmentList.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
-            armorEnchantmentList.put(Enchantment.DURABILITY, 5);
-            armorEnchantmentList.put(Enchantment.THORNS, 3);
-            armorEnchantmentList.put(Enchantment.MENDING, 1);
-
-            ItemStack armorPiece = new ItemStack((Material) armorItem, 1);
-            armorPiece.addUnsafeEnchantments(armorEnchantmentList);
-            ItemMeta armorPieceMeta = armorPiece.getItemMeta();
-
-            assert armorPieceMeta != null;
-
-            StringBuilder itemNewName = new StringBuilder();
-
-            String[] splitItemName = ((Material) armorItem).name().toLowerCase().split("_");
-            for (String itemName : splitItemName) {
-                itemNewName.append(itemName.substring(0, 1).toUpperCase()).append(itemName.substring(1)).append(" ");
-            }
-
-            armorPieceMeta.setDisplayName(ChatColor.BLUE + itemNewName.toString());
-            armorPiece.setItemMeta(armorPieceMeta);
-            player.getInventory().addItem(armorPiece);
-
-        }
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[&aOP &fKit&c]&f claimed."));
+        
         return true;
     }
+
+    private ItemStack createMysticalItem(Material material, String kitName, String itemName) {
+        ItemStack item = new ItemStack(material);
+        ItemMeta meta = item.getItemMeta();
+        String itemNewName = itemName.split("_")[1].substring(0, 1).toUpperCase() + itemName.split("_")[1].substring(1);
+        assert meta != null;
+        meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', kitName + " " + itemNewName ));
+        item.setItemMeta(meta);
+        return item;
+    }
+
+    private void giveMysticalKit(Player player, Material item, String kitName, List<String> enchantment, List<Integer> level, String itemName) {
+        Inventory inventory = player.getInventory();
+
+        ItemStack itemToAdd = createMysticalItem(item, kitName, itemName);
+        setMaxEnchantments(itemToAdd, enchantment, level);
+
+        inventory.addItem(itemToAdd);
+    }
+
+    public static void setMaxEnchantments(ItemStack item, List<String> toEnchant, List<Integer> level) {
+        Enchantment[] enchantments = Enchantment.values();
+
+        for (int i = 0; i < toEnchant.size(); i++) {
+            for (Enchantment enchantment : enchantments) {
+                if (enchantment.canEnchantItem(item) && !enchantment.isTreasure() && toEnchant.get(i).contains(enchantment.getKey().toString())) {
+                    item.addUnsafeEnchantment(enchantment, level.get(i));
+                }
+            }
+        }
+    }
+
+
 }

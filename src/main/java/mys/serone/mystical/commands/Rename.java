@@ -22,6 +22,8 @@ public class Rename implements CommandExecutor {
             return true;
         }
 
+        if (!sender.hasPermission("mystical.rename")) { chatFunctions.commandPermissionError((Player) sender); return true; }
+
         Player player = (Player) sender;
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
         ItemMeta itemMeta = itemInHand.getItemMeta();

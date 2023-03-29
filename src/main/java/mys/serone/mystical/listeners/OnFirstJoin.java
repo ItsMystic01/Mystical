@@ -26,28 +26,28 @@ public class OnFirstJoin implements Listener {
     public void onJoin(PlayerJoinEvent event) {
 
         ConfigurationManager configurationManager = new ConfigurationManager(PLUGIN);
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
+        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
+        PlayerInfo playerInfo = new PlayerInfo();
         Configuration configuration = new Configuration();
 
         File checkFile = new File(PLUGIN.getDataFolder().getAbsolutePath() + "/mystical_configuration.yml");
+        String finalDefaultRank = null;
+        Double finalDefaultCoins = null;
 
         if (checkFile.length() == 0) {
             configuration.setDefaultRank("Member");
+            configuration.setDefaultCoins(1000.0);
             configurationManager.createConfigurationInfo(configuration);
         }
-        
-        String finalDefaultRank = null;
-        
-        List<Configuration> dot = configurationManager.getAllConfiguration();
-        
-        for (Configuration configInfo : dot) {
+
+        List<Configuration> allConfig = configurationManager.getAllConfiguration();
+
+        for (Configuration configInfo : allConfig) {
             finalDefaultRank = configInfo.getDefaultRank();
+            finalDefaultCoins = configInfo.getDefaultCoins();
         }
 
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
-        PlayerInfo playerInfo = new PlayerInfo();
-
-
-        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
         Player player = event.getPlayer();
         String uuid = player.getUniqueId().toString();
 
@@ -71,12 +71,11 @@ public class OnFirstJoin implements Listener {
         } else {
             List<String> defaultRank = new ArrayList<>();
             defaultRank.add(finalDefaultRank);
-            playerInfo.setUserCoins(1000.0);
+            playerInfo.setUserCoins(finalDefaultCoins);
             playerInfo.setUserRankList(defaultRank);
             playerInfo.setPlayerUUID(uuid);
             playerInfoManager.createPlayerInfo(playerInfo);
-            chatFunctions.informationChat(player, "You have received &a$1000&f coins for your first join.");
-
+            chatFunctions.informationChat(player, "You have received &a$" + finalDefaultCoins  + "&f coins for your first join.");
         }
     }
 }

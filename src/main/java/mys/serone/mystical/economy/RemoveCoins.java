@@ -13,10 +13,11 @@ public class RemoveCoins implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
 
         Player player = (Player) sender;
 
-        if(!(player.hasPermission("mystical.manageCoins"))) { chatFunctions.commandPermissionError(player); return true; }
+        if(!(player.hasPermission("mystical.managecoins"))) { chatFunctions.commandPermissionError(player); return true; }
 
         if (args.length < 2) {
             chatFunctions.commandSyntaxError(player, "/removeCoins [player] [amount]");
@@ -42,7 +43,6 @@ public class RemoveCoins implements CommandExecutor {
 
         String userUUID = player.getUniqueId().toString();
 
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
         double userCoins = playerInfoManager.getPlayerCoins(userUUID);
         double newBalance = userCoins - amount;
         playerInfoManager.updatePlayerCoins(userUUID, newBalance);

@@ -7,21 +7,6 @@ commands:
   fly:
     description: Toggles fly.
     aliases: [ flight ]
-  creative:
-    description: Toggles game mode.
-    aliases: [ gm1 ]
-  kit:
-    description: Gives a kit
-    aliases: [ kits ]
-  menu:
-    description: Opens up a menu.
-    aliases: [ menus, selector ]
-  spawn:
-    description: Teleports you to the server spawn.
-    aliases: [ s ]
-  setSpawn:
-    description: Sets the server spawn.
-    aliases: [ spawnset ]
   rename:
     description: Rename an item in hand.
     aliases: [ itemrename ]
@@ -40,9 +25,6 @@ commands:
   pay:
     description: Pay mentioned user a desired amount within balance.
     aliases: [ expend ]
-  playerPermission:
-    description: Gets all the permission a certain player has.
-    aliases: [ permissionplayer ]
   giveRank:
     description: Gives rank to a certain player.
     aliases: [ giverole ]
@@ -61,9 +43,6 @@ commands:
   message:
     description: Messages a user privately.
     aliases: [ msg, tell ]
-  giveItem:
-    description: Gives the user an item
-    aliases: [ gt ]
-  giveKit:
+  kit:
     description: Gives the user their kit
     aliases: [ gk ]

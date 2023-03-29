@@ -23,14 +23,17 @@ public class CreateRank implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
-        if (args.length < 3) { chatFunctions.commandSyntaxError( (Player) sender, "/createRank [Rank Name] [Prefix] [Permission...]"); return true; }
+        RanksManager ranksManager = new RanksManager(PLUGIN);
+
+        if (!sender.hasPermission("mystical.manageranks")) { chatFunctions.commandPermissionError((Player) sender); return true; }
+        if (args.length < 3) { chatFunctions.commandSyntaxError((Player) sender, "/createRank [Rank Name] [Prefix] [Permission...]"); return true; }
 
         List<String> finalizedArguments = new ArrayList<>();
         Collections.addAll(finalizedArguments, Arrays.copyOfRange(args, 2, args.length));
-
-        RanksManager ranksManager = new RanksManager(PLUGIN);
         Rank rankChecker = ranksManager.getRank(args[0]);
+
         if (rankChecker != null) { chatFunctions.rankChat((Player) sender, "Rank already exists"); return true; }
+
         Rank newRank = new Rank();
         newRank.setName(args[0]);
         newRank.setPrefix(args[1]);
@@ -38,7 +41,7 @@ public class CreateRank implements CommandExecutor {
         newRank.setIsDefault(false);
         ranksManager.createRank(newRank);
 
-        sender.sendMessage("Success");
+        chatFunctions.rankChat((Player) sender, args[0] + " Rank has been created successfully.");
         return true;
     }
 }

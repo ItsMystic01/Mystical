@@ -16,14 +16,14 @@ public class Balance implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
-            return true;
-        }
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
+
+        if (!(sender instanceof Player)) { sender.sendMessage("Only players can use this command."); return true; }
+
+        if (!sender.hasPermission("mystical.balance")) { chatFunctions.commandPermissionError((Player) sender); return true; }
 
         Player player = (Player) sender;
         String uuid = player.getUniqueId().toString();
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
         Double playerCoins = playerInfoManager.getPlayerCoins(uuid);
         chatFunctions.balanceEconomyChat(player, playerCoins);
 
