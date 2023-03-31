@@ -10,7 +10,6 @@ public class Rank {
     private List<String> permissions;
     private List<Map<String, Object>> kit;
     private String kitName;
-    private boolean isDefault;
 
     public String getName() { return name; }
     public String getPrefix() { return prefix; }
@@ -18,7 +17,6 @@ public class Rank {
     public List<String> getPermissions() { return permissions; }
     public List<Map<String, Object>> getKit() { return kit; }
     public String getKitName() { return kitName; }
-    public boolean getIsDefault() { return isDefault; }
     public void setName(String name) { this.name = name; }
     public void setPrefix(String prefix) { this.prefix = prefix; }
     public void setPriority(int priority) { this.priority = priority; }
@@ -27,6 +25,5 @@ public class Rank {
     }
     public void setKit(List<Map<String, Object>> kit) { this.kit = kit; }
     public void setKitName(String kitName) { this.kitName = kitName; }
-    public void setIsDefault(boolean isDefault) { this.isDefault = isDefault; }
 }
 

@@ -34,7 +34,7 @@ public class GiveRank implements CommandExecutor {
         Rank rank = ranksManager.getRank(rankName);
         if (rank == null) { chatFunctions.rankChat((Player) sender, "Rank does not exist"); return true; }
 
-        playerInfoManager.updatePlayerRankList(player, sender, rankName);
+        playerInfoManager.addRankToPlayer(player, sender, rank.getName());
 
         return true;
     }

@@ -1,4 +1,4 @@
-package mys.serone.mystical.ConfigurationSystem;
+package mys.serone.mystical.configurationSystem;
 
 public class Configuration {
     private String defaultRank;

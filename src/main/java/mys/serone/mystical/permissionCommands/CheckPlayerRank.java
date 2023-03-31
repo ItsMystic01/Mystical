@@ -2,7 +2,7 @@ package mys.serone.mystical.permissionCommands;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
-import mys.serone.mystical.handlers.ConfigurationManager;
+import mys.serone.mystical.handlers.ConfigManager;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.command.Command;
@@ -43,8 +43,8 @@ public class CheckPlayerRank implements CommandExecutor {
                 newMap.put(playerRank, rankPriority);
                 playerRankPriority.add(newMap);
             } catch (Exception e) {
-                new ConfigurationManager(PLUGIN);
-                System.out.println(player.getDisplayName() + " has invalid ranks on player_info.yml");
+                new ConfigManager(PLUGIN);
+                System.out.println("[Mystical] " + player.getDisplayName() + " has invalid ranks on player_info.yml");
                 chatFunctions.configurationError(player, player.getDisplayName() + " has invalid ranks on player_info.yml");
                 return true;
             }

@@ -16,7 +16,6 @@ public class Fly implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
         ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
         if (!(sender instanceof Player)) { return true; }
-
         if (!sender.hasPermission("mystical.fly")) { chatFunctions.commandPermissionError((Player) sender); return true; }
 
         Player player = (Player) sender;
@@ -28,7 +27,6 @@ public class Fly implements CommandExecutor {
             player.setAllowFlight(true);
             chatFunctions.informationChat(player, "Flight on");
         }
-
         return true;
     }
 }

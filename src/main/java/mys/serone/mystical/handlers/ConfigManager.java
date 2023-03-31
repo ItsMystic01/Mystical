@@ -8,9 +8,9 @@ import mys.serone.mystical.rankSystem.RanksManager;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ConfigurationManager {
+public class ConfigManager {
 
-    public ConfigurationManager(Mystical plugin) {
+    public ConfigManager(Mystical plugin) {
 
         RanksManager ranksManager = new RanksManager(plugin);
         PlayerInfoManager playerInfoManager = new PlayerInfoManager(plugin);

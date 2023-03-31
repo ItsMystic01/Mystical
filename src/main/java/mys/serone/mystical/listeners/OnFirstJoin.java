@@ -1,7 +1,7 @@
 package mys.serone.mystical.listeners;
 
-import mys.serone.mystical.ConfigurationSystem.Configuration;
-import mys.serone.mystical.ConfigurationSystem.ConfigurationManager;
+import mys.serone.mystical.configurationSystem.Configuration;
+import mys.serone.mystical.configurationSystem.ConfigurationManager;
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
 import mys.serone.mystical.playerInfoSystem.PlayerInfo;
@@ -13,7 +13,9 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class OnFirstJoin implements Listener {
     private final Mystical PLUGIN;
@@ -28,8 +30,21 @@ public class OnFirstJoin implements Listener {
         ConfigurationManager configurationManager = new ConfigurationManager(PLUGIN);
         PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
         ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
-        PlayerInfo playerInfo = new PlayerInfo();
         Configuration configuration = new Configuration();
+
+        File checkRanksFile = new File(PLUGIN.getDataFolder().getAbsolutePath() + "/ranks.yml");
+        if (checkRanksFile.length() == 0) {
+            List<String> newRankPermission = new ArrayList<>();
+            newRankPermission.add("mystical.help");
+
+            List<Map<String, Object>> kit = new ArrayList<>();
+            Map<String, Object> kitMap = new HashMap<>();
+            kitMap.put("leather_boots", "protection:1");
+            kit.add(kitMap);
+
+            RanksManager ranksManager = new RanksManager(PLUGIN);
+            ranksManager.createRank("Member", "&f[&7Member&f]", 1, newRankPermission, kit, "&f[&7Member&f]");
+        }
 
         File checkFile = new File(PLUGIN.getDataFolder().getAbsolutePath() + "/mystical_configuration.yml");
         String finalDefaultRank = null;
@@ -68,13 +83,26 @@ public class OnFirstJoin implements Listener {
                     player.addAttachment(PLUGIN, rankPerm, true);
                 }
             }
+            List<String> playerAdditionalPermission = playerInfoManager.getPlayerAdditionalPermission(uuid);
+            if (playerAdditionalPermission.size() > 0) {
+                for (String permissionToAdd : playerAdditionalPermission) {
+                    player.addAttachment(PLUGIN, permissionToAdd, true);
+                }
+            }
+
         } else {
             List<String> defaultRank = new ArrayList<>();
+            List<String> defaultAdditionalPermission = new ArrayList<>();
             defaultRank.add(finalDefaultRank);
-            playerInfo.setUserCoins(finalDefaultCoins);
-            playerInfo.setUserRankList(defaultRank);
-            playerInfo.setPlayerUUID(uuid);
-            playerInfoManager.createPlayerInfo(playerInfo);
+            playerInfoManager.createPlayerInfo(uuid, finalDefaultCoins, defaultRank, defaultAdditionalPermission);
+
+            List<String> playerJoinedRankList = playerInfoManager.getPlayerRankList(uuid);
+            RanksManager ranksManager = new RanksManager(PLUGIN);
+            for (String rank : playerJoinedRankList) {
+                for (String rankPerm : ranksManager.getRank(rank).getPermissions()) {
+                    player.addAttachment(PLUGIN, rankPerm, true);
+                }
+            }
             chatFunctions.informationChat(player, "You have received &a$" + finalDefaultCoins  + "&f coins for your first join.");
         }
     }

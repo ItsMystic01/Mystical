@@ -75,7 +75,7 @@ public class ChatFunctions {
     }
 
     public void configurationError(Player player, String message) {
-        player.sendMessage(CONFIGURATION_ERROR_PREFIX + message);
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', CONFIGURATION_ERROR_PREFIX + message));
     }
 
 }

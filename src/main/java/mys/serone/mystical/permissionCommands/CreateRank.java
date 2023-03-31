@@ -26,20 +26,15 @@ public class CreateRank implements CommandExecutor {
         RanksManager ranksManager = new RanksManager(PLUGIN);
 
         if (!sender.hasPermission("mystical.manageranks")) { chatFunctions.commandPermissionError((Player) sender); return true; }
-        if (args.length < 3) { chatFunctions.commandSyntaxError((Player) sender, "/createRank [Rank Name] [Prefix] [Permission...]"); return true; }
+        if (args.length < 4) { chatFunctions.commandSyntaxError((Player) sender, "/createRank [Rank Name] [Prefix] [Priority] [Permission...]"); return true; }
 
         List<String> finalizedArguments = new ArrayList<>();
-        Collections.addAll(finalizedArguments, Arrays.copyOfRange(args, 2, args.length));
+        Collections.addAll(finalizedArguments, Arrays.copyOfRange(args, 3, args.length));
         Rank rankChecker = ranksManager.getRank(args[0]);
 
         if (rankChecker != null) { chatFunctions.rankChat((Player) sender, "Rank already exists"); return true; }
 
-        Rank newRank = new Rank();
-        newRank.setName(args[0]);
-        newRank.setPrefix(args[1]);
-        newRank.setPermissions(finalizedArguments);
-        newRank.setIsDefault(false);
-        ranksManager.createRank(newRank);
+        ranksManager.createRank(args[0], args[1], Integer.parseInt(args[2]), finalizedArguments, null, null);
 
         chatFunctions.rankChat((Player) sender, args[0] + " Rank has been created successfully.");
         return true;

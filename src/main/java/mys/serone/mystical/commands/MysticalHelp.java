@@ -13,10 +13,10 @@ import org.jetbrains.annotations.NotNull;
 import java.awt.*;
 import java.util.Map;
 
-public class Help implements CommandExecutor {
+public class MysticalHelp implements CommandExecutor {
     private final JavaPlugin PLUGIN;
     private final Mystical Plugin;
-    public Help(JavaPlugin javaPlugin, Mystical plugin) {
+    public MysticalHelp(JavaPlugin javaPlugin, Mystical plugin) {
         this.PLUGIN = javaPlugin;
         this.Plugin = plugin;
     }
@@ -28,11 +28,11 @@ public class Help implements CommandExecutor {
 
         if (!sender.hasPermission("mystical.help")) { chatFunctions.commandPermissionError((Player) sender); return true; }
 
+        StringBuilder textToSend = new StringBuilder();
+        PluginDescriptionFile desc = PLUGIN.getDescription();
+        Map<String, Map<String, Object>> cmd = desc.getCommands();
         if (args.length > 0) {
             String givenCommand = args[0];
-            StringBuilder textToSend = new StringBuilder();
-            PluginDescriptionFile desc = PLUGIN.getDescription();
-            Map<String, Map<String, Object>> cmd = desc.getCommands();
 
             for (Map.Entry<String, Map<String, Object>> entry : cmd.entrySet()) {
                 String cmdName = entry.getKey();
@@ -50,9 +50,6 @@ public class Help implements CommandExecutor {
 
             chatFunctions.commandSyntaxError((Player) sender,"&fCommand not found.");
         } else {
-            StringBuilder textToSend = new StringBuilder();
-            PluginDescriptionFile desc = PLUGIN.getDescription();
-            Map<String, Map<String, Object>> cmd = desc.getCommands();
             StringBuilder cmdListTextGradient = displayName("Command List");
             textToSend.append(ChatColor.translateAlternateColorCodes('&', "&6================== " + cmdListTextGradient + " &6==================\n"));
             for (Map.Entry<String, Map<String, Object>> entry : cmd.entrySet()) {
