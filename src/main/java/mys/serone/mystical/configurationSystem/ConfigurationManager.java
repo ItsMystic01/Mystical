@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import mys.serone.mystical.Mystical;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -14,8 +13,8 @@ public class ConfigurationManager {
     private final List<Configuration> CONFIG_INFO;
     private final File CONFIGURATION_FILE;
 
-    public ConfigurationManager(Mystical plugin) {
-        this.CONFIGURATION_FILE = new File(plugin.getDataFolder().getAbsolutePath() + "/mystical_configuration.yml");
+    public ConfigurationManager(File configurationFile) {
+        this.CONFIGURATION_FILE = configurationFile;
         if (!CONFIGURATION_FILE.exists()) {
             try {
                 boolean created = CONFIGURATION_FILE.createNewFile();

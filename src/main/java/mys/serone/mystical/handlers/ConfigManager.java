@@ -1,6 +1,5 @@
 package mys.serone.mystical.handlers;
 
-import mys.serone.mystical.Mystical;
 import mys.serone.mystical.playerInfoSystem.PlayerInfo;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.Rank;
@@ -10,10 +9,7 @@ import java.util.stream.Collectors;
 
 public class ConfigManager {
 
-    public ConfigManager(Mystical plugin) {
-
-        RanksManager ranksManager = new RanksManager(plugin);
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(plugin);
+    public ConfigManager(RanksManager ranksManager, PlayerInfoManager playerInfoManager) {
 
         List<Rank> allRanks = ranksManager.getRanks();
 

@@ -1,13 +1,12 @@
 package mys.serone.mystical.handlers;
 
-import mys.serone.mystical.Mystical;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 public class ReadMeConfiguration {
 
-    private final Mystical PLUGIN;
-    public ReadMeConfiguration(Mystical plugin) { this.PLUGIN = plugin; }
+    private final File READ_ME_FILE;
+    public ReadMeConfiguration(File readMeFile) { this.READ_ME_FILE = readMeFile; }
     public void writeToFile() {
 
         String[] messageList = {
@@ -68,9 +67,8 @@ public class ReadMeConfiguration {
         };
 
         try {
-            File file = new File(PLUGIN.getDataFolder().getAbsolutePath() + "/README.txt");
-            if (file.length() == 0) {
-                FileWriter writer = new FileWriter(file, true);
+            if (READ_ME_FILE.length() == 0) {
+                FileWriter writer = new FileWriter(READ_ME_FILE, true);
                 for (String m : messageList) {
                     writer.write(m);
                     writer.write(System.lineSeparator());

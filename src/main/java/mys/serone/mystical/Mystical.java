@@ -1,18 +1,16 @@
 package mys.serone.mystical;
 
-import mys.serone.mystical.handlers.ConfigManager;
-import mys.serone.mystical.handlers.ReadMeConfiguration;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 import mys.serone.mystical.functions.CommandEntry;
-import mys.serone.mystical.listeners.ChatListener;
-import mys.serone.mystical.listeners.OnFirstJoin;
 import java.io.File;
 
 public final class Mystical extends JavaPlugin {
 
     @Override
     public void onEnable() {
+
+        CommandEntry commandEntry = new CommandEntry();
 
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) {
@@ -21,12 +19,7 @@ public final class Mystical extends JavaPlugin {
             else { Bukkit.getServer().getLogger().info("[Mystical] Data Folder Created Unsuccessfully."); }
         }
 
-        getServer().getPluginManager().registerEvents(new OnFirstJoin(this), this);
-        getServer().getPluginManager().registerEvents(new ChatListener(this), this);
-        new ConfigManager(this);
-        CommandEntry.initCommands(this);
-        ReadMeConfiguration readMeConfiguration = new ReadMeConfiguration(this);
-        readMeConfiguration.writeToFile();
+        commandEntry.initCommands(this);
     }
     @Override
     public void onDisable() {

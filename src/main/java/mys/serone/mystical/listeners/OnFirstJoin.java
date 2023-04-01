@@ -19,21 +19,28 @@ import java.util.Map;
 
 public class OnFirstJoin implements Listener {
     private final Mystical PLUGIN;
+    private final ConfigurationManager CONFIGURATION_MANAGER;
+    private final Configuration CONFIGURATION;
+    private final PlayerInfoManager PLAYER_INFO_MANAGER;
+    private final ChatFunctions CHAT_FUNCTIONS;
+    private final RanksManager RANKS_MANAGER;
+    private final File CHECK_RANKS_FILE;
 
-    public OnFirstJoin(Mystical plugin) {
+    public OnFirstJoin(Mystical plugin, ConfigurationManager configurationManager, Configuration configuration,
+                       PlayerInfoManager playerInfoManager, ChatFunctions chatFunctions, RanksManager ranksManager, File ranksFile) {
         this.PLUGIN = plugin;
+        this.CONFIGURATION_MANAGER = configurationManager;
+        this.CONFIGURATION = configuration;
+        this.PLAYER_INFO_MANAGER = playerInfoManager;
+        this.CHAT_FUNCTIONS = chatFunctions;
+        this.RANKS_MANAGER = ranksManager;
+        this.CHECK_RANKS_FILE = ranksFile;
     }
 
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
 
-        ConfigurationManager configurationManager = new ConfigurationManager(PLUGIN);
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
-        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
-        Configuration configuration = new Configuration();
-
-        File checkRanksFile = new File(PLUGIN.getDataFolder().getAbsolutePath() + "/ranks.yml");
-        if (checkRanksFile.length() == 0) {
+        if (CHECK_RANKS_FILE.length() == 0) {
             List<String> newRankPermission = new ArrayList<>();
             newRankPermission.add("mystical.help");
 
@@ -42,8 +49,7 @@ public class OnFirstJoin implements Listener {
             kitMap.put("leather_boots", "protection:1");
             kit.add(kitMap);
 
-            RanksManager ranksManager = new RanksManager(PLUGIN);
-            ranksManager.createRank("Member", "&f[&7Member&f]", 1, newRankPermission, kit, "&f[&7Member&f]");
+            RANKS_MANAGER.createRank("Member", "&f[&7Member&f]", 1, newRankPermission, kit, "&f[&7Member&f]");
         }
 
         File checkFile = new File(PLUGIN.getDataFolder().getAbsolutePath() + "/mystical_configuration.yml");
@@ -51,12 +57,12 @@ public class OnFirstJoin implements Listener {
         Double finalDefaultCoins = null;
 
         if (checkFile.length() == 0) {
-            configuration.setDefaultRank("Member");
-            configuration.setDefaultCoins(1000.0);
-            configurationManager.createConfigurationInfo(configuration);
+            CONFIGURATION.setDefaultRank("Member");
+            CONFIGURATION.setDefaultCoins(1000.0);
+            CONFIGURATION_MANAGER.createConfigurationInfo(CONFIGURATION);
         }
 
-        List<Configuration> allConfig = configurationManager.getAllConfiguration();
+        List<Configuration> allConfig = CONFIGURATION_MANAGER.getAllConfiguration();
 
         for (Configuration configInfo : allConfig) {
             finalDefaultRank = configInfo.getDefaultRank();
@@ -68,7 +74,7 @@ public class OnFirstJoin implements Listener {
 
         List<String> uuidList = new ArrayList<>();
 
-        List<PlayerInfo> UUID = playerInfoManager.getAllPlayerInfo();
+        List<PlayerInfo> UUID = PLAYER_INFO_MANAGER.getAllPlayerInfo();
 
         for (PlayerInfo uu : UUID) {
             String userUUID = uu.getPlayerUUID();
@@ -76,14 +82,13 @@ public class OnFirstJoin implements Listener {
         }
 
         if (uuidList.contains(uuid)) {
-            List<String> playerJoinedRankList = playerInfoManager.getPlayerRankList(uuid);
-            RanksManager ranksManager = new RanksManager(PLUGIN);
+            List<String> playerJoinedRankList = PLAYER_INFO_MANAGER.getPlayerRankList(uuid);
             for (String rank : playerJoinedRankList) {
-                for (String rankPerm : ranksManager.getRank(rank).getPermissions()) {
+                for (String rankPerm : RANKS_MANAGER.getRank(rank).getPermissions()) {
                     player.addAttachment(PLUGIN, rankPerm, true);
                 }
             }
-            List<String> playerAdditionalPermission = playerInfoManager.getPlayerAdditionalPermission(uuid);
+            List<String> playerAdditionalPermission = PLAYER_INFO_MANAGER.getPlayerAdditionalPermission(uuid);
             if (playerAdditionalPermission.size() > 0) {
                 for (String permissionToAdd : playerAdditionalPermission) {
                     player.addAttachment(PLUGIN, permissionToAdd, true);
@@ -94,16 +99,15 @@ public class OnFirstJoin implements Listener {
             List<String> defaultRank = new ArrayList<>();
             List<String> defaultAdditionalPermission = new ArrayList<>();
             defaultRank.add(finalDefaultRank);
-            playerInfoManager.createPlayerInfo(uuid, finalDefaultCoins, defaultRank, defaultAdditionalPermission);
+            PLAYER_INFO_MANAGER.createPlayerInfo(uuid, finalDefaultCoins, defaultRank, defaultAdditionalPermission);
 
-            List<String> playerJoinedRankList = playerInfoManager.getPlayerRankList(uuid);
-            RanksManager ranksManager = new RanksManager(PLUGIN);
+            List<String> playerJoinedRankList = PLAYER_INFO_MANAGER.getPlayerRankList(uuid);
             for (String rank : playerJoinedRankList) {
-                for (String rankPerm : ranksManager.getRank(rank).getPermissions()) {
+                for (String rankPerm : RANKS_MANAGER.getRank(rank).getPermissions()) {
                     player.addAttachment(PLUGIN, rankPerm, true);
                 }
             }
-            chatFunctions.informationChat(player, "You have received &a$" + finalDefaultCoins  + "&f coins for your first join.");
+            CHAT_FUNCTIONS.informationChat(player, "You have received &a$" + finalDefaultCoins  + "&f coins for your first join.");
         }
     }
 }

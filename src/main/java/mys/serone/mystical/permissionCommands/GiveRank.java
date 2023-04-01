@@ -13,28 +13,31 @@ import org.jetbrains.annotations.NotNull;
 
 public class GiveRank implements CommandExecutor {
     private final Mystical PLUGIN;
-    public GiveRank(Mystical plugin) {
+    private final ChatFunctions CHAT_FUNCTIONS;
+    private final PlayerInfoManager PLAYER_INFO_MANAGER;
+    private final RanksManager RANKS_MANAGER;
+    public GiveRank(Mystical plugin, ChatFunctions chatFunctions, PlayerInfoManager playerInfoManager, RanksManager ranksManager) {
         this.PLUGIN = plugin;
+        this.CHAT_FUNCTIONS = chatFunctions;
+        this.PLAYER_INFO_MANAGER = playerInfoManager;
+        this.RANKS_MANAGER = ranksManager;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
-        RanksManager ranksManager = new RanksManager(PLUGIN);
 
-        if (!sender.hasPermission("mystical.manageranks")) { chatFunctions.commandPermissionError((Player) sender); return true; }
-        if (args.length < 2) { chatFunctions.commandSyntaxError((Player) sender, "/giveRank [Player] [Rank Name]"); return true; }
+        if (!sender.hasPermission("mystical.manageranks")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (args.length < 2) { CHAT_FUNCTIONS.commandSyntaxError((Player) sender, "/giveRank [Player] [Rank Name]"); return true; }
 
         Player player = PLUGIN.getServer().getPlayer(args[0]);
-        if (player == null) { chatFunctions.rankChat((Player) sender, "Invalid User"); return true; }
+        if (player == null) { CHAT_FUNCTIONS.rankChat((Player) sender, "Invalid User"); return true; }
 
         String rankName = args[1];
 
-        Rank rank = ranksManager.getRank(rankName);
-        if (rank == null) { chatFunctions.rankChat((Player) sender, "Rank does not exist"); return true; }
+        Rank rank = RANKS_MANAGER.getRank(rankName);
+        if (rank == null) { CHAT_FUNCTIONS.rankChat((Player) sender, "Rank does not exist"); return true; }
 
-        playerInfoManager.addRankToPlayer(player, sender, rank.getName());
+        PLAYER_INFO_MANAGER.addRankToPlayer(player, sender, rank.getName());
 
         return true;
     }

@@ -1,6 +1,5 @@
 package mys.serone.mystical.commands;
 
-import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
@@ -15,18 +14,17 @@ import java.util.Map;
 
 public class MysticalHelp implements CommandExecutor {
     private final JavaPlugin PLUGIN;
-    private final Mystical Plugin;
-    public MysticalHelp(JavaPlugin javaPlugin, Mystical plugin) {
+    private final ChatFunctions CHAT_FUNCTIONS;
+    public MysticalHelp(JavaPlugin javaPlugin, ChatFunctions chatFunctions) {
         this.PLUGIN = javaPlugin;
-        this.Plugin = plugin;
+        this.CHAT_FUNCTIONS = chatFunctions;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        ChatFunctions chatFunctions = new ChatFunctions(Plugin);
         if (!(sender instanceof Player)) { return true; }
 
-        if (!sender.hasPermission("mystical.help")) { chatFunctions.commandPermissionError((Player) sender); return true; }
+        if (!sender.hasPermission("mystical.help")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
 
         StringBuilder textToSend = new StringBuilder();
         PluginDescriptionFile desc = PLUGIN.getDescription();
@@ -48,7 +46,7 @@ public class MysticalHelp implements CommandExecutor {
                 return true;
             }
 
-            chatFunctions.commandSyntaxError((Player) sender,"&fCommand not found.");
+            CHAT_FUNCTIONS.commandSyntaxError((Player) sender,"&fCommand not found.");
         } else {
             StringBuilder cmdListTextGradient = displayName("Command List");
             textToSend.append(ChatColor.translateAlternateColorCodes('&', "&6================== " + cmdListTextGradient + " &6==================\n"));

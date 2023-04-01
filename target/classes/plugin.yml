@@ -61,3 +61,9 @@ commands:
   removePermission:
     description: Removes a permission from a user.
     aliases: [ permissionremove ]
+  setKitPrefix:
+    description: Sets kit prefix.
+    aliases: [ skprefix ]
+  editKit:
+    description: Edit contents of an existing kit.
+    aliases: [ kitedit ]

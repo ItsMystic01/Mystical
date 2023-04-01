@@ -14,7 +14,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,31 +23,33 @@ import java.util.Objects;
 public class KitManager {
 
     private final Mystical PLUGIN;
-    private static ChatFunctions chatFunctions;
+    private final ChatFunctions CHAT_FUNCTIONS;
+    private final RanksManager RANKS_MANAGER;
+    private final PlayerInfoManager PLAYER_INFO_MANAGER;
+    private final PersonalKitManager PERSONAL_KIT_MANAGER;
 
-    public KitManager(Mystical plugin) {
+    public KitManager(Mystical plugin, ChatFunctions chatFunctions, RanksManager ranksManager, PlayerInfoManager playerInfoManager, PersonalKitManager personalKitManager) {
         this.PLUGIN = plugin;
-        chatFunctions = new ChatFunctions(PLUGIN);
+        this.CHAT_FUNCTIONS = chatFunctions;
+        this.RANKS_MANAGER = ranksManager;
+        this.PLAYER_INFO_MANAGER = playerInfoManager;
+        this.PERSONAL_KIT_MANAGER = personalKitManager;
     }
 
     public void kitOne(Player player, String[] args) {
-        RanksManager ranksManager = new RanksManager(PLUGIN);
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
 
-        if (!player.hasPermission("mystical.kit")) { chatFunctions.commandPermissionError(player); return; }
+        List<String> list = PLAYER_INFO_MANAGER.getPlayerRankList(player.getUniqueId().toString());
 
-        List<String> list = playerInfoManager.getPlayerRankList(player.getUniqueId().toString());
-
-        if (args.length < 1) { chatFunctions.commandSyntaxError(player, "Usage: /kit [rank]"); return;}
+        if (args.length < 1) { CHAT_FUNCTIONS.commandSyntaxError(player, "Usage: /kit [rank]"); return;}
         String rankKitToGet = args[0];
-        Rank rank = ranksManager.getRank(rankKitToGet);
-        if (rank == null) { chatFunctions.rankChat(player, "Kit does not exist."); return; }
-        if (list.stream().noneMatch(s -> s.equalsIgnoreCase(rankKitToGet))) { chatFunctions.rankChat(player, "You do not have access to that rank kit."); return; }
+        Rank rank = RANKS_MANAGER.getRank(rankKitToGet);
+        if (rank == null) { CHAT_FUNCTIONS.rankChat(player, "Kit does not exist."); return; }
+        if (list.stream().noneMatch(s -> s.equalsIgnoreCase(rankKitToGet))) { CHAT_FUNCTIONS.rankChat(player, "You do not have access to that rank kit."); return; }
 
         List<Map<String, Object>> kit = rank.getKit();
         if (kit == null || kit.size() == 0) {
             System.out.println("[Mystical] " + rank.getName() + " does not have a kit in ranks.yml. (Read the README.txt file in the Mystical Folder in the Plugins Folder)");
-            chatFunctions.informationChat(player, rank.getName() + " does not have an existing kit. (Read the README.txt file in the Mystical Folder in the Plugins Folder)");
+            CHAT_FUNCTIONS.informationChat(player, rank.getName() + " does not have an existing kit. (Read the README.txt file in the Mystical Folder in the Plugins Folder)");
             return;
         }
         String kitName = rank.getKitName();
@@ -100,7 +101,7 @@ public class KitManager {
         inventory.addItem(itemToAdd);
     }
 
-    public static void setMaxEnchantments(ItemStack item, List<String> toEnchant, List<Integer> level) {
+    public void setMaxEnchantments(ItemStack item, List<String> toEnchant, List<Integer> level) {
         Enchantment[] enchantments = Enchantment.values();
 
         for (int i = 0; i < toEnchant.size(); i++) {
@@ -112,14 +113,14 @@ public class KitManager {
         }
     }
 
-    public static void claimKit(Mystical PLUGIN, Player player, String kitName) {
+    public void claimKit(Player player, String kitName) {
         File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits/" + kitName + ".yml");
         if (!kitFile.exists()) {
-            chatFunctions.commandSyntaxError(player, "Kit does not exist.");
+            CHAT_FUNCTIONS.commandSyntaxError(player, "Kit does not exist.");
             return;
         }
 
-        if(!player.hasPermission("mystical."+ kitName)) { chatFunctions.commandPermissionError(player); return; }
+        if(!player.hasPermission("mystical."+ kitName)) { CHAT_FUNCTIONS.commandPermissionError(player); return; }
 
         YamlConfiguration kitConfig = YamlConfiguration.loadConfiguration(kitFile);
         ItemStack[] contents = new ItemStack[36];
@@ -151,8 +152,7 @@ public class KitManager {
             }
         }
 
-        PersonalKitManager personalKitManager = new PersonalKitManager(PLUGIN);
-        List<PersonalKit> allKit = personalKitManager.getKITS();
+        List<PersonalKit> allKit = PERSONAL_KIT_MANAGER.getKITS();
         String prefix = null;
 
         for (PersonalKit perPersonalKit : allKit) {
@@ -185,7 +185,7 @@ public class KitManager {
                 player.getInventory().addItem(item);
             }
         }
-        chatFunctions.configurationError(player,"You have claimed the kit " + kitName + ".");
+        CHAT_FUNCTIONS.configurationError(player,"You have claimed the kit " + kitName + ".");
     }
 
 }

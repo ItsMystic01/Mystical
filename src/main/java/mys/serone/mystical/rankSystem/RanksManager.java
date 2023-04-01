@@ -4,7 +4,9 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import mys.serone.mystical.Mystical;
+import mys.serone.mystical.functions.ChatFunctions;
+import org.bukkit.entity.Player;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -15,8 +17,8 @@ public class RanksManager {
     private final List<Rank> RANKS;
     private final File RANKS_FILE;
 
-    public RanksManager(Mystical plugin) {
-        this.RANKS_FILE = new File(plugin.getDataFolder().getAbsolutePath() + "/ranks.yml");
+    public RanksManager(File ranksFile) {
+        this.RANKS_FILE = ranksFile;
         if (!RANKS_FILE.exists()) {
             try {
                 boolean created = RANKS_FILE.createNewFile();
@@ -63,6 +65,14 @@ public class RanksManager {
                 .filter(rank -> rank.getName().equalsIgnoreCase(name))
                 .findFirst()
                 .orElse(null);
+    }
+
+    public void setKitName(Player player, String rankName, String kitName) {
+        ChatFunctions chatFunctions = new ChatFunctions(this);
+        Rank rankToConfigure = getRank(rankName);
+        rankToConfigure.setKitName(kitName);
+        saveRanksToFile();
+        chatFunctions.configurationError(player, "Prefix has been set successfully.");
     }
 
     public void createRank(String name, String prefix, int priority, List<String> newRankPermission, List<Map<String, Object>> kit, String kitName) {

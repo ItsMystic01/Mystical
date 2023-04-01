@@ -14,38 +14,40 @@ import java.util.*;
 
 public class CheckPlayerRank implements CommandExecutor {
     private final Mystical PLUGIN;
-    public CheckPlayerRank(Mystical plugin) {
+    private final ChatFunctions CHAT_FUNCTIONS;
+    private final PlayerInfoManager PLAYER_INFO_MANAGER;
+    private final RanksManager RANKS_MANAGER;
+    public CheckPlayerRank(Mystical plugin, ChatFunctions chatFunctions, PlayerInfoManager playerInfoManager, RanksManager ranksManager) {
         this.PLUGIN = plugin;
+        this.CHAT_FUNCTIONS = chatFunctions;
+        this.PLAYER_INFO_MANAGER = playerInfoManager;
+        this.RANKS_MANAGER = ranksManager;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
-        RanksManager ranksManager = new RanksManager(PLUGIN);
-
         if (!(sender instanceof Player)) { return true; }
-        if (!sender.hasPermission("mystical.manageranks")) { chatFunctions.commandPermissionError((Player) sender); return true; }
-        if (args.length < 1) { chatFunctions.commandSyntaxError( (Player) sender, "/checkPlayerRank [username]"); return true; }
+        if (!sender.hasPermission("mystical.manageranks")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (args.length < 1) { CHAT_FUNCTIONS.commandSyntaxError( (Player) sender, "/checkPlayerRank [username]"); return true; }
 
         Player player = PLUGIN.getServer().getPlayer(args[0]);
-        if (player == null) { chatFunctions.rankChat((Player) sender, "Player not found."); return true; }
+        if (player == null) { CHAT_FUNCTIONS.rankChat((Player) sender, "Player not found."); return true; }
         String uuid = player.getUniqueId().toString();
 
-        List<String> playerRankList = playerInfoManager.getPlayerRankList(uuid);
+        List<String> playerRankList = PLAYER_INFO_MANAGER.getPlayerRankList(uuid);
         List<Map<String, Integer>> playerRankPriority = new ArrayList<>();
         List<String> playerSortedRankList = new ArrayList<>();
 
         for (String playerRank : playerRankList) {
             try {
-                int rankPriority = ranksManager.getRank(playerRank).getPriority();
+                int rankPriority = RANKS_MANAGER.getRank(playerRank).getPriority();
                 Map<String, Integer> newMap = new HashMap<>();
                 newMap.put(playerRank, rankPriority);
                 playerRankPriority.add(newMap);
             } catch (Exception e) {
-                new ConfigManager(PLUGIN);
+                new ConfigManager(RANKS_MANAGER, PLAYER_INFO_MANAGER);
                 System.out.println("[Mystical] " + player.getDisplayName() + " has invalid ranks on player_info.yml");
-                chatFunctions.configurationError(player, player.getDisplayName() + " has invalid ranks on player_info.yml");
+                CHAT_FUNCTIONS.configurationError(player, player.getDisplayName() + " has invalid ranks on player_info.yml");
                 return true;
             }
         }
@@ -62,7 +64,7 @@ public class CheckPlayerRank implements CommandExecutor {
             playerSortedRankList.add(rankSort.replace("[", "").replace("]", ""));
         }
 
-        chatFunctions.playerRankChat((Player) sender, playerSortedRankList);
+        CHAT_FUNCTIONS.playerRankChat((Player) sender, playerSortedRankList);
 
         return true;
     }

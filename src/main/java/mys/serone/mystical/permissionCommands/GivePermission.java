@@ -14,38 +14,40 @@ import java.util.Objects;
 
 public class GivePermission implements CommandExecutor {
     private final Mystical PLUGIN;
-    public GivePermission(Mystical plugin) {
+    private final ChatFunctions CHAT_FUNCTIONS;
+    private final PlayerInfoManager PLAYER_INFO_MANAGER;
+    public GivePermission(Mystical plugin, ChatFunctions chatFunctions, PlayerInfoManager playerInfoManager) {
         this.PLUGIN = plugin;
+        this.CHAT_FUNCTIONS = chatFunctions;
+        this.PLAYER_INFO_MANAGER = playerInfoManager;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
 
-        if (!sender.hasPermission("mystical.manageranks")) { chatFunctions.commandPermissionError((Player) sender); return true; }
-        if (args.length < 2) { chatFunctions.commandSyntaxError((Player) sender, "/givePermission [Player] [Permission]"); return true; }
+        if (!sender.hasPermission("mystical.manageranks")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (args.length < 2) { CHAT_FUNCTIONS.commandSyntaxError((Player) sender, "/givePermission [Player] [Permission]"); return true; }
 
         Player player = PLUGIN.getServer().getPlayer(args[0]);
-        if (player == null) { chatFunctions.rankChat((Player) sender, "Invalid User"); return true; }
+        if (player == null) { CHAT_FUNCTIONS.rankChat((Player) sender, "Invalid User"); return true; }
 
         String permission = args[1];
 
-        List<String> permissionToAdd = playerInfoManager.getPlayerAdditionalPermission(player.getUniqueId().toString());
+        List<String> permissionToAdd = PLAYER_INFO_MANAGER.getPlayerAdditionalPermission(player.getUniqueId().toString());
         permissionToAdd.add(permission);
 
-        List<PlayerInfo> allPlayerInfo = playerInfoManager.getAllPlayerInfo();
+        List<PlayerInfo> allPlayerInfo = PLAYER_INFO_MANAGER.getAllPlayerInfo();
 
         for (PlayerInfo perInfo : allPlayerInfo) {
             if (Objects.equals(perInfo.getPlayerUUID(), player.getUniqueId().toString())) {
                 perInfo.setUserAdditionalPermission(permissionToAdd);
-                playerInfoManager.savePlayerInfoToFile();
+                PLAYER_INFO_MANAGER.savePlayerInfoToFile();
             }
         }
 
-        chatFunctions.rankChat((Player) sender, permission + " has been given to " + player.getDisplayName() + ".");
-        chatFunctions.rankChat((Player) sender, "It is recommended for " + player.getDisplayName() + " to re-log for the permission to take effect.");
-        chatFunctions.rankChat(player, "It is recommended to re-log for the changes to take effect.");
+        CHAT_FUNCTIONS.rankChat((Player) sender, permission + " has been given to " + player.getDisplayName() + ".");
+        CHAT_FUNCTIONS.rankChat((Player) sender, "It is recommended for " + player.getDisplayName() + " to re-log for the permission to take effect.");
+        CHAT_FUNCTIONS.rankChat(player, "It is recommended to re-log for the changes to take effect.");
 
         return true;
     }

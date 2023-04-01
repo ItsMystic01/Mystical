@@ -4,7 +4,6 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
 import org.bukkit.entity.Player;
 import java.io.File;
@@ -16,11 +15,11 @@ public class PersonalKitManager {
 
     private final File KIT_FILE;
     private final List<PersonalKit> KITS;
-    private static ChatFunctions chatFunctions;
+    private final ChatFunctions CHAT_FUNCTIONS;
 
-    public PersonalKitManager(Mystical plugin) {
-        chatFunctions = new ChatFunctions(plugin);
-        this.KIT_FILE = new File(plugin.getDataFolder().getAbsolutePath() + "/personal_kit_configuration.yml");
+    public PersonalKitManager(ChatFunctions chatFunctions, File kitFile) {
+        this.CHAT_FUNCTIONS = chatFunctions;
+        this.KIT_FILE = kitFile;
         if (!KIT_FILE.exists()) {
             try {
                 boolean created = KIT_FILE.createNewFile();
@@ -69,14 +68,20 @@ public class PersonalKitManager {
                 .orElse(null);
     }
 
+    public void setKitPrefix(Player player, String kitName, String newPrefix) {
+        PersonalKit kitInYML = getKit(kitName);
+        kitInYML.setKitCodeName(newPrefix);
+        saveKitsToFile();
+        CHAT_FUNCTIONS.configurationError(player, "Prefix has been set successfully.");
+    }
+
     public void createKit(Player player, String kitName, String kitCodeName) {
         PersonalKit personalKit = new PersonalKit();
-
         personalKit.setKitName(kitName);
         personalKit.setKitCodeName(kitCodeName);
         KITS.add(personalKit);
         saveKitsToFile();
-        chatFunctions.configurationError(player, kitName + " has been created successfully.");
+        CHAT_FUNCTIONS.configurationError(player, kitName + " has been created successfully.");
     }
 
     public void deleteKit(PersonalKit kitName) {
