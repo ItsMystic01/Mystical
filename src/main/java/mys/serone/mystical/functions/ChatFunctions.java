@@ -1,6 +1,5 @@
 package mys.serone.mystical.functions;
 
-import mys.serone.mystical.Mystical;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -8,14 +7,16 @@ import java.util.List;
 
 public class ChatFunctions {
 
-    private final Mystical PLUGIN;
+    private final RanksManager RANKS_MANAGER;
     public static final String ECONOMY_PREFIX = "&6[&aEconomy&6] &l| ";
     public static final String SYNTAX_ERROR_PREFIX = "&b[&3Syntax Error&b] &l| ";
     public static final String GENERAL_PREFIX = "&6[&eServer&6] &l| ";
     public static final String PERMISSION_PREFIX = "&b[&3Permission&b] &l| ";
     public static final String RANK_PREFIX = "&b[&3Rank&b] &l| ";
-
-    public ChatFunctions(Mystical plugin) { this.PLUGIN = plugin; }
+    public static final String CONFIGURATION_ERROR_PREFIX = "&f[&cMystical&f] &l| &r";
+    public ChatFunctions(RanksManager ranksManager) {
+        this.RANKS_MANAGER = ranksManager;
+    }
 
     public void informationChat(Player player, String message) {
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', GENERAL_PREFIX + "&f" + message));
@@ -27,12 +28,6 @@ public class ChatFunctions {
 
     public void commandSyntaxError(Player player, String commandSyntax) {
         player.sendMessage(ChatColor.translateAlternateColorCodes('&', SYNTAX_ERROR_PREFIX + "&3" + commandSyntax));
-    }
-
-    public void adminEconomyChat(Player player, Player target, String status, double newBalance, double amount) {
-        target.sendMessage(ChatColor.translateAlternateColorCodes('&', ECONOMY_PREFIX + "&fBalance " + status + ": &a$" + amount));
-        target.sendMessage(ChatColor.translateAlternateColorCodes('&', ECONOMY_PREFIX + "&fBalance: &a$" + newBalance));
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', ECONOMY_PREFIX + "&fBalance " + status + " &c(" + target.getName() + ")&r&f: &a$" + amount));
     }
 
     public void balanceEconomyChat(Player player, double balance) {
@@ -48,14 +43,13 @@ public class ChatFunctions {
     }
 
     public void playerRankChat(Player player, List<String> rank) {
-        RanksManager ranksManager = new RanksManager(PLUGIN);
         StringBuilder userRank = new StringBuilder();
         for ( String perRank : rank ) {
             String rankPrefix;
-            if (ranksManager.getRank(perRank) == null || ranksManager.getRank(perRank).getPrefix() == null) {
+            if (RANKS_MANAGER.getRank(perRank) == null || RANKS_MANAGER.getRank(perRank).getPrefix() == null) {
                 rankPrefix = "&c[&fInvalid Rank&c]";
             } else {
-                rankPrefix = ranksManager.getRank(perRank).getPrefix();
+                rankPrefix = RANKS_MANAGER.getRank(perRank).getPrefix();
             }
             userRank.append(rankPrefix);
             userRank.append(" ");
@@ -72,6 +66,10 @@ public class ChatFunctions {
                 + targetPlayer.getDisplayName() + "&7: ") + message);
         targetPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', "&dFrom &r" + targetPrefix +
                 " " + player.getDisplayName() + "&7: ") + message);
+    }
+
+    public void configurationError(Player player, String message) {
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', CONFIGURATION_ERROR_PREFIX + message));
     }
 
 }

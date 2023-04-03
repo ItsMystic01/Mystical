@@ -11,20 +11,26 @@ import org.jetbrains.annotations.NotNull;
 
 public class Pay implements CommandExecutor {
     private final Mystical PLUGIN;
-    public Pay(Mystical plugin) {
+    private final ChatFunctions CHAT_FUNCTIONS;
+    private final PlayerInfoManager PLAYER_INFO_MANAGER;
+
+    public Pay(Mystical plugin, ChatFunctions chatFunctions, PlayerInfoManager playerInfoManager) {
         this.PLUGIN = plugin;
+        this.CHAT_FUNCTIONS = chatFunctions;
+        this.PLAYER_INFO_MANAGER = playerInfoManager;
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) {
             return true;
         }
 
+        if (!sender.hasPermission("mystical.pay")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+
         Player player = (Player) sender;
         if (args.length != 2) {
-            chatFunctions.commandSyntaxError(player, "/pay [player] [amount]");
+            CHAT_FUNCTIONS.commandSyntaxError(player, "/pay [player] [amount]");
             return true;
         }
         String recipientName = args[0];
@@ -32,39 +38,37 @@ public class Pay implements CommandExecutor {
         try {
             amount = Double.parseDouble(args[1]);
         } catch (NumberFormatException e) {
-            chatFunctions.commandSyntaxError(player, "Invalid amount.");
+            CHAT_FUNCTIONS.commandSyntaxError(player, "Invalid amount.");
             return true;
         }
         if (amount <= 0) {
-            chatFunctions.commandSyntaxError(player, "Amount must be greater than 0.");
+            CHAT_FUNCTIONS.commandSyntaxError(player, "Amount must be greater than 0.");
             return true;
         }
         Player recipient = PLUGIN.getServer().getPlayer(recipientName);
         if (recipient == null) {
-            chatFunctions.commandSyntaxError(player, "Player not found.");
+            CHAT_FUNCTIONS.commandSyntaxError(player, "Player not found.");
             return true;
         }
         String senderUuid = player.getUniqueId().toString();
         String recipientUuid = recipient.getUniqueId().toString();
         if (senderUuid.equals(recipientUuid)) {
-            chatFunctions.commandSyntaxError(player, "You cannot send coins to yourself.");
+            CHAT_FUNCTIONS.commandSyntaxError(player, "You cannot send coins to yourself.");
             return true;
         }
 
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
-        Double senderCoins = playerInfoManager.getPlayerCoins(senderUuid);
-        Double recipientCoins = playerInfoManager.getPlayerCoins(recipientUuid);
+        Double senderCoins = PLAYER_INFO_MANAGER.getPlayerCoins(senderUuid);
+        Double recipientCoins = PLAYER_INFO_MANAGER.getPlayerCoins(recipientUuid);
 
-        if (senderCoins < amount) { chatFunctions.commandSyntaxError(player, "Insufficient Balance."); return true;}
-
+        if (senderCoins < amount) { CHAT_FUNCTIONS.commandSyntaxError(player, "Insufficient Balance."); return true;}
 
         Double senderNewBalance = senderCoins - amount;
-        playerInfoManager.updatePlayerCoins(senderUuid, senderNewBalance);
+        PLAYER_INFO_MANAGER.updatePlayerCoins(senderUuid, senderNewBalance);
 
         Double recipientNewBalance = recipientCoins + amount;
-        playerInfoManager.updatePlayerCoins(recipientUuid, recipientNewBalance);
-        player.sendMessage(chatFunctions.payerEconomyChat(recipient, amount));
-        recipient.sendMessage(chatFunctions.recipientEconomyChat(player, amount));
+        PLAYER_INFO_MANAGER.updatePlayerCoins(recipientUuid, recipientNewBalance);
+        player.sendMessage(CHAT_FUNCTIONS.payerEconomyChat(recipient, amount));
+        recipient.sendMessage(CHAT_FUNCTIONS.recipientEconomyChat(player, amount));
 
         return true;
     }

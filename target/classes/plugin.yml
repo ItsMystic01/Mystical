@@ -7,63 +7,76 @@ commands:
   fly:
     description: Toggles fly.
     aliases: [ flight ]
-  creative:
-    description: Toggles game mode.
-    aliases: [ gm1 ]
+    permission: mystical.fly
   kit:
-    description: Gives a kit
-    aliases: [ kits ]
-  menu:
-    description: Opens up a menu.
-    aliases: [ menus, selector ]
-  spawn:
-    description: Teleports you to the server spawn.
-    aliases: [ s ]
-  setSpawn:
-    description: Sets the server spawn.
-    aliases: [ spawnset ]
-  rename:
-    description: Rename an item in hand.
-    aliases: [ itemrename ]
-  help:
-    description: Shows all the list of commands available.
-    aliases: [ commands ]
-  balance:
-    description: Shows the balance of the user.
-    aliases: [ coins ]
-  giveCoins:
-    description: Gives coins to a user's balance.
-    aliases: [ addbalance ]
-  removeCoins:
-    description: Removes coins from a user's balance.
-    aliases: [ removebalance ]
-  pay:
-    description: Pay mentioned user a desired amount within balance.
-    aliases: [ expend ]
-  playerPermission:
-    description: Gets all the permission a certain player has.
-    aliases: [ permissionplayer ]
-  giveRank:
-    description: Gives rank to a certain player.
-    aliases: [ giverole ]
-  checkAllRank:
-    description: Gives all existing ranks.
-    aliases: [ rankall, allrank ]
-  createRank:
-    description: Creates a new rank.
-    aliases: [ newrank ]
-  deleteRank:
-    description: Deletes an existing rank.
-    aliases: [ eradicaterank ]
-  checkPlayerRank:
-    description: Checks the rank a certain player has.
-    aliases: [ playerrank ]
+    description: Gives the user a kit
+    aliases: [ kitme ]
+    permission: mystical.kit
   message:
     description: Messages a user privately.
     aliases: [ msg, tell ]
-  giveItem:
-    description: Gives the user an item
-    aliases: [ gt ]
-  giveKit:
-    description: Gives the user their kit
-    aliases: [ gk ]
+    permission: mystical.message
+  mysticalHelp:
+    description: Shows all the list of commands available.
+    aliases: [ mysticalcommands ]
+    permission: mystical.help
+  rename:
+    description: Rename an item in hand.
+    aliases: [ itemrename ]
+    permission: mystical.rename
+  balance:
+    description: Shows the balance of the user.
+    aliases: [ coins ]
+    permission: mystical.economy
+  pay:
+    description: Pay mentioned user a desired amount within balance.
+    aliases: [ expend ]
+    permission: mystical.economy
+  checkAllRank:
+    description: Gives all existing ranks.
+    aliases: [ rankall, allrank ]
+    permission: mystical.manageranks
+  checkPlayerRank:
+    description: Checks the rank a certain player has.
+    aliases: [ playerrank ]
+    permission: mystical.manageranks
+  createRank:
+    description: Creates a new rank.
+    aliases: [ newrank ]
+    permission: mystical.manageranks
+  deleteRank:
+    description: Deletes an existing rank.
+    aliases: [ eradicaterank ]
+    permission: mystical.manageranks
+  giveRank:
+    description: Gives rank to a certain player.
+    aliases: [ giverole ]
+    permission: mystical.manageranks
+  removeRank:
+    description: Removes a rank from a certain player.
+    aliases: [ removerole ]
+    permission: mystical.manageranks
+  createKit:
+    description: Creates a kit.
+    aliases: [ ck, kitcreate ]
+    permission: mystical.managekits
+  deleteKit:
+    description: Deletes a kit.
+    aliases: [ dk, kitdelete ]
+    permission: mystical.managekits
+  setKitPrefix:
+    description: Sets kit prefix.
+    aliases: [ skprefix ]
+    permission: mystical.managekits
+  editKit:
+    description: Edit contents of an existing kit.
+    aliases: [ kitedit ]
+    permission: mystical.managekits
+  givePermission:
+    description: Gives a user additional permission.
+    aliases: [ permissionadd ]
+    permission: mystical.managepermissions
+  removePermission:
+    description: Removes a permission from a user.
+    aliases: [ permissionremove ]
+    permission: mystical.managepermissions

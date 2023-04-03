@@ -1,6 +1,5 @@
 package mys.serone.mystical.economy;
 
-import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import org.bukkit.command.Command;
@@ -10,22 +9,24 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class Balance implements CommandExecutor {
-    private final Mystical PLUGIN;
+    private final ChatFunctions CHAT_FUNCTIONS;
+    private final PlayerInfoManager PLAYER_INFO_MANAGER;
 
-    public Balance(Mystical plugin) { this.PLUGIN = plugin; }
+    public Balance(ChatFunctions chatFunctions, PlayerInfoManager playerInfoManager) {
+        this.CHAT_FUNCTIONS = chatFunctions;
+        this.PLAYER_INFO_MANAGER = playerInfoManager;
+    }
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
-        if (!(sender instanceof Player)) {
-            sender.sendMessage("Only players can use this command.");
-            return true;
-        }
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+
+        if (!(sender instanceof Player)) { sender.sendMessage("Only players can use this command."); return true; }
+
+        if (!sender.hasPermission("mystical.balance")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
 
         Player player = (Player) sender;
         String uuid = player.getUniqueId().toString();
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(PLUGIN);
-        Double playerCoins = playerInfoManager.getPlayerCoins(uuid);
-        chatFunctions.balanceEconomyChat(player, playerCoins);
+        Double playerCoins = PLAYER_INFO_MANAGER.getPlayerCoins(uuid);
+        CHAT_FUNCTIONS.balanceEconomyChat(player, playerCoins);
 
         return true;
     }

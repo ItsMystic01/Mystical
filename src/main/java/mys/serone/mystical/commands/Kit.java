@@ -1,109 +1,44 @@
 package mys.serone.mystical.commands;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
+import mys.serone.mystical.Mystical;
+import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.kitSystem.KitManager;
+import mys.serone.mystical.rankSystem.Rank;
+import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
-import java.util.HashMap;
-import java.util.Map;
+import java.io.File;
 
 public class Kit implements CommandExecutor {
+    private final Mystical PLUGIN;
+    private final ChatFunctions CHAT_FUNCTIONS;
+    private final KitManager KIT_MANAGER;
+    private final RanksManager RANKS_MANAGER;
+
+    public Kit(Mystical plugin, ChatFunctions chatFunctions, KitManager kitManager, RanksManager ranksManager) {
+        this.PLUGIN = plugin;
+        this.CHAT_FUNCTIONS = chatFunctions;
+        this.KIT_MANAGER = kitManager;
+        this.RANKS_MANAGER = ranksManager;
+    }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        if (!(sender instanceof Player)) {
-            return true;
-        }
-
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
 
-        Map<Enchantment, Integer> weaponEnchantmentList = new HashMap<>();
+        if (!sender.hasPermission("mystical.kit")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (args.length < 1) { CHAT_FUNCTIONS.commandSyntaxError(player, "Usage: /kit [rank]"); return true;}
 
-        weaponEnchantmentList.put(Enchantment.DAMAGE_ALL, 5);
-        weaponEnchantmentList.put(Enchantment.DURABILITY, 5);
-        weaponEnchantmentList.put(Enchantment.LOOT_BONUS_MOBS, 4);
-        weaponEnchantmentList.put(Enchantment.FIRE_ASPECT, 3);
-        weaponEnchantmentList.put(Enchantment.MENDING, 1);
+        String rankKitToGet = args[0];
+        Rank rank = RANKS_MANAGER.getRank(rankKitToGet);
+        File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits/" + rankKitToGet + ".yml");
 
-        ItemStack weaponPiece = new ItemStack(Material.NETHERITE_SWORD, 1);
-        weaponPiece.addUnsafeEnchantments(weaponEnchantmentList);
-        ItemMeta weaponPieceMeta = weaponPiece.getItemMeta();
-
-        assert weaponPieceMeta != null;
-
-        StringBuilder weaponNewName = new StringBuilder();
-
-        String[] weaponSplitName = Material.NETHERITE_SWORD.name().toLowerCase().split("_");
-        for (String itemName : weaponSplitName) {
-            weaponNewName.append(itemName.substring(0, 1).toUpperCase()).append(itemName.substring(1)).append(" ");
-        }
-
-        weaponPieceMeta.setDisplayName(ChatColor.BLUE + weaponNewName.toString());
-        weaponPiece.setItemMeta(weaponPieceMeta);
-        player.getInventory().addItem(weaponPiece);
-
-        Object[] toolList = {Material.NETHERITE_PICKAXE, Material.NETHERITE_SHOVEL, Material.NETHERITE_AXE};
-        Object[] armorList = {Material.NETHERITE_HELMET, Material.NETHERITE_CHESTPLATE, Material.NETHERITE_LEGGINGS, Material.NETHERITE_BOOTS};
-
-        for (Object toolItem : toolList) {
-            Map<Enchantment, Integer> toolEnchantmentList = new HashMap<>();
-
-            toolEnchantmentList.put(Enchantment.DIG_SPEED, 5);
-            toolEnchantmentList.put(Enchantment.DURABILITY, 5);
-            toolEnchantmentList.put(Enchantment.LOOT_BONUS_BLOCKS, 4);
-            toolEnchantmentList.put(Enchantment.MENDING, 1);
-
-            ItemStack toolPiece = new ItemStack((Material) toolItem, 1);
-            toolPiece.addUnsafeEnchantments(toolEnchantmentList);
-            ItemMeta toolPieceMeta = toolPiece.getItemMeta();
-
-            assert toolPieceMeta != null;
-
-            StringBuilder itemNewName = new StringBuilder();
-
-            String[] splitItemName = ((Material) toolItem).name().toLowerCase().split("_");
-            for (String itemName : splitItemName) {
-                itemNewName.append(itemName.substring(0, 1).toUpperCase()).append(itemName.substring(1)).append(" ");
-            }
-
-            toolPieceMeta.setDisplayName(ChatColor.BLUE + itemNewName.toString());
-            toolPiece.setItemMeta(toolPieceMeta);
-            player.getInventory().addItem(toolPiece);
-        }
-
-        for (Object armorItem : armorList) {
-            Map<Enchantment, Integer> armorEnchantmentList = new HashMap<>();
-
-            armorEnchantmentList.put(Enchantment.PROTECTION_ENVIRONMENTAL, 5);
-            armorEnchantmentList.put(Enchantment.DURABILITY, 5);
-            armorEnchantmentList.put(Enchantment.THORNS, 3);
-            armorEnchantmentList.put(Enchantment.MENDING, 1);
-
-            ItemStack armorPiece = new ItemStack((Material) armorItem, 1);
-            armorPiece.addUnsafeEnchantments(armorEnchantmentList);
-            ItemMeta armorPieceMeta = armorPiece.getItemMeta();
-
-            assert armorPieceMeta != null;
-
-            StringBuilder itemNewName = new StringBuilder();
-
-            String[] splitItemName = ((Material) armorItem).name().toLowerCase().split("_");
-            for (String itemName : splitItemName) {
-                itemNewName.append(itemName.substring(0, 1).toUpperCase()).append(itemName.substring(1)).append(" ");
-            }
-
-            armorPieceMeta.setDisplayName(ChatColor.BLUE + itemNewName.toString());
-            armorPiece.setItemMeta(armorPieceMeta);
-            player.getInventory().addItem(armorPiece);
-
-        }
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&c[&aOP &fKit&c]&f claimed."));
+        if (rank != null) { KIT_MANAGER.kitOne(player, args); }
+        else if (kitFile.exists()) { KIT_MANAGER.claimKit(player, rankKitToGet); }
+        else { CHAT_FUNCTIONS.commandSyntaxError(player, "Kit does not exist."); return true; }
         return true;
     }
 }

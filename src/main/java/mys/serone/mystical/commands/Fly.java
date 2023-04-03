@@ -1,6 +1,5 @@
 package mys.serone.mystical.commands;
 
-import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -9,28 +8,23 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 public class Fly implements CommandExecutor {
-    private final Mystical PLUGIN;
-
-    public Fly(Mystical plugin) { this.PLUGIN = plugin; }
+    private final ChatFunctions CHAT_FUNCTIONS;
+    public Fly(ChatFunctions chatFunctions) {
+        this.CHAT_FUNCTIONS = chatFunctions;
+    }
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
-        ChatFunctions chatFunctions = new ChatFunctions(PLUGIN);
-        if (!(sender instanceof Player)) {
-            return true;
-        }
-
-        if (!sender.hasPermission("mystic.fly")) { chatFunctions.commandPermissionError((Player) sender); return true; }
-
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+        if (!(sender instanceof Player)) { return true; }
+        if (!sender.hasPermission("mystical.fly")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
         Player player = (Player) sender;
 
         if (player.getAllowFlight()) {
             player.setAllowFlight(false);
-            player.sendMessage("Off");
+            CHAT_FUNCTIONS.informationChat(player, "Flight off");
         } else {
             player.setAllowFlight(true);
-            player.sendMessage("On");
+            CHAT_FUNCTIONS.informationChat(player, "Flight on");
         }
-
         return true;
     }
 }

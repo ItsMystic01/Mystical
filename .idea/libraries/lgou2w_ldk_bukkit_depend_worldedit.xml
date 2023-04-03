@@ -1,0 +1,25 @@
+<component name="libraryTable">
+  <library name="lgou2w.ldk.bukkit.depend.worldedit" type="repository">
+    <properties maven-id="com.lgou2w:ldk-bukkit-depend-worldedit:0.2.2" />
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-bukkit-depend-worldedit/0.2.2/ldk-bukkit-depend-worldedit-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-bukkit-depend/0.2.2/ldk-bukkit-depend-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-bukkit-common/0.2.2/ldk-bukkit-common-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-chat/0.2.2/ldk-chat-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-common/0.2.2/ldk-common-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/google/code/gson/gson/2.8.6/gson-2.8.6.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-bukkit-version/0.2.2/ldk-bukkit-version-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-bukkit-reflect/0.2.2/ldk-bukkit-reflect-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-reflect/0.2.2/ldk-reflect-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-bukkit-nbt/0.2.2/ldk-bukkit-nbt-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-nbt/0.2.2/ldk-nbt-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-bukkit-compatibility/0.2.2/ldk-bukkit-compatibility-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/com/lgou2w/ldk-bukkit-region/0.2.2/ldk-bukkit-region-0.2.2.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib/1.4.0/kotlin-stdlib-1.4.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/kotlin/kotlin-stdlib-common/1.4.0/kotlin-stdlib-common-1.4.0.jar!/" />
+      <root url="jar://$MAVEN_REPOSITORY$/org/jetbrains/annotations/13.0/annotations-13.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
