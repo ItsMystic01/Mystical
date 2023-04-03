@@ -2,26 +2,24 @@ package mys.serone.mystical.functions;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.commands.*;
-import mys.serone.mystical.configurationSystem.Configuration;
-import mys.serone.mystical.configurationSystem.ConfigurationManager;
-import mys.serone.mystical.economy.Balance;
-import mys.serone.mystical.economy.Pay;
-import mys.serone.mystical.handlers.ConfigManager;
-import mys.serone.mystical.handlers.ReadMeConfiguration;
+import mys.serone.mystical.configurationSystem.*;
+import mys.serone.mystical.economy.*;
+import mys.serone.mystical.handlers.*;
 import mys.serone.mystical.kit.*;
-import mys.serone.mystical.listeners.ChatListener;
-import mys.serone.mystical.listeners.OnFirstJoin;
-import mys.serone.mystical.permissionCommands.*;
+import mys.serone.mystical.kitSystem.KitManager;
+import mys.serone.mystical.kitSystem.PersonalKitManager;
+import mys.serone.mystical.listeners.*;
+import mys.serone.mystical.roleCommands.*;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.command.CommandExecutor;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.io.File;
 import java.util.Objects;
 
-public class CommandEntry extends JavaPlugin {
-    public CommandEntry() {
+import static org.bukkit.Bukkit.getServer;
+
+public class CommandEntryFunctions {
+    public CommandEntryFunctions() {
     }
 
     public void initCommands(Mystical plugin) {
@@ -40,8 +38,8 @@ public class CommandEntry extends JavaPlugin {
         Configuration configuration = new Configuration();
         KitManager kitManager = new KitManager(plugin, chatFunctions, ranksManager, playerInfoManager, personalKitManager);
 
-        getServer().getPluginManager().registerEvents(new ChatListener(playerInfoManager, ranksManager), this);
-        getServer().getPluginManager().registerEvents(new OnFirstJoin(plugin, configurationManager, configuration, playerInfoManager, chatFunctions, ranksManager, ranksFile), this);
+        getServer().getPluginManager().registerEvents(new ChatListener(playerInfoManager, ranksManager), plugin);
+        getServer().getPluginManager().registerEvents(new OnFirstJoinListener(plugin, configurationManager, configuration, playerInfoManager, chatFunctions, ranksManager, ranksFile), plugin);
 
         new ReadMeConfiguration(readMeFile).writeToFile();
         new ConfigManager(ranksManager, playerInfoManager);

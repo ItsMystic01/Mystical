@@ -11,12 +11,11 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 public class PlayerInfoManager {
-    private final List<PlayerInfo> PLAYER_INFO;
+    private final HashMap<String, PlayerInfo> PLAYER_INFO;
     private final File PLAYER_INFO_FILE;
     private final ChatFunctions CHAT_FUNCTIONS;
     private final RanksManager RANKS_MANAGER;
@@ -40,15 +39,15 @@ public class PlayerInfoManager {
         this.PLAYER_INFO = loadPlayerInfoFromFile();
     }
 
-    private List<PlayerInfo> loadPlayerInfoFromFile() {
-        List<PlayerInfo> ranks = new ArrayList<>();
+    private HashMap<String, PlayerInfo> loadPlayerInfoFromFile() {
+        HashMap<String, PlayerInfo> ranks = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
             if (PLAYER_INFO_FILE.length() == 0) {
                 System.out.println("[Mystical] Player Info file is empty.");
                 return ranks;
             }
-            ranks = mapper.readValue(PLAYER_INFO_FILE, new TypeReference<List<PlayerInfo>>() {});
+            ranks = mapper.readValue(PLAYER_INFO_FILE, new TypeReference<HashMap<String, PlayerInfo>>() {});
         } catch (JsonParseException e) {
             System.out.println("[Mystical] Ranks file has invalid formatting.");
             e.printStackTrace();
@@ -60,105 +59,70 @@ public class PlayerInfoManager {
     }
 
 
-    public List<PlayerInfo> getAllPlayerInfo() {
+    public HashMap<String, PlayerInfo> getAllPlayerInfo() {
         return PLAYER_INFO;
     }
 
     public void createPlayerInfo(String playerUUID, Double userCoins, List<String> userRankList, List<String> userAdditionalPermission) {
         PlayerInfo playerInfo = new PlayerInfo();
-        playerInfo.setPlayerUUID(playerUUID);
         playerInfo.setUserCoins(userCoins);
         playerInfo.setUserRankList(userRankList);
         playerInfo.setUserAdditionalPermission(userAdditionalPermission);
-        PLAYER_INFO.add(playerInfo);
+        PLAYER_INFO.put(playerUUID, playerInfo);
         savePlayerInfoToFile();
     }
 
     public List<String> getPlayerRankList(String UUID) {
-        List<PlayerInfo> allPlayerInfo = getAllPlayerInfo();
-
-        List<String> userRankList = null;
-
-        for (PlayerInfo perInfo : allPlayerInfo) {
-            if (Objects.equals(perInfo.getPlayerUUID(), UUID)) {
-                userRankList = perInfo.getUserRankList();
-            }
-        }
-        return userRankList;
+        PlayerInfo playerInfo = PLAYER_INFO.get(UUID);
+        return playerInfo.getUserRankList();
     }
 
     public Double getPlayerCoins(String UUID) {
-        List<PlayerInfo> allPlayerInfo = getAllPlayerInfo();
-
-        Double userCoins = null;
-
-        for (PlayerInfo perInfo : allPlayerInfo) {
-            if (Objects.equals(perInfo.getPlayerUUID(), UUID)) {
-                userCoins = perInfo.getUserCoins();
-            }
-        }
-        return userCoins;
+        PlayerInfo playerInfo = PLAYER_INFO.get(UUID);
+        return playerInfo.getUserCoins();
     }
 
     public void updatePlayerCoins(String UUID, Double newBalance) {
-        List<PlayerInfo> allPlayerInfo = getAllPlayerInfo();
-
-        for (PlayerInfo perInfo : allPlayerInfo) {
-            if (Objects.equals(perInfo.getPlayerUUID(), UUID)) {
-                perInfo.setUserCoins(newBalance);
-                savePlayerInfoToFile();
-            }
-        }
+        PlayerInfo playerInfo = PLAYER_INFO.get(UUID);
+        playerInfo.setUserCoins(newBalance);
+        savePlayerInfoToFile();
     }
 
     public void addRankToPlayer(Player player, CommandSender sender, String rankToAdd) {
-        for (PlayerInfo perPlayer : getAllPlayerInfo()) {
-            if (perPlayer.getPlayerUUID().equals(player.getUniqueId().toString())) {
-                List<String> playerRankList = perPlayer.getUserRankList();
-                if (playerRankList.stream().anyMatch(s -> s.equalsIgnoreCase(rankToAdd))) {
-                    CHAT_FUNCTIONS.rankChat((Player) sender, player.getDisplayName() + " already has that rank.");
-                    return;
-                }
-                playerRankList.add(rankToAdd);
-                perPlayer.setUserRankList(playerRankList);
-                savePlayerInfoToFile();
-                CHAT_FUNCTIONS.rankChat((Player) sender, rankToAdd + " has been given to " + player.getDisplayName() + ".");
-                CHAT_FUNCTIONS.rankChat((Player) sender, "It is recommended for " + player.getDisplayName() + " to re-log for the rank-update to take effect.");
-                CHAT_FUNCTIONS.rankChat(player, "It is recommended to re-log for the rank-update to take effect.");
-                new ConfigManager(RANKS_MANAGER, this);
-            }
+        PlayerInfo playerInfo = PLAYER_INFO.get(player.getUniqueId().toString());
+        List<String> playerInfoRankList = playerInfo.getUserRankList();
+
+        if (playerInfoRankList.stream().anyMatch(s -> s.equalsIgnoreCase(rankToAdd))) {
+            CHAT_FUNCTIONS.rankChat((Player) sender, player.getDisplayName() + " already has that rank.");
+            return;
         }
+
+        playerInfoRankList.add(rankToAdd);
+        playerInfo.setUserRankList(playerInfoRankList);
+        savePlayerInfoToFile();
+        new ConfigManager(RANKS_MANAGER, this);
+
+        CHAT_FUNCTIONS.rankChat((Player) sender, rankToAdd + " has been given to " + player.getDisplayName() + ".");
+        CHAT_FUNCTIONS.rankChat((Player) sender, "It is recommended for " + player.getDisplayName() + " to re-log for the rank-update to take effect.");
+        CHAT_FUNCTIONS.rankChat(player, "It is recommended to re-log for the rank-update to take effect.");
     }
 
     public void removeRankToPlayer(Player player, CommandSender sender, String rankToRemove) {
-        for (PlayerInfo perPlayer : getAllPlayerInfo()) {
-            if (perPlayer.getPlayerUUID().equals(player.getUniqueId().toString())) {
-                List<String> playerRankList = perPlayer.getUserRankList();
-                if (playerRankList.stream().noneMatch(s -> s.equalsIgnoreCase(rankToRemove))) {
-                    CHAT_FUNCTIONS.rankChat((Player) sender, player.getDisplayName() + " does not have that rank.");
-                    return;
-                }
-                playerRankList.remove(rankToRemove);
-                perPlayer.setUserRankList(playerRankList);
-                savePlayerInfoToFile();
-                CHAT_FUNCTIONS.rankChat((Player) sender, rankToRemove + " has been removed from " + player.getDisplayName() + ".");
-                CHAT_FUNCTIONS.rankChat((Player) sender, "It is recommended for " + player.getDisplayName() + " to re-log for the rank-update to take effect.");
-                new ConfigManager(RANKS_MANAGER, this);
-            }
+        PlayerInfo playerInfo = PLAYER_INFO.get(player.getUniqueId().toString());
+        List<String> playerInfoRankList = playerInfo.getUserRankList();
+
+        if (playerInfoRankList.stream().noneMatch(s -> s.equalsIgnoreCase(rankToRemove))) {
+            CHAT_FUNCTIONS.rankChat((Player) sender, player.getDisplayName() + " does not have that rank.");
+            return;
         }
-    }
 
-    public List<String> getPlayerAdditionalPermission(String UUID) {
-        List<PlayerInfo> allPlayerInfo = getAllPlayerInfo();
+        playerInfoRankList.remove(rankToRemove);
+        playerInfo.setUserRankList(playerInfoRankList);
+        savePlayerInfoToFile();
+        new ConfigManager(RANKS_MANAGER, this);
 
-        List<String> additionalPermission = new ArrayList<>();
-
-        for (PlayerInfo perInfo : allPlayerInfo) {
-            if (Objects.equals(perInfo.getPlayerUUID(), UUID)) {
-                additionalPermission = perInfo.getUserAdditionalPermission();
-            }
-        }
-        return additionalPermission;
+        CHAT_FUNCTIONS.rankChat((Player) sender, rankToRemove + " has been removed from " + player.getDisplayName() + ".");
+        CHAT_FUNCTIONS.rankChat((Player) sender, "It is recommended for " + player.getDisplayName() + " to re-log for the rank-update to take effect.");
     }
 
     public void savePlayerInfoToFile() {

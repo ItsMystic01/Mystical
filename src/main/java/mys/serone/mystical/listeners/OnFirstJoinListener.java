@@ -17,7 +17,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class OnFirstJoin implements Listener {
+public class OnFirstJoinListener implements Listener {
     private final Mystical PLUGIN;
     private final ConfigurationManager CONFIGURATION_MANAGER;
     private final Configuration CONFIGURATION;
@@ -26,8 +26,8 @@ public class OnFirstJoin implements Listener {
     private final RanksManager RANKS_MANAGER;
     private final File CHECK_RANKS_FILE;
 
-    public OnFirstJoin(Mystical plugin, ConfigurationManager configurationManager, Configuration configuration,
-                       PlayerInfoManager playerInfoManager, ChatFunctions chatFunctions, RanksManager ranksManager, File ranksFile) {
+    public OnFirstJoinListener(Mystical plugin, ConfigurationManager configurationManager, Configuration configuration,
+                               PlayerInfoManager playerInfoManager, ChatFunctions chatFunctions, RanksManager ranksManager, File ranksFile) {
         this.PLUGIN = plugin;
         this.CONFIGURATION_MANAGER = configurationManager;
         this.CONFIGURATION = configuration;
@@ -72,23 +72,23 @@ public class OnFirstJoin implements Listener {
         Player player = event.getPlayer();
         String uuid = player.getUniqueId().toString();
 
+        HashMap<String, PlayerInfo> allPlayerInfo = PLAYER_INFO_MANAGER.getAllPlayerInfo();
+        PlayerInfo playerInfo = allPlayerInfo.get(uuid);
+
         List<String> uuidList = new ArrayList<>();
 
-        List<PlayerInfo> UUID = PLAYER_INFO_MANAGER.getAllPlayerInfo();
-
-        for (PlayerInfo uu : UUID) {
-            String userUUID = uu.getPlayerUUID();
-            uuidList.add(userUUID);
+        for (Map.Entry<String, PlayerInfo> playerInfoEntry : allPlayerInfo.entrySet()) {
+            uuidList.add(playerInfoEntry.getKey());
         }
 
         if (uuidList.contains(uuid)) {
-            List<String> playerJoinedRankList = PLAYER_INFO_MANAGER.getPlayerRankList(uuid);
+            List<String> playerJoinedRankList = playerInfo.getUserRankList();
             for (String rank : playerJoinedRankList) {
                 for (String rankPerm : RANKS_MANAGER.getRank(rank).getPermissions()) {
                     player.addAttachment(PLUGIN, rankPerm, true);
                 }
             }
-            List<String> playerAdditionalPermission = PLAYER_INFO_MANAGER.getPlayerAdditionalPermission(uuid);
+            List<String> playerAdditionalPermission = playerInfo.getUserAdditionalPermission();
             if (playerAdditionalPermission.size() > 0) {
                 for (String permissionToAdd : playerAdditionalPermission) {
                     player.addAttachment(PLUGIN, permissionToAdd, true);
@@ -98,15 +98,18 @@ public class OnFirstJoin implements Listener {
         } else {
             List<String> defaultRank = new ArrayList<>();
             List<String> defaultAdditionalPermission = new ArrayList<>();
+
             defaultRank.add(finalDefaultRank);
             PLAYER_INFO_MANAGER.createPlayerInfo(uuid, finalDefaultCoins, defaultRank, defaultAdditionalPermission);
 
-            List<String> playerJoinedRankList = PLAYER_INFO_MANAGER.getPlayerRankList(uuid);
+            List<String> playerJoinedRankList = playerInfo.getUserRankList();
+
             for (String rank : playerJoinedRankList) {
                 for (String rankPerm : RANKS_MANAGER.getRank(rank).getPermissions()) {
                     player.addAttachment(PLUGIN, rankPerm, true);
                 }
             }
+            
             CHAT_FUNCTIONS.informationChat(player, "You have received &a$" + finalDefaultCoins  + "&f coins for your first join.");
         }
     }

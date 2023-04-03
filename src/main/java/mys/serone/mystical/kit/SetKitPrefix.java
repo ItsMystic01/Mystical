@@ -2,6 +2,7 @@ package mys.serone.mystical.kit;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.kitSystem.PersonalKitManager;
 import mys.serone.mystical.rankSystem.Rank;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.command.Command;
@@ -25,7 +26,7 @@ public class SetKitPrefix implements CommandExecutor {
         this.RANKS_MANAGER = ranksManager;
     }
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
 
         if (!sender.hasPermission("mystical.kit")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }

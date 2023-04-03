@@ -2,7 +2,7 @@ package mys.serone.mystical;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
-import mys.serone.mystical.functions.CommandEntry;
+import mys.serone.mystical.functions.CommandEntryFunctions;
 import java.io.File;
 
 public final class Mystical extends JavaPlugin {
@@ -10,7 +10,7 @@ public final class Mystical extends JavaPlugin {
     @Override
     public void onEnable() {
 
-        CommandEntry commandEntry = new CommandEntry();
+        CommandEntryFunctions commandEntry = new CommandEntryFunctions();
 
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) {

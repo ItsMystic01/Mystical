@@ -1,4 +1,4 @@
-package mys.serone.mystical.permissionCommands;
+package mys.serone.mystical.roleCommands;
 
 import mys.serone.mystical.functions.ChatFunctions;
 import mys.serone.mystical.rankSystem.Rank;
@@ -19,7 +19,7 @@ public class CheckAllRank implements CommandExecutor {
         this.RANKS_MANAGER = ranksManager;
     }
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         List<Rank> allRanks = RANKS_MANAGER.getRanks();
 
         if (!sender.hasPermission("mystical.manageranks")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }

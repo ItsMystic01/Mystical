@@ -13,7 +13,7 @@ public class Fly implements CommandExecutor {
         this.CHAT_FUNCTIONS = chatFunctions;
     }
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) { return true; }
         if (!sender.hasPermission("mystical.fly")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
         Player player = (Player) sender;

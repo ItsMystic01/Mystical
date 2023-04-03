@@ -1,4 +1,4 @@
-package mys.serone.mystical.kit;
+package mys.serone.mystical.kitSystem;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
@@ -28,7 +28,8 @@ public class KitManager {
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final PersonalKitManager PERSONAL_KIT_MANAGER;
 
-    public KitManager(Mystical plugin, ChatFunctions chatFunctions, RanksManager ranksManager, PlayerInfoManager playerInfoManager, PersonalKitManager personalKitManager) {
+    public KitManager(Mystical plugin, ChatFunctions chatFunctions, RanksManager ranksManager,
+                      PlayerInfoManager playerInfoManager, PersonalKitManager personalKitManager) {
         this.PLUGIN = plugin;
         this.CHAT_FUNCTIONS = chatFunctions;
         this.RANKS_MANAGER = ranksManager;

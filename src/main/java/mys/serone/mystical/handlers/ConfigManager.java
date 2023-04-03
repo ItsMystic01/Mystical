@@ -12,26 +12,26 @@ public class ConfigManager {
     public ConfigManager(RanksManager ranksManager, PlayerInfoManager playerInfoManager) {
 
         List<Rank> allRanks = ranksManager.getRanks();
+        List<Map<String, Integer>> playerRankPriority = new ArrayList<>();
+        List<String> playerSortedRankList = new ArrayList<>();
+        HashMap<String, PlayerInfo> allPlayerInfo = playerInfoManager.getAllPlayerInfo();
 
         for (Rank rankName : allRanks) {
             if (rankName.getName() == null) {
-                 System.out.println("[Mystical] Invalid Rank Format at ranks.yml");
+                System.out.println("[Mystical] Invalid Rank Format at ranks.yml");
             }
         }
 
-        List<Map<String, Integer>> playerRankPriority = new ArrayList<>();
-
-            try {
-                List<Rank> rankPriority = ranksManager.getRanks();
-                for (Rank rankToCheck : rankPriority) {
-                    Map<String, Integer> newMap = new HashMap<>();
-                    newMap.put(rankToCheck.getName(), rankToCheck.getPriority());
-                    playerRankPriority.add(newMap);
-                }
-            } catch (Exception e) {
-                System.out.println("[Mystical] A problem has occurred in the ranks.yml");
+        try {
+            List<Rank> rankPriority = ranksManager.getRanks();
+            for (Rank rankToCheck : rankPriority) {
+                Map<String, Integer> newMap = new HashMap<>();
+                newMap.put(rankToCheck.getName(), rankToCheck.getPriority());
+                playerRankPriority.add(newMap);
             }
-
+        } catch (Exception e) {
+            System.out.println("[Mystical] A problem has occurred in the ranks.yml");
+        }
 
         playerRankPriority.sort((o1, o2) -> {
             Integer value1 = Collections.min(o1.values());
@@ -39,22 +39,19 @@ public class ConfigManager {
             return value1.compareTo(value2);
         });
 
-        List<String> playerSortedRankList = new ArrayList<>();
-
         for (Map<String, Integer> stringIntegerMap : playerRankPriority) {
             String rankSort = stringIntegerMap.keySet().toString();
             playerSortedRankList.add(rankSort.replace("[", "").replace("]", ""));
         }
 
-        List<PlayerInfo> allPlayerInfo = playerInfoManager.getAllPlayerInfo();
-
-        for (PlayerInfo certainPlayer : allPlayerInfo) {
-            List<String> certainPlayerRankList = certainPlayer.getUserRankList();
-            List<String> sortedPlayerRankList = certainPlayerRankList.stream()
+        for (Map.Entry<String, PlayerInfo> playerInfo : allPlayerInfo.entrySet()) {
+            PlayerInfo playerInfoValues = playerInfo.getValue();
+            List<String> playerInfoValuesUserRankList = playerInfoValues.getUserRankList();
+            List<String> playerInfoValuesUserSortedRankList = playerInfoValuesUserRankList.stream()
                     .filter(playerSortedRankList::contains)
                     .sorted(Comparator.comparingInt(playerSortedRankList::indexOf))
                     .collect(Collectors.toList());
-            certainPlayer.setUserRankList(sortedPlayerRankList);
+            playerInfoValues.setUserRankList(playerInfoValuesUserSortedRankList);
             playerInfoManager.savePlayerInfoToFile();
         }
     }

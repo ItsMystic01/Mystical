@@ -24,7 +24,7 @@ public class Message implements CommandExecutor {
         this.PLAYER_INFO_MANAGER = playerInfoManager;
     }
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (!(sender instanceof Player)) { return true; }
 

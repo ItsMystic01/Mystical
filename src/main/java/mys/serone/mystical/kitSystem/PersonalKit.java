@@ -1,4 +1,4 @@
-package mys.serone.mystical.kit;
+package mys.serone.mystical.kitSystem;
 
 public class PersonalKit {
     private String kitName;

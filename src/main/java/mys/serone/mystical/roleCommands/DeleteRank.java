@@ -1,4 +1,4 @@
-package mys.serone.mystical.permissionCommands;
+package mys.serone.mystical.roleCommands;
 
 import mys.serone.mystical.functions.ChatFunctions;
 import mys.serone.mystical.handlers.ConfigManager;
@@ -23,7 +23,7 @@ public class DeleteRank implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!sender.hasPermission("mystical.manageranks")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
         if (args.length < 1) { CHAT_FUNCTIONS.commandSyntaxError( (Player) sender, "/deleteRank [Rank Name]"); return true; }
 

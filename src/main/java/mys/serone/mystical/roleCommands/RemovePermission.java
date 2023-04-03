@@ -1,4 +1,4 @@
-package mys.serone.mystical.permissionCommands;
+package mys.serone.mystical.roleCommands;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
@@ -9,8 +9,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Objects;
 
 public class RemovePermission implements CommandExecutor {
     private final Mystical PLUGIN;
@@ -23,7 +23,7 @@ public class RemovePermission implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!sender.hasPermission("mystical.manageranks")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
         if (args.length < 2) { CHAT_FUNCTIONS.commandSyntaxError((Player) sender, "/removePermission [Player] [Permission]"); return true; }
 
@@ -31,19 +31,18 @@ public class RemovePermission implements CommandExecutor {
         if (player == null) { CHAT_FUNCTIONS.rankChat((Player) sender, "Invalid User"); return true; }
 
         String permission = args[1];
+        HashMap<String, PlayerInfo> allPlayerInfo = PLAYER_INFO_MANAGER.getAllPlayerInfo();
+        PlayerInfo playerInfo = allPlayerInfo.get(player.getUniqueId().toString());
+        List<String> playerInfoPermissionList = playerInfo.getUserAdditionalPermission();
 
-        List<String> permissionToAdd = PLAYER_INFO_MANAGER.getPlayerAdditionalPermission(player.getUniqueId().toString());
-        if (!(permissionToAdd.contains(permission))) { CHAT_FUNCTIONS.commandSyntaxError((Player) sender, player.getDisplayName() + " does not have that permission."); return true; }
-        permissionToAdd.remove(permission);
-
-        List<PlayerInfo> allPlayerInfo = PLAYER_INFO_MANAGER.getAllPlayerInfo();
-
-        for (PlayerInfo perInfo : allPlayerInfo) {
-            if (Objects.equals(perInfo.getPlayerUUID(), player.getUniqueId().toString())) {
-                perInfo.setUserAdditionalPermission(permissionToAdd);
-                PLAYER_INFO_MANAGER.savePlayerInfoToFile();
-            }
+        if (!(playerInfoPermissionList.contains(permission))) {
+            CHAT_FUNCTIONS.commandSyntaxError((Player) sender, player.getDisplayName() + " does not have that permission.");
+            return true;
         }
+
+        playerInfoPermissionList.remove(permission);
+        playerInfo.setUserAdditionalPermission(playerInfoPermissionList);
+        PLAYER_INFO_MANAGER.savePlayerInfoToFile();
 
         CHAT_FUNCTIONS.rankChat((Player) sender, permission + " has been removed from " + player.getDisplayName() + ".");
         CHAT_FUNCTIONS.rankChat((Player) sender, "It is recommended for " + player.getDisplayName() + " to re-log for the permission to take effect.");

@@ -81,6 +81,10 @@
           <id>sonatype</id>
           <url>https://oss.sonatype.org/content/groups/public/</url>
       </repository>
+      <repository>
+          <id>worldedit-repo</id>
+          <url>https://maven.enginehub.org/repo</url>
+      </repository>
   </repositories>
 
   <dependencies>

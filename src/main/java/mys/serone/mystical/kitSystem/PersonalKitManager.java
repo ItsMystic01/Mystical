@@ -1,4 +1,4 @@
-package mys.serone.mystical.kit;
+package mys.serone.mystical.kitSystem;
 
 import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
