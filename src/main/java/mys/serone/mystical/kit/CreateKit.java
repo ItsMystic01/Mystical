@@ -2,6 +2,7 @@ package mys.serone.mystical.kit;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.functions.PermissionENUM;
 import mys.serone.mystical.kitSystem.PersonalKitManager;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.Bukkit;
@@ -36,7 +37,7 @@ public class CreateKit implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) { return true; }
-        if (!sender.hasPermission("mystical.managekits")) { chatFunctions.commandPermissionError((Player) sender); return true; }
+        if (!sender.hasPermission(PermissionENUM.permissionENUM.CREATE_KIT.getPermission())) { chatFunctions.commandPermissionError((Player) sender); return true; }
         if (args.length < 2) {
             chatFunctions.commandSyntaxError((Player) sender, "/createKit [name] [colored name]");
             return true;

@@ -7,76 +7,162 @@ commands:
   fly:
     description: Toggles fly.
     aliases: [ flight ]
-    permission: mystical.fly
   kit:
     description: Gives the user a kit
     aliases: [ kitme ]
-    permission: mystical.kit
   message:
     description: Messages a user privately.
     aliases: [ msg, tell ]
-    permission: mystical.message
   mysticalHelp:
     description: Shows all the list of commands available.
     aliases: [ mysticalcommands ]
-    permission: mystical.help
   rename:
     description: Rename an item in hand.
     aliases: [ itemrename ]
-    permission: mystical.rename
   balance:
     description: Shows the balance of the user.
     aliases: [ coins ]
-    permission: mystical.economy
   pay:
     description: Pay mentioned user a desired amount within balance.
     aliases: [ expend ]
-    permission: mystical.economy
-  checkAllRank:
-    description: Gives all existing ranks.
-    aliases: [ rankall, allrank ]
-    permission: mystical.manageranks
-  checkPlayerRank:
-    description: Checks the rank a certain player has.
-    aliases: [ playerrank ]
-    permission: mystical.manageranks
-  createRank:
-    description: Creates a new rank.
-    aliases: [ newrank ]
-    permission: mystical.manageranks
-  deleteRank:
-    description: Deletes an existing rank.
-    aliases: [ eradicaterank ]
-    permission: mystical.manageranks
-  giveRank:
-    description: Gives rank to a certain player.
-    aliases: [ giverole ]
-    permission: mystical.manageranks
-  removeRank:
-    description: Removes a rank from a certain player.
-    aliases: [ removerole ]
-    permission: mystical.manageranks
   createKit:
     description: Creates a kit.
     aliases: [ ck, kitcreate ]
-    permission: mystical.managekits
   deleteKit:
     description: Deletes a kit.
     aliases: [ dk, kitdelete ]
-    permission: mystical.managekits
   setKitPrefix:
     description: Sets kit prefix.
     aliases: [ skprefix ]
-    permission: mystical.managekits
   editKit:
     description: Edit contents of an existing kit.
     aliases: [ kitedit ]
-    permission: mystical.managekits
+  checkAllRank:
+    description: Gives all existing ranks.
+    aliases: [ rankall, allrank ]
+  checkPlayerRank:
+    description: Checks the rank a certain player has.
+    aliases: [ playerrank ]
+  createRank:
+    description: Creates a new rank.
+    aliases: [ newrank ]
+  deleteRank:
+    description: Deletes an existing rank.
+    aliases: [ eradicaterank ]
+  giveRank:
+    description: Gives rank to a certain player.
+    aliases: [ giverole ]
+  removeRank:
+    description: Removes a rank from a certain player.
+    aliases: [ removerole ]
   givePermission:
     description: Gives a user additional permission.
     aliases: [ permissionadd ]
-    permission: mystical.managepermissions
   removePermission:
     description: Removes a permission from a user.
     aliases: [ permissionremove ]
-    permission: mystical.managepermissions
+  customParticle:
+    description: Creates custom particle.
+    aliases: [ cparticle ]
+
+permissions:
+  mystical.*:
+    description: Permission over all features of Mystical Plugin.
+    default: op
+    children:
+      mystical.managekits: true
+      mystical.manageeconomy: true
+      mystical.roles: true
+      mystical.default: true
+  mystical.managekits:
+    description: Permission over all kits features of Mystical Plugin
+    default: false
+    children:
+      mystical.createkit: true
+      mystical.deletekit: true
+      mystical.editkit: true
+      mystical.setkitprefix: true
+  mystical.manageeconomy:
+    description: Permission over all economy features of Mystical Plugin
+    default: false
+    children:
+      mystical.balance: true
+      mystical.pay: true
+  mystical.roles:
+    description: Permission over all role features of Mystical Plugin
+    default: false
+    children:
+      mystical.checkallrank: true
+      mystical.checkplayerrank: true
+      mystical.createrank: true
+      mystical.deleterank: true
+      mystical.givepermission: true
+      mystical.giverank: true
+      mystical.removepermission: true
+      mystical.removerank: true
+  mystical.default:
+    description: Permission over all default features of Mystical Plugin
+    default: true
+    children:
+      mystical.fly: false
+      mystical.kit: true
+      mystical.message: true
+      mystical.help: false
+      mystical.rename: false
+  mystical.fly:
+    description: Permission to enable or disable flight.
+    default: op
+  mystical.kit:
+    description: Ability to claim kits.
+    default: true
+  mystical.message:
+    description: Ability to privately message a user.
+    default: true
+  mystical.help:
+    description: Ability to use the help command of Mystical Commands
+    default: false
+  mystical.rename:
+    description: Ability to rename on-hand item.
+    default: op
+  mystical.balance:
+    description: Ability to check their own balance.
+    default: true
+  mystical.pay:
+    description: Ability to pay other user.
+    default: true
+  mystical.createkit:
+    description: Ability to create custom-kits.
+    default: op
+  mystical.deletekit:
+    description: Ability to delete kits from the current custom-kit list.
+    default: op
+  mystical.editkit:
+    description: Ability to edit the contents of a custom-kit.
+    default: op
+  mystical.setkitprefix:
+    description: Ability to change the kit prefix.
+    default: op
+  mystical.checkallrank:
+    description: Ability to check all the current ranks available.
+    default: op
+  mystical.checkplayerrank:
+    description: Ability to check all the rank a user has.
+    default: op
+  mystical.createrank:
+    description: Ability to create a rank.
+    default: op
+  mystical.deleterank:
+    description: Ability to delete an existing rank.
+    default: op
+  mystical.givepermission:
+    description: Ability to give a user certain permission.
+    default: op
+  mystical.giverank:
+    description: Ability to give a user an existing rank.
+    default: op
+  mystical.removepermission:
+    description: Ability to remove permission from a user.
+    default: op
+  mystical.removerank:
+    description: Ability to remove rank from a user.
+    default: op

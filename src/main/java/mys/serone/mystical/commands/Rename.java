@@ -1,6 +1,7 @@
 package mys.serone.mystical.commands;
 
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.functions.PermissionENUM;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -21,7 +22,7 @@ public class Rename implements CommandExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("mystical.rename")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (!sender.hasPermission(PermissionENUM.permissionENUM.RENAME.getPermission())) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
 
         Player player = (Player) sender;
         ItemStack itemInHand = player.getInventory().getItemInMainHand();

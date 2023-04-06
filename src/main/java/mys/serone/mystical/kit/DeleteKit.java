@@ -2,6 +2,7 @@ package mys.serone.mystical.kit;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.functions.PermissionENUM;
 import mys.serone.mystical.kitSystem.PersonalKit;
 import mys.serone.mystical.kitSystem.PersonalKitManager;
 import org.bukkit.command.Command;
@@ -25,7 +26,7 @@ public class DeleteKit implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) { return true; }
-        if (!sender.hasPermission("mystical.managekits")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (!sender.hasPermission(PermissionENUM.permissionENUM.DELETE_KIT.getPermission())) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
 
         if (args.length < 1) {
             CHAT_FUNCTIONS.commandSyntaxError((Player) sender, "/deleteKit [name]");

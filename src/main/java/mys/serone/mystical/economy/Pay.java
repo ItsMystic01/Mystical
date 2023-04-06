@@ -2,6 +2,7 @@ package mys.serone.mystical.economy;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.functions.PermissionENUM;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,7 +27,7 @@ public class Pay implements CommandExecutor {
             return true;
         }
 
-        if (!sender.hasPermission("mystical.pay")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (!sender.hasPermission(PermissionENUM.permissionENUM.PAY.getPermission())) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
 
         Player player = (Player) sender;
         if (args.length != 2) {

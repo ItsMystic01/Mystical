@@ -73,7 +73,6 @@ public class OnFirstJoinListener implements Listener {
         String uuid = player.getUniqueId().toString();
 
         HashMap<String, PlayerInfo> allPlayerInfo = PLAYER_INFO_MANAGER.getAllPlayerInfo();
-        PlayerInfo playerInfo = allPlayerInfo.get(uuid);
 
         List<String> uuidList = new ArrayList<>();
 
@@ -82,6 +81,7 @@ public class OnFirstJoinListener implements Listener {
         }
 
         if (uuidList.contains(uuid)) {
+            PlayerInfo playerInfo = allPlayerInfo.get(uuid);
             List<String> playerJoinedRankList = playerInfo.getUserRankList();
             for (String rank : playerJoinedRankList) {
                 for (String rankPerm : RANKS_MANAGER.getRank(rank).getPermissions()) {
@@ -101,7 +101,7 @@ public class OnFirstJoinListener implements Listener {
 
             defaultRank.add(finalDefaultRank);
             PLAYER_INFO_MANAGER.createPlayerInfo(uuid, finalDefaultCoins, defaultRank, defaultAdditionalPermission);
-
+            PlayerInfo playerInfo = allPlayerInfo.get(uuid);
             List<String> playerJoinedRankList = playerInfo.getUserRankList();
 
             for (String rank : playerJoinedRankList) {

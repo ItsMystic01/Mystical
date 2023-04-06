@@ -2,6 +2,7 @@ package mys.serone.mystical.roleCommands;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.functions.PermissionENUM;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.Rank;
 import mys.serone.mystical.rankSystem.RanksManager;
@@ -26,7 +27,7 @@ public class GiveRank implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!sender.hasPermission("mystical.manageranks")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (!sender.hasPermission(PermissionENUM.permissionENUM.GIVE_RANK.getPermission())) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
         if (args.length < 2) { CHAT_FUNCTIONS.commandSyntaxError((Player) sender, "/giveRank [Player] [Rank Name]"); return true; }
 
         Player player = PLUGIN.getServer().getPlayer(args[0]);

@@ -2,6 +2,7 @@ mys\serone\mystical\commands\MysticalHelp.class
 mys\serone\mystical\economy\Pay.class
 mys\serone\mystical\roleCommands\DeleteRank.class
 mys\serone\mystical\roleCommands\RemoveRank.class
+mys\serone\mystical\functions\PermissionENUM$permissionENUM.class
 mys\serone\mystical\listeners\OnFirstJoinListener.class
 mys\serone\mystical\roleCommands\GivePermission.class
 mys\serone\mystical\commands\Rename.class
@@ -13,10 +14,12 @@ mys\serone\mystical\roleCommands\CheckAllRank.class
 mys\serone\mystical\configurationSystem\ConfigurationManager.class
 mys\serone\mystical\commands\Fly.class
 mys\serone\mystical\commands\Message.class
+mys\serone\mystical\beta\CustomParticle.class
 mys\serone\mystical\economy\Balance.class
 mys\serone\mystical\kit\SetKitPrefix.class
 mys\serone\mystical\listeners\ChatListener.class
 mys\serone\mystical\roleCommands\CheckPlayerRank.class
+mys\serone\mystical\functions\PermissionENUM.class
 mys\serone\mystical\kitSystem\PersonalKitManager.class
 mys\serone\mystical\configurationSystem\ConfigurationManager$1.class
 mys\serone\mystical\functions\ChatFunctions.class

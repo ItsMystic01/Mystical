@@ -2,6 +2,7 @@ package mys.serone.mystical.kit;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.functions.PermissionENUM;
 import mys.serone.mystical.kitSystem.PersonalKitManager;
 import mys.serone.mystical.rankSystem.Rank;
 import mys.serone.mystical.rankSystem.RanksManager;
@@ -29,7 +30,7 @@ public class SetKitPrefix implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         Player player = (Player) sender;
 
-        if (!sender.hasPermission("mystical.kit")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (!sender.hasPermission(PermissionENUM.permissionENUM.SET_KIT_PREFIX.getPermission())) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
         if (args.length < 2) { CHAT_FUNCTIONS.commandSyntaxError(player, "Usage: /setKitPrefix [rank] [prefix]"); return true;}
 
         String rankKitToGet = args[0];

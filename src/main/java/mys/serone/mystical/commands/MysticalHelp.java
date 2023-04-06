@@ -1,6 +1,7 @@
 package mys.serone.mystical.commands;
 
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.functions.PermissionENUM;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -24,7 +25,7 @@ public class MysticalHelp implements CommandExecutor {
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
         if (!(sender instanceof Player)) { return true; }
 
-        if (!sender.hasPermission("mystical.help")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (!sender.hasPermission(PermissionENUM.permissionENUM.MYSTICAL_HELP.getPermission())) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
 
         StringBuilder textToSend = new StringBuilder();
         PluginDescriptionFile desc = PLUGIN.getDescription();

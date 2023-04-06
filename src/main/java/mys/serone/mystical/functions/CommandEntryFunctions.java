@@ -1,6 +1,7 @@
 package mys.serone.mystical.functions;
 
 import mys.serone.mystical.Mystical;
+import mys.serone.mystical.beta.CustomParticle;
 import mys.serone.mystical.commands.*;
 import mys.serone.mystical.configurationSystem.*;
 import mys.serone.mystical.economy.*;
@@ -63,7 +64,8 @@ public class CommandEntryFunctions {
                 new GivePermission(plugin, chatFunctions, playerInfoManager),
                 new RemovePermission(plugin, chatFunctions, playerInfoManager),
                 new SetKitPrefix(plugin, chatFunctions, personalKitManager, ranksManager),
-                new EditKit(plugin, ranksManager)
+                new EditKit(plugin, ranksManager),
+                new CustomParticle()
         };
 
         for (CommandExecutor executor : commandExecutors) {

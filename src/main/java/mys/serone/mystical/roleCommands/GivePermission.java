@@ -2,6 +2,7 @@ package mys.serone.mystical.roleCommands;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.functions.PermissionENUM;
 import mys.serone.mystical.playerInfoSystem.PlayerInfo;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import org.bukkit.command.Command;
@@ -25,7 +26,7 @@ public class GivePermission implements CommandExecutor {
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
-        if (!sender.hasPermission("mystical.manageranks")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (!sender.hasPermission(PermissionENUM.permissionENUM.GIVE_PERMISSION.getPermission())) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
         if (args.length < 2) { CHAT_FUNCTIONS.commandSyntaxError((Player) sender, "/givePermission [Player] [Permission]"); return true; }
 
         Player player = PLUGIN.getServer().getPlayer(args[0]);

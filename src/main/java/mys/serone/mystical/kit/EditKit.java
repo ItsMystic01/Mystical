@@ -2,6 +2,7 @@ package mys.serone.mystical.kit;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.functions.PermissionENUM;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
@@ -40,7 +41,7 @@ public class EditKit implements CommandExecutor {
         if (!(sender instanceof Player)) {
             return true;
         }
-        if (!sender.hasPermission("mystical.managekits")) {
+        if (!sender.hasPermission(PermissionENUM.permissionENUM.EDIT_KIT.getPermission())) {
             chatFunctions.commandPermissionError((Player) sender);
             return true;
         }

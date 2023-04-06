@@ -2,6 +2,7 @@ package mys.serone.mystical.commands;
 
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.ChatFunctions;
+import mys.serone.mystical.functions.PermissionENUM;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.command.Command;
@@ -28,7 +29,7 @@ public class Message implements CommandExecutor {
 
         if (!(sender instanceof Player)) { return true; }
 
-        if (!sender.hasPermission("mystical.message")) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
+        if (!sender.hasPermission(PermissionENUM.permissionENUM.MESSAGE.getPermission())) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
 
         Player player = (Player) sender;
 
