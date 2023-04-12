@@ -1,44 +1,51 @@
 package mys.serone.mystical.commands;
 
 import mys.serone.mystical.Mystical;
-import mys.serone.mystical.functions.ChatFunctions;
-import mys.serone.mystical.functions.PermissionENUM;
+import mys.serone.mystical.functions.MysticalPermission;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.RanksManager;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Message implements CommandExecutor {
     private final Mystical PLUGIN;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
-    private final ChatFunctions CHAT_FUNCTIONS;
     private final RanksManager RANKS_MANAGER;
-    public Message(Mystical plugin, RanksManager ranksManager, ChatFunctions chatFunctions, PlayerInfoManager playerInfoManager) {
+    private final FileConfiguration LANG_FILE;
+    public Message(Mystical plugin, RanksManager ranksManager, PlayerInfoManager playerInfoManager, FileConfiguration langFile) {
         this.PLUGIN = plugin;
         this.RANKS_MANAGER = ranksManager;
-        this.CHAT_FUNCTIONS = chatFunctions;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
+        this.LANG_FILE = langFile;
     }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
         if (!(sender instanceof Player)) { return true; }
 
-        if (!sender.hasPermission(PermissionENUM.permissionENUM.MESSAGE.getPermission())) { CHAT_FUNCTIONS.commandPermissionError((Player) sender); return true; }
-
         Player player = (Player) sender;
+        String langMessage = LANG_FILE.getString("information");
+        String langPermissionMessage = LANG_FILE.getString("command_permission_error");
 
-        if (args.length < 2) { CHAT_FUNCTIONS.commandSyntaxError(player, "/message [user] [message]"); return true; }
+        if (!player.hasPermission(MysticalPermission.permissionENUM.MESSAGE.getPermission())) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                Objects.requireNonNull(langPermissionMessage))); return true; }
+        if (args.length < 2) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                String.format(Objects.requireNonNull(langMessage), "/message <user> <message>"))); return true; }
 
         Player targetPlayer = PLUGIN.getServer().getPlayer(args[0]);
 
-        if (targetPlayer == player) { CHAT_FUNCTIONS.commandSyntaxError(player, "You can not message yourself."); return true;}
-        if (targetPlayer == null) { CHAT_FUNCTIONS.commandSyntaxError(player, "/message [user] [message]"); return true; }
+        if (targetPlayer == player) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                String.format(Objects.requireNonNull(langMessage), "You cannot message yourself."))); return true;}
+        if (targetPlayer == null) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                String.format(Objects.requireNonNull(langMessage), "/message <user> <message>"))); return true; }
 
         String playerUUID = player.getUniqueId().toString();
         String targetUUID = targetPlayer.getUniqueId().toString();
@@ -50,7 +57,8 @@ public class Message implements CommandExecutor {
         String recipientPrefix = RANKS_MANAGER.getRank(recipientRankList.get(0)).getPrefix();
         String message = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-        CHAT_FUNCTIONS.messageChat(player, senderPrefix, targetPlayer, recipientPrefix, message);
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&dTo &r" + recipientPrefix + " " + targetPlayer.getDisplayName() + "&7: ") + message);
+        targetPlayer.sendMessage(ChatColor.translateAlternateColorCodes('&', "&dFrom &r" + senderPrefix + " " + player.getDisplayName() + "&7: ") + message);
 
         return true;
     }

@@ -1,6 +1,6 @@
 package mys.serone.mystical.functions;
 
-public class PermissionENUM {
+public class MysticalPermission {
 
     public enum permissionENUM {
         FLY("mystical.fly"),
@@ -8,8 +8,6 @@ public class PermissionENUM {
         MESSAGE("mystical.message"),
         MYSTICAL_HELP("mystical.help"),
         RENAME("mystical.rename"),
-        BALANCE("mystical.balance"),
-        PAY("mystical.pay"),
         CREATE_KIT("mystical.createkit"),
         DELETE_KIT("mystical.deletekit"),
         EDIT_KIT("mystical.editkit"),

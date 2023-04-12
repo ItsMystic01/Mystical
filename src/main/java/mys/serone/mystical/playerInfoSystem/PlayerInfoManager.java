@@ -4,26 +4,28 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import mys.serone.mystical.functions.ChatFunctions;
 import mys.serone.mystical.handlers.ConfigManager;
 import mys.serone.mystical.rankSystem.RanksManager;
-import org.bukkit.command.CommandSender;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 
 public class PlayerInfoManager {
     private final HashMap<String, PlayerInfo> PLAYER_INFO;
     private final File PLAYER_INFO_FILE;
-    private final ChatFunctions CHAT_FUNCTIONS;
     private final RanksManager RANKS_MANAGER;
+    private final FileConfiguration LANG_FILE;
 
-    public PlayerInfoManager(ChatFunctions chatFunctions, RanksManager ranksManager, File playerInfoFile) {
-        this.CHAT_FUNCTIONS = chatFunctions;
+    public PlayerInfoManager(RanksManager ranksManager, File playerInfoFile, FileConfiguration langFile) {
         this.RANKS_MANAGER = ranksManager;
         this.PLAYER_INFO_FILE = playerInfoFile;
+        this.LANG_FILE = langFile;
         if (!PLAYER_INFO_FILE.exists()) {
             try {
                 boolean created = PLAYER_INFO_FILE.createNewFile();
@@ -63,9 +65,8 @@ public class PlayerInfoManager {
         return PLAYER_INFO;
     }
 
-    public void createPlayerInfo(String playerUUID, Double userCoins, List<String> userRankList, List<String> userAdditionalPermission) {
+    public void createPlayerInfo(String playerUUID, List<String> userRankList, List<String> userAdditionalPermission) {
         PlayerInfo playerInfo = new PlayerInfo();
-        playerInfo.setUserCoins(userCoins);
         playerInfo.setUserRankList(userRankList);
         playerInfo.setUserAdditionalPermission(userAdditionalPermission);
         PLAYER_INFO.put(playerUUID, playerInfo);
@@ -77,23 +78,14 @@ public class PlayerInfoManager {
         return playerInfo.getUserRankList();
     }
 
-    public Double getPlayerCoins(String UUID) {
-        PlayerInfo playerInfo = PLAYER_INFO.get(UUID);
-        return playerInfo.getUserCoins();
-    }
-
-    public void updatePlayerCoins(String UUID, Double newBalance) {
-        PlayerInfo playerInfo = PLAYER_INFO.get(UUID);
-        playerInfo.setUserCoins(newBalance);
-        savePlayerInfoToFile();
-    }
-
-    public void addRankToPlayer(Player player, CommandSender sender, String rankToAdd) {
+    public void addRankToPlayer(Player player, Player playerSender, String rankToAdd) {
         PlayerInfo playerInfo = PLAYER_INFO.get(player.getUniqueId().toString());
         List<String> playerInfoRankList = playerInfo.getUserRankList();
+        String langMessage = LANG_FILE.getString("information");
 
         if (playerInfoRankList.stream().anyMatch(s -> s.equalsIgnoreCase(rankToAdd))) {
-            CHAT_FUNCTIONS.rankChat((Player) sender, player.getDisplayName() + " already has that rank.");
+            playerSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    String.format(Objects.requireNonNull(langMessage), player.getDisplayName() + " already has that rank.")));
             return;
         }
 
@@ -102,17 +94,23 @@ public class PlayerInfoManager {
         savePlayerInfoToFile();
         new ConfigManager(RANKS_MANAGER, this);
 
-        CHAT_FUNCTIONS.rankChat((Player) sender, rankToAdd + " has been given to " + player.getDisplayName() + ".");
-        CHAT_FUNCTIONS.rankChat((Player) sender, "It is recommended for " + player.getDisplayName() + " to re-log for the rank-update to take effect.");
-        CHAT_FUNCTIONS.rankChat(player, "It is recommended to re-log for the rank-update to take effect.");
+        playerSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                String.format(Objects.requireNonNull(langMessage), rankToAdd + " has been given to " + player.getDisplayName() + ".")));
+        playerSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                String.format(Objects.requireNonNull(langMessage), "It is recommended for " + player.getDisplayName() + " to re-log for the rank-update to take effect.")));
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                String.format(Objects.requireNonNull(langMessage), "It is recommended to re-log for the rank-update to take effect.")));
+
     }
 
-    public void removeRankToPlayer(Player player, CommandSender sender, String rankToRemove) {
+    public void removeRankToPlayer(Player player, Player playerSender, String rankToRemove) {
         PlayerInfo playerInfo = PLAYER_INFO.get(player.getUniqueId().toString());
         List<String> playerInfoRankList = playerInfo.getUserRankList();
+        String langMessage = LANG_FILE.getString("information");
 
         if (playerInfoRankList.stream().noneMatch(s -> s.equalsIgnoreCase(rankToRemove))) {
-            CHAT_FUNCTIONS.rankChat((Player) sender, player.getDisplayName() + " does not have that rank.");
+            playerSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    String.format(Objects.requireNonNull(langMessage), player.getDisplayName() + " does not have that rank.")));
             return;
         }
 
@@ -121,8 +119,10 @@ public class PlayerInfoManager {
         savePlayerInfoToFile();
         new ConfigManager(RANKS_MANAGER, this);
 
-        CHAT_FUNCTIONS.rankChat((Player) sender, rankToRemove + " has been removed from " + player.getDisplayName() + ".");
-        CHAT_FUNCTIONS.rankChat((Player) sender, "It is recommended for " + player.getDisplayName() + " to re-log for the rank-update to take effect.");
+        playerSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                String.format(Objects.requireNonNull(langMessage), rankToRemove + " has been removed from " + player.getDisplayName() + ".")));
+        playerSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                String.format(Objects.requireNonNull(langMessage), "It is recommended for " + player.getDisplayName() + " to re-log for the rank-update to take effect.")));
     }
 
     public void savePlayerInfoToFile() {

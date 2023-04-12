@@ -1,0 +1,26 @@
+
+information: "&3[&bMystical&3] &l| &r%s"
+
+command_permission_error: "&3[&bMystical&3] &l| &r&3You do not have the permission to perform this command."
+
+create_kit_configuration_error: "&3[&bMystical&3] &l| &rAn error occurred while saving the kit."
+
+create_kit_successful: "&3[&bMystical&3] &l| &r%s kit has been deleted successfully."
+
+delete_kit_rank_does_not_exist_error: "&3[&bMystical&3] &l| &r%s rank kit does not exist."
+
+delete_kit_successful: "&3[&bMystical&3] &l| &r%s kit has been deleted successfully."
+
+delete_kit_unsuccessful: "&3[&bMystical&3] &l| &r%s kit has been deleted unsuccessfully."
+
+edit_kit_successful: "&3[&bMystical&3] &l| &aKit saved successfully."
+
+claim_kit_successful: "&3[&bMystical&3] &l| &rYou have claimed %s kit."
+
+edit_kit_prefix_successful: "&3[&bMystical&3] &l| &rPrefix has been edited successfully."
+
+set_kit_prefix_successful: "&3[&bMystical&3] &l| &rPrefix has been set successfully."
+
+user_invalid_rank_configuration_error: "&3[&bMystical&3] &l| &r%s has invalid ranks on player_info.yml"
+
+rank_has_no_existing_kit_configuration_error: "&3[&bMystical&3] &l| &r%s does not have an existing kit. (Read the README.txt file in the Mystical Folder in the Plugins Folder)"

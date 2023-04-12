@@ -4,20 +4,25 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import mys.serone.mystical.functions.ChatFunctions;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Objects;
 
 public class RanksManager {
     private final List<Rank> RANKS;
     private final File RANKS_FILE;
+    private final FileConfiguration LANG_FILE;
 
-    public RanksManager(File ranksFile) {
+    public RanksManager(File ranksFile, FileConfiguration langFile) {
         this.RANKS_FILE = ranksFile;
+        this.LANG_FILE = langFile;
         if (!RANKS_FILE.exists()) {
             try {
                 boolean created = RANKS_FILE.createNewFile();
@@ -67,11 +72,12 @@ public class RanksManager {
     }
 
     public void setKitName(Player player, String rankName, String kitName) {
-        ChatFunctions chatFunctions = new ChatFunctions(this);
+        String langSetKitPrefixSuccessfulMessage = LANG_FILE.getString("set_kit_prefix_successful");
         Rank rankToConfigure = getRank(rankName);
         rankToConfigure.setKitName(kitName);
         saveRanksToFile();
-        chatFunctions.configurationError(player, "Prefix has been set successfully.");
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                String.format(Objects.requireNonNull(langSetKitPrefixSuccessfulMessage))));
     }
 
     public void createRank(String name, String prefix, int priority, List<String> newRankPermission, List<Map<String, Object>> kit, String kitName) {

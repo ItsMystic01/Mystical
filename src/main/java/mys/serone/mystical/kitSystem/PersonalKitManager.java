@@ -4,22 +4,24 @@ import com.fasterxml.jackson.core.JsonParseException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import mys.serone.mystical.functions.ChatFunctions;
+import org.bukkit.ChatColor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
 public class PersonalKitManager {
 
     private final File KIT_FILE;
     private final List<PersonalKit> KITS;
-    private final ChatFunctions CHAT_FUNCTIONS;
+    private final FileConfiguration LANG_FILE;
 
-    public PersonalKitManager(ChatFunctions chatFunctions, File kitFile) {
-        this.CHAT_FUNCTIONS = chatFunctions;
+    public PersonalKitManager(File kitFile, FileConfiguration langFile) {
         this.KIT_FILE = kitFile;
+        this.LANG_FILE = langFile;
         if (!KIT_FILE.exists()) {
             try {
                 boolean created = KIT_FILE.createNewFile();
@@ -72,7 +74,7 @@ public class PersonalKitManager {
         PersonalKit kitInYML = getKit(kitName);
         kitInYML.setKitCodeName(newPrefix);
         saveKitsToFile();
-        CHAT_FUNCTIONS.configurationError(player, "Prefix has been set successfully.");
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(LANG_FILE.getString("set_kit_prefix_successful"))));
     }
 
     public void createKit(Player player, String kitName, String kitCodeName) {
@@ -81,7 +83,7 @@ public class PersonalKitManager {
         personalKit.setKitCodeName(kitCodeName);
         KITS.add(personalKit);
         saveKitsToFile();
-        CHAT_FUNCTIONS.configurationError(player, kitName + " has been created successfully.");
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(LANG_FILE.getString("create_kit_successful"))));
     }
 
     public void deleteKit(PersonalKit kitName) {

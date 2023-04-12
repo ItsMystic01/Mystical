@@ -1,14 +1,14 @@
 package mys.serone.mystical.kit;
 
 import mys.serone.mystical.Mystical;
-import mys.serone.mystical.functions.ChatFunctions;
-import mys.serone.mystical.functions.PermissionENUM;
+import mys.serone.mystical.functions.MysticalPermission;
 import mys.serone.mystical.kitSystem.PersonalKitManager;
-import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -27,32 +27,43 @@ public class CreateKit implements CommandExecutor {
 
     private final Mystical PLUGIN;
     private final PersonalKitManager PERSONAL_KIT_MANAGER;
-    private static ChatFunctions chatFunctions = null;
-    public CreateKit(Mystical plugin, RanksManager ranksManager, PersonalKitManager personalKitManager) {
+    private static FileConfiguration LANG_FILE;
+
+    public CreateKit(Mystical plugin, PersonalKitManager personalKitManager, FileConfiguration langFile) {
         this.PLUGIN = plugin;
         this.PERSONAL_KIT_MANAGER = personalKitManager;
-        chatFunctions = new ChatFunctions(ranksManager);
+        LANG_FILE = langFile;
     }
 
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
+
         if (!(sender instanceof Player)) { return true; }
-        if (!sender.hasPermission(PermissionENUM.permissionENUM.CREATE_KIT.getPermission())) { chatFunctions.commandPermissionError((Player) sender); return true; }
+
+        Player player = (Player) sender;
+        String langMessage = LANG_FILE.getString("information");
+        String langPermissionMessage = LANG_FILE.getString("command_permission_error");
+
+        if (!player.hasPermission(MysticalPermission.permissionENUM.CREATE_KIT.getPermission())) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                Objects.requireNonNull(langPermissionMessage))); return true; }
         if (args.length < 2) {
-            chatFunctions.commandSyntaxError((Player) sender, "/createKit [name] [colored name]");
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                    String.format(Objects.requireNonNull(langMessage), "/createKit <name> <colored name>")));
             return true;
         }
 
         String kitName = args[0];
         String kitNameCode = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
-        Player player = (Player) sender;
         Inventory kitInventory = Bukkit.createInventory(null, 36, kitName);
         File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits/" + kitName + ".yml");
-        if (kitFile.exists()) { chatFunctions.commandSyntaxError(player, "Kit already exists"); return true; }
-        KitCloseListener kitCloseListener = new KitCloseListener((Player) sender, kitInventory, kitFile, kitName, kitNameCode, PERSONAL_KIT_MANAGER);
-        PLUGIN.getServer().getPluginManager().registerEvents(kitCloseListener, PLUGIN);
 
+        if (kitFile.exists()) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
+                String.format(Objects.requireNonNull(langMessage), "Kit already exists"))); return true; }
+
+        KitCloseListener kitCloseListener = new KitCloseListener(player, kitInventory, kitFile, kitName, kitNameCode, PERSONAL_KIT_MANAGER);
+
+        PLUGIN.getServer().getPluginManager().registerEvents(kitCloseListener, PLUGIN);
         player.openInventory(kitInventory);
 
         return true;
@@ -77,9 +88,12 @@ public class CreateKit implements CommandExecutor {
 
         @EventHandler
         public void onInventoryClose(InventoryCloseEvent event) {
-            if (event.getInventory().equals(KIT_INVENTORY)) {
-                YamlConfiguration kitConfig = new YamlConfiguration();
 
+            String langCreateKitConfigurationErrorMessage = LANG_FILE.getString("create_kit_configuration_error");
+
+            if (event.getInventory().equals(KIT_INVENTORY)) {
+
+                YamlConfiguration kitConfig = new YamlConfiguration();
                 ItemStack[] kitContents = KIT_INVENTORY.getContents();
 
                 for (int i = 0; i < kitContents.length; i++) {
@@ -88,12 +102,12 @@ public class CreateKit implements CommandExecutor {
                         kitConfig.set(path + "item", kitContents[i]);
 
                         Map<Enchantment, Integer> enchantments = kitContents[i].getEnchantments();
+
                         if (!enchantments.isEmpty()) {
                             for (Enchantment enchantment : enchantments.keySet()) {
                                 kitConfig.set(path + "enchantments." + enchantment.getKey(), enchantments.get(enchantment));
                             }
                         }
-
                         if (kitContents[i].hasItemMeta() && Objects.requireNonNull(kitContents[i].getItemMeta()).hasDisplayName()) {
                             kitConfig.set(path + "name", Objects.requireNonNull(kitContents[i].getItemMeta()).getDisplayName());
                         }
@@ -104,12 +118,11 @@ public class CreateKit implements CommandExecutor {
                     PERSONAL_KIT_MANAGER.createKit(PLAYER, kitName, kitNameCode);
                     kitConfig.save(kitFile);
                 } catch (IOException e) {
-                    chatFunctions.configurationError(PLAYER,"An error occurred while saving the kit.");
+                    PLAYER.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(langCreateKitConfigurationErrorMessage)));
                     e.printStackTrace();
                 }
             }
         }
     }
-
 
 }

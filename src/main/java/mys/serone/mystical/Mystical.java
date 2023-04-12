@@ -15,6 +15,7 @@ public final class Mystical extends JavaPlugin {
         File dataFolder = getDataFolder();
         if (!dataFolder.exists()) {
             boolean result = dataFolder.mkdirs();
+
             if (result) { Bukkit.getServer().getLogger().info("[Mystical] Data Folder Created Successfully"); }
             else { Bukkit.getServer().getLogger().info("[Mystical] Data Folder Created Unsuccessfully."); }
         }

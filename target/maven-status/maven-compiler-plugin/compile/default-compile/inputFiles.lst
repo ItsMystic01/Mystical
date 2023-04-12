@@ -1,4 +1,3 @@
-C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\functions\PermissionENUM.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\roleCommands\CreateRank.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\handlers\ConfigManager.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\listeners\OnFirstJoinListener.java
@@ -12,14 +11,12 @@ C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\kitSystem\PersonalKit.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\beta\CustomParticle.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\configurationSystem\ConfigurationManager.java
-C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\functions\ChatFunctions.java
+C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\functions\MysticalMessage.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\roleCommands\GivePermission.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\commands\MysticalHelp.java
-C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\economy\Balance.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\rankSystem\Rank.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\configurationSystem\Configuration.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\kit\SetKitPrefix.java
-C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\economy\Pay.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\commands\Rename.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\kit\DeleteKit.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\playerInfoSystem\PlayerInfoManager.java
@@ -29,6 +26,7 @@ C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\kit\EditKit.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\Mystical.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\roleCommands\RemovePermission.java
+C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\functions\MysticalPermission.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\kitSystem\KitManager.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\commands\Message.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\roleCommands\CheckPlayerRank.java

@@ -19,12 +19,6 @@ commands:
   rename:
     description: Rename an item in hand.
     aliases: [ itemrename ]
-  balance:
-    description: Shows the balance of the user.
-    aliases: [ coins ]
-  pay:
-    description: Pay mentioned user a desired amount within balance.
-    aliases: [ expend ]
   createKit:
     description: Creates a kit.
     aliases: [ ck, kitcreate ]
@@ -71,7 +65,6 @@ permissions:
     default: op
     children:
       mystical.managekits: true
-      mystical.manageeconomy: true
       mystical.roles: true
       mystical.default: true
   mystical.managekits:
@@ -82,12 +75,6 @@ permissions:
       mystical.deletekit: true
       mystical.editkit: true
       mystical.setkitprefix: true
-  mystical.manageeconomy:
-    description: Permission over all economy features of Mystical Plugin
-    default: false
-    children:
-      mystical.balance: true
-      mystical.pay: true
   mystical.roles:
     description: Permission over all role features of Mystical Plugin
     default: false
@@ -124,12 +111,6 @@ permissions:
   mystical.rename:
     description: Ability to rename on-hand item.
     default: op
-  mystical.balance:
-    description: Ability to check their own balance.
-    default: true
-  mystical.pay:
-    description: Ability to pay other user.
-    default: true
   mystical.createkit:
     description: Ability to create custom-kits.
     default: op
