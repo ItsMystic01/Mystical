@@ -1,15 +1,14 @@
 package mys.serone.mystical.kit;
 
 import mys.serone.mystical.Mystical;
+import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.NamespacedKey;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -29,11 +28,9 @@ import java.util.Objects;
 public class EditKit implements CommandExecutor {
 
     private final Mystical PLUGIN;
-    private static FileConfiguration LANG_FILE;
 
-    public EditKit(Mystical plugin, FileConfiguration langFile) {
+    public EditKit(Mystical plugin) {
         this.PLUGIN = plugin;
-        LANG_FILE = langFile;
     }
 
     @Override
@@ -42,16 +39,13 @@ public class EditKit implements CommandExecutor {
         if (!(sender instanceof Player)) { return true; }
 
         Player player = (Player) sender;
-        String langMessage = LANG_FILE.getString("information");
-        String langPermissionMessage = LANG_FILE.getString("command_permission_error");
 
         if (!player.hasPermission(MysticalPermission.permissionENUM.EDIT_KIT.getPermission())) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(langPermissionMessage)));
+            player.sendMessage(MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage());
             return true;
         }
         if (args.length < 1) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    String.format(Objects.requireNonNull(langMessage), "/editKit <name>")));
+            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("/editKit <name>"));
             return true;
         }
 
@@ -59,8 +53,7 @@ public class EditKit implements CommandExecutor {
         File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits/" + kitName + ".yml");
 
         if (!kitFile.exists()) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    String.format(Objects.requireNonNull(langMessage), "Kit doesn't exist")));
+            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Kit doesn't exist"));
             return true;
         }
 
@@ -129,8 +122,6 @@ public class EditKit implements CommandExecutor {
         @EventHandler
         public void onInventoryClose(InventoryCloseEvent event) throws IOException {
 
-            String langEditKitSuccessfulMessage = LANG_FILE.getString("edit_kit_successful");
-
             if (event.getInventory().equals(KIT_INVENTORY)) {
                 YamlConfiguration kitConfig = new YamlConfiguration();
                 ItemStack[] kitContents = KIT_INVENTORY.getContents();
@@ -155,8 +146,7 @@ public class EditKit implements CommandExecutor {
                 }
 
                 kitConfig.save(kitFile);
-                PLAYER.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        String.format(Objects.requireNonNull(langEditKitSuccessfulMessage), "&aKit saved successfully.")));
+                PLAYER.sendMessage(MysticalMessage.messageENUM.EDIT_KIT_SUCCESSFUL.formatMessage("&aKit saved successfully."));
             }
         }
     }

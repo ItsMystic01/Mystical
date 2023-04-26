@@ -1,29 +1,29 @@
 package mys.serone.mystical.roleCommands;
 
 import mys.serone.mystical.Mystical;
+import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
-import mys.serone.mystical.handlers.ConfigManager;
+import mys.serone.mystical.handlers.RankConfigurationHandler;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
 
 public class CheckPlayerRank implements CommandExecutor {
     private final Mystical PLUGIN;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final RanksManager RANKS_MANAGER;
-    private final FileConfiguration LANG_FILE;
-    public CheckPlayerRank(Mystical plugin, PlayerInfoManager playerInfoManager, RanksManager ranksManager, FileConfiguration langFile) {
+
+    public CheckPlayerRank(Mystical plugin, PlayerInfoManager playerInfoManager, RanksManager ranksManager) {
         this.PLUGIN = plugin;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
         this.RANKS_MANAGER = ranksManager;
-        this.LANG_FILE = langFile;
     }
 
     @Override
@@ -32,19 +32,16 @@ public class CheckPlayerRank implements CommandExecutor {
         if (!(sender instanceof Player)) { return true; }
 
         Player playerSender = (Player) sender;
-        String langMessage = LANG_FILE.getString("information");
-        String langPermissionMessage = LANG_FILE.getString("command_permission_error");
-        String langUserInvalidRankConfigurationErrorMessage = LANG_FILE.getString("user_invalid_rank_configuration_error");
 
-        if (!playerSender.hasPermission(MysticalPermission.permissionENUM.CHECK_PLAYER_RANK.getPermission())) { playerSender.sendMessage(
-                ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(langPermissionMessage))); return true; }
-        if (args.length < 1) { playerSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                String.format(Objects.requireNonNull(langMessage), "/checkPlayerRank <username>"))); return true; }
+        if (!playerSender.hasPermission(MysticalPermission.permissionENUM.CHECK_PLAYER_RANK.getPermission())) {
+            playerSender.sendMessage(MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage());
+            return true;
+        }
+        if (args.length < 1) { playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("/checkPlayerRank <username>")); return true; }
 
         Player player = PLUGIN.getServer().getPlayer(args[0]);
 
-        if (player == null) { playerSender.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                String.format(Objects.requireNonNull(langMessage), "Player not found."))); return true; }
+        if (player == null) { playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Player not found.")); return true; }
 
         String uuid = player.getUniqueId().toString();
         List<String> playerRankList = PLAYER_INFO_MANAGER.getPlayerRankList(uuid);
@@ -59,11 +56,10 @@ public class CheckPlayerRank implements CommandExecutor {
                 newMap.put(playerRank, rankPriority);
                 playerRankPriority.add(newMap);
             } catch (Exception e) {
-                new ConfigManager(RANKS_MANAGER, PLAYER_INFO_MANAGER);
+                new RankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
 
                 System.out.println("[Mystical] " + player.getDisplayName() + " has invalid ranks on player_info.yml");
-                player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                        String.format(Objects.requireNonNull(langUserInvalidRankConfigurationErrorMessage), player)));
+                player.sendMessage(MysticalMessage.messageENUM.USER_INVALID_RANK_CONFIGURATION_ERROR.formatMessage(player.getDisplayName()));
                 return true;
             }
         }

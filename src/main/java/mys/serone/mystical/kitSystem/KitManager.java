@@ -1,19 +1,20 @@
 package mys.serone.mystical.kitSystem;
 
 import mys.serone.mystical.Mystical;
+import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.Rank;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
@@ -26,37 +27,40 @@ public class KitManager {
     private final RanksManager RANKS_MANAGER;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final PersonalKitManager PERSONAL_KIT_MANAGER;
-    private final FileConfiguration LANG_FILE;
 
     public KitManager(Mystical plugin, RanksManager ranksManager,
-                      PlayerInfoManager playerInfoManager, PersonalKitManager personalKitManager, FileConfiguration langFile) {
+                      PlayerInfoManager playerInfoManager, PersonalKitManager personalKitManager) {
         this.PLUGIN = plugin;
         this.RANKS_MANAGER = ranksManager;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
         this.PERSONAL_KIT_MANAGER = personalKitManager;
-        this.LANG_FILE = langFile;
     }
 
     public void kitOne(Player player, String[] args) {
 
         List<String> list = PLAYER_INFO_MANAGER.getPlayerRankList(player.getUniqueId().toString());
-        String langMessage = LANG_FILE.getString("information");
-        String langNoExistingRankKitConfigurationErrorMessage = LANG_FILE.getString("rank_has_no_existing_kit_configuration_error");
 
-        if (args.length < 1) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                String.format(Objects.requireNonNull(langMessage), "Usage: /kit [rank]"))); return;}
+        if (args.length < 1) {
+            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Usage: /kit [rank]"));
+            return;
+        }
+
         String rankKitToGet = args[0];
         Rank rank = RANKS_MANAGER.getRank(rankKitToGet);
-        if (rank == null) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                String.format(Objects.requireNonNull(langMessage), "Kit does not exist."))); return; }
-        if (list.stream().noneMatch(s -> s.equalsIgnoreCase(rankKitToGet))) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                String.format(Objects.requireNonNull(langMessage), "You do not have access to that rank kit."))); return; }
+
+        if (rank == null) {
+            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage( "Kit does not exist."));
+            return;
+        }
+        if (list.stream().noneMatch(s -> s.equalsIgnoreCase(rankKitToGet))) {
+            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("You do not have access to that rank kit."));
+            return;
+        }
 
         List<Map<String, Object>> kit = rank.getKit();
         if (kit == null || kit.size() == 0) {
             System.out.println("[Mystical] " + rank.getName() + " does not have a kit in ranks.yml. (Read the README.txt file in the Mystical Folder in the Plugins Folder)");
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    String.format(Objects.requireNonNull(langNoExistingRankKitConfigurationErrorMessage))));
+            player.sendMessage(MysticalMessage.messageENUM.RANK_HAS_NO_EXISTING_KIT_CONFIGURATION_ERROR.formatMessage(rank.getName()));
             return;
         }
         String kitName = rank.getKitName();
@@ -122,18 +126,13 @@ public class KitManager {
 
     public void claimKit(Player player, String kitName) {
         File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits/" + kitName + ".yml");
-        String langMessage = LANG_FILE.getString("information");
-        String langPermissionMessage = LANG_FILE.getString("command_permission_error");
-        String langKitClaimSuccessfulMessage = LANG_FILE.getString("claim_kit_successful");
 
         if (!kitFile.exists()) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    String.format(Objects.requireNonNull(langMessage), "Kit does not exist.")));
+            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Kit does not exist."));
             return;
         }
 
-        if(!player.hasPermission("mystical."+ kitName)) { player.sendMessage(ChatColor.translateAlternateColorCodes(
-                '&', Objects.requireNonNull(langPermissionMessage))); return; }
+        if(!player.hasPermission("mystical."+ kitName)) { player.sendMessage(MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage()); return; }
 
         YamlConfiguration kitConfig = YamlConfiguration.loadConfiguration(kitFile);
         ItemStack[] contents = new ItemStack[36];
@@ -198,7 +197,7 @@ public class KitManager {
                 player.getInventory().addItem(item);
             }
         }
-        player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.format(Objects.requireNonNull(langKitClaimSuccessfulMessage))));
+        player.sendMessage(MysticalMessage.messageENUM.CLAIM_KIT_SUCCESSFUL.formatMessage(kitName));
     }
 
 }

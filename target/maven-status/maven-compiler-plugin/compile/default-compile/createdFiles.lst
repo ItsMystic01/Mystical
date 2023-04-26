@@ -4,7 +4,6 @@ mys\serone\mystical\roleCommands\RemoveRank.class
 mys\serone\mystical\listeners\OnFirstJoinListener.class
 mys\serone\mystical\roleCommands\GivePermission.class
 mys\serone\mystical\commands\Rename.class
-mys\serone\mystical\functions\CommandEntryFunctions.class
 mys\serone\mystical\configurationSystem\Configuration.class
 mys\serone\mystical\functions\MysticalPermission.class
 mys\serone\mystical\kit\EditKit.class
@@ -25,12 +24,13 @@ mys\serone\mystical\kit\CreateKit$KitCloseListener.class
 mys\serone\mystical\kitSystem\PersonalKitManager$1.class
 mys\serone\mystical\kit\EditKit$KitCloseListener.class
 mys\serone\mystical\vault\PersonalVault.class
-mys\serone\mystical\handlers\ConfigManager.class
 mys\serone\mystical\handlers\ReadMeConfiguration.class
 mys\serone\mystical\kit\DeleteKit.class
+mys\serone\mystical\handlers\RankConfigurationHandler.class
 mys\serone\mystical\kitSystem\KitManager.class
 mys\serone\mystical\kit\CreateKit.class
 mys\serone\mystical\kitSystem\PersonalKit.class
+mys\serone\mystical\kit\Kits.class
 mys\serone\mystical\functions\MysticalPermission$permissionENUM.class
 mys\serone\mystical\roleCommands\GiveRank.class
 mys\serone\mystical\roleCommands\CreateRank.class
@@ -38,6 +38,7 @@ mys\serone\mystical\functions\MysticalMessage$messageENUM.class
 mys\serone\mystical\functions\MysticalMessage.class
 mys\serone\mystical\rankSystem\RanksManager.class
 mys\serone\mystical\roleCommands\RemovePermission.class
+mys\serone\mystical\functions\CommandAndEventLoader.class
 mys\serone\mystical\Mystical.class
 mys\serone\mystical\playerInfoSystem\PlayerInfoManager$1.class
 mys\serone\mystical\playerInfoSystem\PlayerInfo.class

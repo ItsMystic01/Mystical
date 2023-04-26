@@ -1,25 +1,24 @@
 package mys.serone.mystical.commands;
 
+import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
+
 import java.awt.*;
 import java.util.Map;
-import java.util.Objects;
 
 public class MysticalHelp implements CommandExecutor {
     private final JavaPlugin PLUGIN;
-    private final FileConfiguration LANG_FILE;
-    public MysticalHelp(JavaPlugin javaPlugin, FileConfiguration langFile) {
+
+    public MysticalHelp(JavaPlugin javaPlugin) {
         this.PLUGIN = javaPlugin;
-        this.LANG_FILE = langFile;
     }
 
     @Override
@@ -28,11 +27,9 @@ public class MysticalHelp implements CommandExecutor {
         if (!(sender instanceof Player)) { return true; }
 
         Player player = (Player) sender;
-        String langMessage = LANG_FILE.getString("information");
-        String langPermissionMessage = LANG_FILE.getString("command_permission_error");
 
-        if (!player.hasPermission(MysticalPermission.permissionENUM.MYSTICAL_HELP.getPermission())) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                Objects.requireNonNull(langPermissionMessage))); return true; }
+        if (!player.hasPermission(MysticalPermission.permissionENUM.MYSTICAL_HELP.getPermission())) { player.sendMessage(
+                MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage()); return true; }
 
         StringBuilder textToSend = new StringBuilder();
         PluginDescriptionFile desc = PLUGIN.getDescription();
@@ -58,8 +55,8 @@ public class MysticalHelp implements CommandExecutor {
                 return true;
             }
 
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    String.format(Objects.requireNonNull(langMessage), "Command not found.")));
+            player.sendMessage(
+                    MysticalMessage.messageENUM.INFORMATION.formatMessage("Command not found."));
 
         } else {
             StringBuilder cmdListTextGradient = displayName("Command List");

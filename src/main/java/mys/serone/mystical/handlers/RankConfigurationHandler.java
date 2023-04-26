@@ -7,26 +7,26 @@ import mys.serone.mystical.rankSystem.RanksManager;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class ConfigManager {
+public class RankConfigurationHandler {
 
-    public ConfigManager(RanksManager ranksManager, PlayerInfoManager playerInfoManager) {
+    public RankConfigurationHandler(RanksManager ranksManager, PlayerInfoManager playerInfoManager) {
 
-        List<Rank> allRanks = ranksManager.getRanks();
+        HashMap<String, Rank> allRanks = ranksManager.getRanks();
         List<Map<String, Integer>> playerRankPriority = new ArrayList<>();
         List<String> playerSortedRankList = new ArrayList<>();
         HashMap<String, PlayerInfo> allPlayerInfo = playerInfoManager.getAllPlayerInfo();
 
-        for (Rank rankName : allRanks) {
-            if (rankName.getName() == null) {
+        for (String rankName : allRanks.keySet()) {
+            if (rankName == null) {
                 System.out.println("[Mystical] Invalid Rank Format at ranks.yml");
             }
         }
 
         try {
-            List<Rank> rankPriority = ranksManager.getRanks();
-            for (Rank rankToCheck : rankPriority) {
+            HashMap<String, Rank> rankPriority = ranksManager.getRanks();
+            for (String rankToCheck : rankPriority.keySet()) {
                 Map<String, Integer> newMap = new HashMap<>();
-                newMap.put(rankToCheck.getName(), rankToCheck.getPriority());
+                newMap.put(rankPriority.get(rankToCheck).getName(), rankPriority.get(rankToCheck).getPriority());
                 playerRankPriority.add(newMap);
             }
         } catch (Exception e) {

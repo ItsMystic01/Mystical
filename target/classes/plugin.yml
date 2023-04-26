@@ -58,6 +58,9 @@ commands:
   customParticle:
     description: Creates custom particle.
     aliases: [ cparticle ]
+  ping:
+    description: Ping
+    aliases: [ pings ]
 
 permissions:
   mystical.*:
@@ -94,7 +97,7 @@ permissions:
       mystical.fly: false
       mystical.kit: true
       mystical.message: true
-      mystical.help: false
+      mystical.help: true
       mystical.rename: false
   mystical.fly:
     description: Permission to enable or disable flight.

@@ -1,14 +1,13 @@
 package mys.serone.mystical.kit;
 
 import mys.serone.mystical.Mystical;
+import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
 import mys.serone.mystical.kitSystem.PersonalKitManager;
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -17,6 +16,7 @@ import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.NotNull;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
@@ -27,12 +27,10 @@ public class CreateKit implements CommandExecutor {
 
     private final Mystical PLUGIN;
     private final PersonalKitManager PERSONAL_KIT_MANAGER;
-    private static FileConfiguration LANG_FILE;
 
-    public CreateKit(Mystical plugin, PersonalKitManager personalKitManager, FileConfiguration langFile) {
+    public CreateKit(Mystical plugin, PersonalKitManager personalKitManager) {
         this.PLUGIN = plugin;
         this.PERSONAL_KIT_MANAGER = personalKitManager;
-        LANG_FILE = langFile;
     }
 
     @Override
@@ -41,14 +39,14 @@ public class CreateKit implements CommandExecutor {
         if (!(sender instanceof Player)) { return true; }
 
         Player player = (Player) sender;
-        String langMessage = LANG_FILE.getString("information");
-        String langPermissionMessage = LANG_FILE.getString("command_permission_error");
 
-        if (!player.hasPermission(MysticalPermission.permissionENUM.CREATE_KIT.getPermission())) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                Objects.requireNonNull(langPermissionMessage))); return true; }
+        if (!player.hasPermission(MysticalPermission.permissionENUM.CREATE_KIT.getPermission())) {
+            player.sendMessage(MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage());
+            return true;
+        }
+
         if (args.length < 2) {
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                    String.format(Objects.requireNonNull(langMessage), "/createKit <name> <colored name>")));
+            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("/createKit <name> <colored name>"));
             return true;
         }
 
@@ -58,8 +56,7 @@ public class CreateKit implements CommandExecutor {
         Inventory kitInventory = Bukkit.createInventory(null, 36, kitName);
         File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits/" + kitName + ".yml");
 
-        if (kitFile.exists()) { player.sendMessage(ChatColor.translateAlternateColorCodes('&',
-                String.format(Objects.requireNonNull(langMessage), "Kit already exists"))); return true; }
+        if (kitFile.exists()) { player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Kit already exists")); return true; }
 
         KitCloseListener kitCloseListener = new KitCloseListener(player, kitInventory, kitFile, kitName, kitNameCode, PERSONAL_KIT_MANAGER);
 
@@ -89,8 +86,6 @@ public class CreateKit implements CommandExecutor {
         @EventHandler
         public void onInventoryClose(InventoryCloseEvent event) {
 
-            String langCreateKitConfigurationErrorMessage = LANG_FILE.getString("create_kit_configuration_error");
-
             if (event.getInventory().equals(KIT_INVENTORY)) {
 
                 YamlConfiguration kitConfig = new YamlConfiguration();
@@ -118,7 +113,7 @@ public class CreateKit implements CommandExecutor {
                     PERSONAL_KIT_MANAGER.createKit(PLAYER, kitName, kitNameCode);
                     kitConfig.save(kitFile);
                 } catch (IOException e) {
-                    PLAYER.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(langCreateKitConfigurationErrorMessage)));
+                    PLAYER.sendMessage(MysticalMessage.messageENUM.CREATE_KIT_CONFIGURATION_ERROR.formatMessage());
                     e.printStackTrace();
                 }
             }
