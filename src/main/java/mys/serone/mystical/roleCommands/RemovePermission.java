@@ -8,19 +8,23 @@ import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
 public class RemovePermission implements CommandExecutor {
     private final Mystical PLUGIN;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
+    private final FileConfiguration LANG_CONFIG;
 
-    public RemovePermission(Mystical plugin, PlayerInfoManager playerInfoManager) {
+    public RemovePermission(Mystical plugin, PlayerInfoManager playerInfoManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
+        this.LANG_CONFIG = langConfig;
     }
 
     @Override
@@ -30,17 +34,17 @@ public class RemovePermission implements CommandExecutor {
 
         Player playerSender = (Player) sender;
 
-        if (!playerSender.hasPermission(MysticalPermission.permissionENUM.REMOVE_PERMISSION.getPermission())) {
-            playerSender.sendMessage(MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage()); return true; }
+        if (!playerSender.hasPermission(MysticalPermission.REMOVE_PERMISSION.getPermission())) {
+            playerSender.sendMessage(MysticalMessage.COMMAND_PERMISSION_ERROR.formatMessage(LANG_CONFIG)); return true; }
         if (args.length < 2) {
-            playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("/removePermission <player> <permission>"));
+            playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "/removePermission <player> <permission>"), LANG_CONFIG));
             return true;
         }
 
         Player player = PLUGIN.getServer().getPlayer(args[0]);
 
         if (player == null) {
-            playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Invalid User"));
+            playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Invalid User"), LANG_CONFIG));
             return true;
         }
 
@@ -50,7 +54,7 @@ public class RemovePermission implements CommandExecutor {
         List<String> playerInfoPermissionList = playerInfo.getUserAdditionalPermission();
 
         if (!(playerInfoPermissionList.contains(permission))) {
-            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage(player.getDisplayName() + " does not have that permission."));
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", player.getDisplayName() + " does not have that permission."), LANG_CONFIG));
             return true;
         }
 
@@ -58,9 +62,9 @@ public class RemovePermission implements CommandExecutor {
         playerInfo.setUserAdditionalPermission(playerInfoPermissionList);
         PLAYER_INFO_MANAGER.savePlayerInfoToFile();
 
-        playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage(permission + " has been removed from " + player.getDisplayName() + "."));
-        playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("It is recommended for " + player.getDisplayName() + " to re-log for the permission to take effect."));
-        player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("It is recommended to re-log for the changes to take effect."));
+        playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", permission + " has been removed from " + player.getDisplayName() + "."), LANG_CONFIG));
+        playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "It is recommended for " + player.getDisplayName() + " to re-log for the permission to take effect."), LANG_CONFIG));
+        player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "It is recommended to re-log for the changes to take effect."), LANG_CONFIG));
 
         return true;
     }

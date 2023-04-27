@@ -7,10 +7,12 @@ import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.handlers.RankConfigurationHandler;
 import mys.serone.mystical.rankSystem.RanksManager;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
@@ -18,10 +20,12 @@ public class PlayerInfoManager {
     private final HashMap<String, PlayerInfo> PLAYER_INFO;
     private final File PLAYER_INFO_FILE;
     private final RanksManager RANKS_MANAGER;
+    private final FileConfiguration LANG_CONFIG;
 
-    public PlayerInfoManager(RanksManager ranksManager, File playerInfoFile) {
+    public PlayerInfoManager(RanksManager ranksManager, File playerInfoFile, FileConfiguration langConfig) {
         this.RANKS_MANAGER = ranksManager;
         this.PLAYER_INFO_FILE = playerInfoFile;
+        this.LANG_CONFIG = langConfig;
         if (!PLAYER_INFO_FILE.exists()) {
             try {
                 boolean created = PLAYER_INFO_FILE.createNewFile();
@@ -38,14 +42,14 @@ public class PlayerInfoManager {
     }
 
     private HashMap<String, PlayerInfo> loadPlayerInfoFromFile() {
-        HashMap<String, PlayerInfo> ranks = new HashMap<>();
+        HashMap<String, PlayerInfo> playerInfo = new HashMap<>();
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
             if (PLAYER_INFO_FILE.length() == 0) {
                 System.out.println("[Mystical] Player Info file is empty.");
-                return ranks;
+                return playerInfo;
             }
-            ranks = mapper.readValue(PLAYER_INFO_FILE, new TypeReference<HashMap<String, PlayerInfo>>() {});
+            playerInfo = mapper.readValue(PLAYER_INFO_FILE, new TypeReference<HashMap<String, PlayerInfo>>() {});
         } catch (JsonParseException e) {
             System.out.println("[Mystical] Ranks file has invalid formatting.");
             e.printStackTrace();
@@ -53,7 +57,7 @@ public class PlayerInfoManager {
             System.out.println("[Mystical] Error loading Player Info file.");
             e.printStackTrace();
         }
-        return ranks;
+        return playerInfo;
     }
 
 
@@ -79,7 +83,7 @@ public class PlayerInfoManager {
         List<String> playerInfoRankList = playerInfo.getUserRankList();
 
         if (playerInfoRankList.stream().anyMatch(s -> s.equalsIgnoreCase(rankToAdd))) {
-            playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage(player.getDisplayName() + " already has that rank."));
+            playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", player.getDisplayName() + " already has that rank."), LANG_CONFIG));
             return;
         }
 
@@ -88,10 +92,10 @@ public class PlayerInfoManager {
         savePlayerInfoToFile();
         new RankConfigurationHandler(RANKS_MANAGER, this);
 
-        playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage(rankToAdd + " has been given to " + player.getDisplayName() + "."));
-        playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("It is recommended for " +
-                player.getDisplayName() + " to re-log for the rank-update to take effect."));
-        player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("It is recommended to re-log for the rank-update to take effect."));
+        playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", rankToAdd + " has been given to " + player.getDisplayName() + "."), LANG_CONFIG));
+        playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "It is recommended for " +
+                player.getDisplayName() + " to re-log for the rank-update to take effect."), LANG_CONFIG));
+        player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "It is recommended to re-log for the rank-update to take effect."), LANG_CONFIG));
 
     }
 
@@ -100,7 +104,7 @@ public class PlayerInfoManager {
         List<String> playerInfoRankList = playerInfo.getUserRankList();
 
         if (playerInfoRankList.stream().noneMatch(s -> s.equalsIgnoreCase(rankToRemove))) {
-            playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage(player.getDisplayName() + " does not have that rank."));
+            playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", player.getDisplayName() + " does not have that rank."), LANG_CONFIG));
             return;
         }
 
@@ -109,9 +113,9 @@ public class PlayerInfoManager {
         savePlayerInfoToFile();
         new RankConfigurationHandler(RANKS_MANAGER, this);
 
-        playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage(rankToRemove + " has been removed from " + player.getDisplayName() + "."));
-        playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("It is recommended for " +
-                player.getDisplayName() + " to re-log for the rank-update to take effect."));
+        playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", rankToRemove + " has been removed from " + player.getDisplayName() + "."), LANG_CONFIG));
+        playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "It is recommended for " +
+                player.getDisplayName() + " to re-log for the rank-update to take effect."), LANG_CONFIG));
     }
 
     public void savePlayerInfoToFile() {

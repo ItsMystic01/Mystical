@@ -9,20 +9,24 @@ import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
+import java.util.Collections;
 
 public class SetKitPrefix implements CommandExecutor {
     private final Mystical PLUGIN;
     private final PersonalKitManager PERSONAL_KIT_MANAGER;
     private final RanksManager RANKS_MANAGER;
+    private final FileConfiguration LANG_CONFIG;
 
-    public SetKitPrefix(Mystical plugin, PersonalKitManager personalKitManager, RanksManager ranksManager) {
+    public SetKitPrefix(Mystical plugin, PersonalKitManager personalKitManager, RanksManager ranksManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.PERSONAL_KIT_MANAGER = personalKitManager;
         this.RANKS_MANAGER = ranksManager;
+        this.LANG_CONFIG = langConfig;
     }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -31,23 +35,23 @@ public class SetKitPrefix implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission(MysticalPermission.permissionENUM.SET_KIT_PREFIX.getPermission())) {
-            player.sendMessage(MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage());
+        if (!player.hasPermission(MysticalPermission.SET_KIT_PREFIX.getPermission())) {
+            player.sendMessage(MysticalMessage.COMMAND_PERMISSION_ERROR.formatMessage(LANG_CONFIG));
             return true;
         }
 
         if (args.length < 2) {
-            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Usage: /setKitPrefix <rank> <prefix>"));
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Usage: /setKitPrefix <rank> <prefix>"), LANG_CONFIG));
             return true;
         }
 
         String rankKitToGet = args[0];
         Rank rank = RANKS_MANAGER.getRank(rankKitToGet);
-        File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits/" + rankKitToGet + ".yml");
+        File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits" + File.separator + ".yml");
 
         if (rank != null) { RANKS_MANAGER.setKitName(player, rankKitToGet, args[1]); }
         else if (kitFile.exists()) { PERSONAL_KIT_MANAGER.setKitPrefix(player, rankKitToGet, args[1]); }
-        else { player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Kit does not exist.")); return true; }
+        else { player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Kit does not exist."), LANG_CONFIG)); return true; }
 
         return true;
     }

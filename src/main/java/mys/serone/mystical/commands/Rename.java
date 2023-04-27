@@ -6,12 +6,20 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.NotNull;
 
+import java.util.Collections;
+
 public class Rename implements CommandExecutor {
+
+    private final FileConfiguration LANG_CONFIG;
+    public Rename(FileConfiguration langConfig) {
+        LANG_CONFIG = langConfig;
+    }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -19,18 +27,18 @@ public class Rename implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission(MysticalPermission.permissionENUM.RENAME.getPermission())) { player.sendMessage(
-                MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage()); return true; }
+        if (!player.hasPermission(MysticalPermission.RENAME.getPermission())) { player.sendMessage(
+                MysticalMessage.COMMAND_PERMISSION_ERROR.formatMessage(LANG_CONFIG)); return true; }
 
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
         ItemMeta itemMeta = itemInHand.getItemMeta();
 
         if (itemMeta == null) {
-            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("You need to hold an item in your hand."));
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "You need to hold an item in your hand."), LANG_CONFIG));
             return true;
         }
         if (args.length < 1) {
-            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("/rename <name>"));
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "/rename <name>"), LANG_CONFIG));
             return true;
         }
 
@@ -38,7 +46,7 @@ public class Rename implements CommandExecutor {
 
         itemMeta.setDisplayName(ChatColor.translateAlternateColorCodes('&', newName));
         itemInHand.setItemMeta(itemMeta);
-        player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Item renamed to: " + newName));
+        player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Item renamed to: " + newName), LANG_CONFIG));
 
         return true;
     }

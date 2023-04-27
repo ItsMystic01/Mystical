@@ -11,20 +11,20 @@ public class RankConfigurationHandler {
 
     public RankConfigurationHandler(RanksManager ranksManager, PlayerInfoManager playerInfoManager) {
 
-        HashMap<String, Rank> allRanks = ranksManager.getRanks();
+        HashMap<UUID, Rank> allRanks = ranksManager.getRanks();
         List<Map<String, Integer>> playerRankPriority = new ArrayList<>();
         List<String> playerSortedRankList = new ArrayList<>();
         HashMap<String, PlayerInfo> allPlayerInfo = playerInfoManager.getAllPlayerInfo();
 
-        for (String rankName : allRanks.keySet()) {
-            if (rankName == null) {
+        for (UUID rankId : allRanks.keySet()) {
+            if (rankId == null) {
                 System.out.println("[Mystical] Invalid Rank Format at ranks.yml");
             }
         }
 
         try {
-            HashMap<String, Rank> rankPriority = ranksManager.getRanks();
-            for (String rankToCheck : rankPriority.keySet()) {
+            HashMap<UUID, Rank> rankPriority = ranksManager.getRanks();
+            for (UUID rankToCheck : rankPriority.keySet()) {
                 Map<String, Integer> newMap = new HashMap<>();
                 newMap.put(rankPriority.get(rankToCheck).getName(), rankPriority.get(rankToCheck).getPriority());
                 playerRankPriority.add(newMap);

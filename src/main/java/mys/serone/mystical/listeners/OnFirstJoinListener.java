@@ -12,10 +12,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class OnFirstJoinListener implements Listener {
     private final Mystical PLUGIN;
@@ -47,10 +44,10 @@ public class OnFirstJoinListener implements Listener {
             kitMap.put("leather_boots", "protection:1");
             kit.add(kitMap);
 
-            RANKS_MANAGER.createRank("Member", "&f[&7Member&f]", 50, newRankPermission, kit, "&f[&7Member&f]");
+            RANKS_MANAGER.createRank(UUID.randomUUID(), "Member", "&f[&7Member&f]", 50, newRankPermission, kit, "&f[&7Member&f]");
         }
 
-        File checkFile = new File(PLUGIN.getDataFolder().getAbsolutePath() + "/mystical_configuration.yml");
+        File checkFile = new File(PLUGIN.getDataFolder().getAbsolutePath() + File.separator + "mystical_configuration.yml");
         String finalDefaultRank = null;
 
         if (checkFile.length() == 0) {

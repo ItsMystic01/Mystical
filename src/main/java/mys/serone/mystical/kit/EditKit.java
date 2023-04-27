@@ -9,6 +9,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -22,15 +23,18 @@ import org.jetbrains.annotations.NotNull;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
 public class EditKit implements CommandExecutor {
 
     private final Mystical PLUGIN;
+    private final FileConfiguration LANG_CONFIG;
 
-    public EditKit(Mystical plugin) {
+    public EditKit(Mystical plugin, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
+        this.LANG_CONFIG = langConfig;
     }
 
     @Override
@@ -40,26 +44,25 @@ public class EditKit implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission(MysticalPermission.permissionENUM.EDIT_KIT.getPermission())) {
-            player.sendMessage(MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage());
+        if (!player.hasPermission(MysticalPermission.EDIT_KIT.getPermission())) {
+            player.sendMessage(MysticalMessage.COMMAND_PERMISSION_ERROR.formatMessage(LANG_CONFIG));
             return true;
         }
         if (args.length < 1) {
-            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("/editKit <name>"));
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "/editKit <name>"), LANG_CONFIG));
             return true;
         }
 
         String kitName = args[0];
-        File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits/" + kitName + ".yml");
+        File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits" + File.separator + kitName + ".yml");
 
         if (!kitFile.exists()) {
-            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Kit doesn't exist"));
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Kit doesn't exist"), LANG_CONFIG));
             return true;
         }
 
         YamlConfiguration kitConfig = YamlConfiguration.loadConfiguration(kitFile);
 
-        assert kitName != null;
         Inventory kitInventory = Bukkit.createInventory(null, 36, kitName);
         ItemStack[] kitContents = new ItemStack[36];
 
@@ -97,7 +100,7 @@ public class EditKit implements CommandExecutor {
 
         kitInventory.setContents(kitContents);
 
-        KitCloseListener kitCloseListener = new KitCloseListener(player, kitInventory, kitFile, kitName, kitName);
+        KitCloseListener kitCloseListener = new KitCloseListener(player, kitInventory, kitFile, kitName, kitName, LANG_CONFIG);
         PLUGIN.getServer().getPluginManager().registerEvents(kitCloseListener, PLUGIN);
         player.openInventory(kitInventory);
 
@@ -110,13 +113,15 @@ public class EditKit implements CommandExecutor {
         public File kitFile;
         public String kitName;
         public String kitNameCode;
+        private final FileConfiguration LANG_CONFIG;
 
-        public KitCloseListener(Player player, Inventory kitInventory, File kitFile, String kitName, String kitNameCode) {
+        public KitCloseListener(Player player, Inventory kitInventory, File kitFile, String kitName, String kitNameCode, FileConfiguration langConfig) {
             this.PLAYER = player;
             this.KIT_INVENTORY = kitInventory;
             this.kitFile = kitFile;
             this.kitName = kitName;
             this.kitNameCode = kitNameCode;
+            this.LANG_CONFIG = langConfig;
         }
 
         @EventHandler
@@ -146,7 +151,7 @@ public class EditKit implements CommandExecutor {
                 }
 
                 kitConfig.save(kitFile);
-                PLAYER.sendMessage(MysticalMessage.messageENUM.EDIT_KIT_SUCCESSFUL.formatMessage("&aKit saved successfully."));
+                PLAYER.sendMessage(MysticalMessage.EDIT_KIT_SUCCESSFUL.formatMessage(Collections.singletonMap("kit", kitName), LANG_CONFIG));
             }
         }
     }

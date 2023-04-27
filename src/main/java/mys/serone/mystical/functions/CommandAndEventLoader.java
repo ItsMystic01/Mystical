@@ -19,6 +19,7 @@ import mys.serone.mystical.rankSystem.RanksManager;
 import mys.serone.mystical.roleCommands.*;
 import org.bukkit.Bukkit;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
 import java.util.Objects;
@@ -26,26 +27,27 @@ import java.util.Objects;
 public class CommandAndEventLoader {
 
     public void registerCommands(Mystical plugin, RanksManager ranksManager,
-                                 PersonalKitManager personalKitManager, PlayerInfoManager playerInfoManager, KitManager kitManager) {
+                                 PersonalKitManager personalKitManager, PlayerInfoManager playerInfoManager, KitManager kitManager, FileConfiguration langConfig) {
 
         CommandExecutor[] commandExecutors = {
-                new Fly(),
-                new Kit(plugin, kitManager, ranksManager),
-                new Message(plugin, ranksManager, playerInfoManager),
-                new MysticalHelp(plugin),
-                new Rename(),
-                new CreateKit(plugin, personalKitManager),
-                new DeleteKit(plugin, personalKitManager),
-                new EditKit(plugin),
-                new SetKitPrefix(plugin, personalKitManager, ranksManager),
-                new CheckAllRank(ranksManager),
-                new CheckPlayerRank(plugin, playerInfoManager, ranksManager),
-                new CreateRank(ranksManager, playerInfoManager),
-                new DeleteRank(ranksManager, playerInfoManager),
-                new GivePermission(plugin, playerInfoManager),
-                new GiveRank(plugin, playerInfoManager, ranksManager),
-                new RemovePermission(plugin, playerInfoManager),
-                new RemoveRank(plugin, playerInfoManager, ranksManager),
+                new Fly(langConfig),
+                new Kit(plugin, kitManager, ranksManager, langConfig),
+                new Message(plugin, ranksManager, playerInfoManager, langConfig),
+                new MysticalHelp(plugin, langConfig),
+                new Rename(langConfig),
+                new CreateKit(plugin, personalKitManager, langConfig),
+                new DeleteKit(plugin, personalKitManager, langConfig),
+                new EditKit(plugin, langConfig),
+                new SetKitPrefix(plugin, personalKitManager, ranksManager, langConfig),
+                new CheckAllRank(ranksManager, langConfig),
+                new CheckPlayerRank(plugin, playerInfoManager, ranksManager, langConfig),
+                new CreateRank(ranksManager, playerInfoManager, langConfig),
+                new DeleteAllRank(ranksManager, langConfig),
+                new DeleteRank(ranksManager, playerInfoManager, langConfig),
+                new GivePermission(plugin, playerInfoManager, langConfig),
+                new GiveRank(plugin, playerInfoManager, ranksManager, langConfig),
+                new RemovePermission(plugin, playerInfoManager, langConfig),
+                new RemoveRank(plugin, playerInfoManager, ranksManager, langConfig),
         };
 
         for (CommandExecutor executor : commandExecutors) {

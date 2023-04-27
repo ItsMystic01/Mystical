@@ -9,22 +9,22 @@ import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class CreateRank implements CommandExecutor {
 
     private final RanksManager RANKS_MANAGER;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
+    private final FileConfiguration LANG_CONFIG;
 
-    public CreateRank(RanksManager ranksManager, PlayerInfoManager playerInfoManager) {
+    public CreateRank(RanksManager ranksManager, PlayerInfoManager playerInfoManager, FileConfiguration langConfig) {
         this.RANKS_MANAGER = ranksManager;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
+        this.LANG_CONFIG = langConfig;
     }
 
     @Override
@@ -34,12 +34,12 @@ public class CreateRank implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission(MysticalPermission.permissionENUM.CREATE_RANK.getPermission())) {
-            player.sendMessage(MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage());
+        if (!player.hasPermission(MysticalPermission.CREATE_RANK.getPermission())) {
+            player.sendMessage(MysticalMessage.COMMAND_PERMISSION_ERROR.formatMessage(LANG_CONFIG));
             return true;
         }
         if (args.length < 4) {
-            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("/createRank <rank name> <prefix> <priority> <permission...>"));
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "/createRank <rank name> <prefix> <priority> <permission...>"), LANG_CONFIG));
             return true;
         }
 
@@ -49,10 +49,13 @@ public class CreateRank implements CommandExecutor {
 
         Rank rankChecker = RANKS_MANAGER.getRank(args[0]);
 
-        if (rankChecker != null) { player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Rank already exists")); return true; }
+        if (rankChecker != null) {
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Rank already exists"), LANG_CONFIG));
+            return true;
+        }
 
-        RANKS_MANAGER.createRank(args[0], args[1], Integer.parseInt(args[2]), finalizedArguments, null, null);
-        player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage(args[0] + " Rank has been created successfully."));
+        RANKS_MANAGER.createRank(UUID.randomUUID(), args[0], args[1], Integer.parseInt(args[2]), finalizedArguments, null, null);
+        player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", args[0] + " Rank has been created successfully."), LANG_CONFIG));
 
         new RankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
         return true;

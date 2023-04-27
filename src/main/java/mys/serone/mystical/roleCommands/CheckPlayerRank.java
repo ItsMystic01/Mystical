@@ -10,6 +10,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,11 +20,13 @@ public class CheckPlayerRank implements CommandExecutor {
     private final Mystical PLUGIN;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final RanksManager RANKS_MANAGER;
+    private final FileConfiguration LANG_CONFIG;
 
-    public CheckPlayerRank(Mystical plugin, PlayerInfoManager playerInfoManager, RanksManager ranksManager) {
+    public CheckPlayerRank(Mystical plugin, PlayerInfoManager playerInfoManager, RanksManager ranksManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
         this.RANKS_MANAGER = ranksManager;
+        this.LANG_CONFIG = langConfig;
     }
 
     @Override
@@ -33,15 +36,21 @@ public class CheckPlayerRank implements CommandExecutor {
 
         Player playerSender = (Player) sender;
 
-        if (!playerSender.hasPermission(MysticalPermission.permissionENUM.CHECK_PLAYER_RANK.getPermission())) {
-            playerSender.sendMessage(MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage());
+        if (!playerSender.hasPermission(MysticalPermission.CHECK_PLAYER_RANK.getPermission())) {
+            playerSender.sendMessage(MysticalMessage.COMMAND_PERMISSION_ERROR.formatMessage(LANG_CONFIG));
             return true;
         }
-        if (args.length < 1) { playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("/checkPlayerRank <username>")); return true; }
+        if (args.length < 1) {
+            playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "/checkPlayerRank <username>"), LANG_CONFIG));
+            return true;
+        }
 
         Player player = PLUGIN.getServer().getPlayer(args[0]);
 
-        if (player == null) { playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Player not found.")); return true; }
+        if (player == null) {
+            playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Player not found."), LANG_CONFIG));
+            return true;
+        }
 
         String uuid = player.getUniqueId().toString();
         List<String> playerRankList = PLAYER_INFO_MANAGER.getPlayerRankList(uuid);
@@ -59,7 +68,7 @@ public class CheckPlayerRank implements CommandExecutor {
                 new RankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
 
                 System.out.println("[Mystical] " + player.getDisplayName() + " has invalid ranks on player_info.yml");
-                player.sendMessage(MysticalMessage.messageENUM.USER_INVALID_RANK_CONFIGURATION_ERROR.formatMessage(player.getDisplayName()));
+                player.sendMessage(MysticalMessage.USER_INVALID_RANK_CONFIGURATION_ERROR.formatMessage(Collections.singletonMap("player", player.getDisplayName()), LANG_CONFIG));
                 return true;
             }
         }

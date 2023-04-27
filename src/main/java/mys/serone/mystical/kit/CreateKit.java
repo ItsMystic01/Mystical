@@ -8,6 +8,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
@@ -20,6 +21,7 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.io.IOException;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
@@ -27,10 +29,12 @@ public class CreateKit implements CommandExecutor {
 
     private final Mystical PLUGIN;
     private final PersonalKitManager PERSONAL_KIT_MANAGER;
+    private final FileConfiguration LANG_CONFIG;
 
-    public CreateKit(Mystical plugin, PersonalKitManager personalKitManager) {
+    public CreateKit(Mystical plugin, PersonalKitManager personalKitManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.PERSONAL_KIT_MANAGER = personalKitManager;
+        this.LANG_CONFIG = langConfig;
     }
 
     @Override
@@ -40,13 +44,13 @@ public class CreateKit implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission(MysticalPermission.permissionENUM.CREATE_KIT.getPermission())) {
-            player.sendMessage(MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage());
+        if (!player.hasPermission(MysticalPermission.CREATE_KIT.getPermission())) {
+            player.sendMessage(MysticalMessage.COMMAND_PERMISSION_ERROR.formatMessage(LANG_CONFIG));
             return true;
         }
 
         if (args.length < 2) {
-            player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("/createKit <name> <colored name>"));
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "/createKit <name> <colored name>"), LANG_CONFIG));
             return true;
         }
 
@@ -54,11 +58,14 @@ public class CreateKit implements CommandExecutor {
         String kitNameCode = String.join(" ", Arrays.copyOfRange(args, 1, args.length));
 
         Inventory kitInventory = Bukkit.createInventory(null, 36, kitName);
-        File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits/" + kitName + ".yml");
+        File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits"  + File.separator + kitName + ".yml");
 
-        if (kitFile.exists()) { player.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Kit already exists")); return true; }
+        if (kitFile.exists()) {
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Kit already exists"), LANG_CONFIG));
+            return true;
+        }
 
-        KitCloseListener kitCloseListener = new KitCloseListener(player, kitInventory, kitFile, kitName, kitNameCode, PERSONAL_KIT_MANAGER);
+        KitCloseListener kitCloseListener = new KitCloseListener(player, kitInventory, kitFile, kitName, kitNameCode, PERSONAL_KIT_MANAGER, LANG_CONFIG);
 
         PLUGIN.getServer().getPluginManager().registerEvents(kitCloseListener, PLUGIN);
         player.openInventory(kitInventory);
@@ -73,14 +80,16 @@ public class CreateKit implements CommandExecutor {
         public File kitFile;
         public String kitName;
         public String kitNameCode;
+        private final FileConfiguration LANG_CONFIG;
 
-        public KitCloseListener(Player player, Inventory kitInventory, File kitFile, String kitName, String kitNameCode, PersonalKitManager personalKitManager) {
+        public KitCloseListener(Player player, Inventory kitInventory, File kitFile, String kitName, String kitNameCode, PersonalKitManager personalKitManager, FileConfiguration langConfig) {
             this.PLAYER = player;
             this.KIT_INVENTORY = kitInventory;
             this.kitFile = kitFile;
             this.kitName = kitName;
             this.kitNameCode = kitNameCode;
             this.PERSONAL_KIT_MANAGER = personalKitManager;
+            this.LANG_CONFIG = langConfig;
         }
 
         @EventHandler
@@ -113,7 +122,7 @@ public class CreateKit implements CommandExecutor {
                     PERSONAL_KIT_MANAGER.createKit(PLAYER, kitName, kitNameCode);
                     kitConfig.save(kitFile);
                 } catch (IOException e) {
-                    PLAYER.sendMessage(MysticalMessage.messageENUM.CREATE_KIT_CONFIGURATION_ERROR.formatMessage());
+                    PLAYER.sendMessage(MysticalMessage.CREATE_KIT_CONFIGURATION_ERROR.formatMessage(LANG_CONFIG));
                     e.printStackTrace();
                 }
             }

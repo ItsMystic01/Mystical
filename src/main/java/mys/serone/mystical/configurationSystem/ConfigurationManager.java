@@ -19,9 +19,9 @@ public class ConfigurationManager {
             try {
                 boolean created = CONFIGURATION_FILE.createNewFile();
                 if (created) {
-                    System.out.println("[Mystical] File created successfully");
+                    System.out.println("[Mystical] mystical_configuration file created successfully");
                 } else {
-                    System.out.println("[Mystical] File already exists");
+                    System.out.println("[Mystical] mystical_configuration file already exists");
                 }
             } catch (IOException e) {
                 e.printStackTrace();
@@ -35,15 +35,15 @@ public class ConfigurationManager {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {
             if (CONFIGURATION_FILE.length() == 0) {
-                System.out.println("[Mystical] Configuration file is empty.");
+                System.out.println("[Mystical] mystical_configuration file is empty.");
                 return configurationInfo;
             }
             configurationInfo = mapper.readValue(CONFIGURATION_FILE, new TypeReference<List<Configuration>>() {});
         } catch (JsonParseException e) {
-            System.out.println("[Mystical] Configuration file has invalid formatting.");
+            System.out.println("[Mystical] mystical_configuration file has invalid formatting.");
             e.printStackTrace();
         } catch (IOException e) {
-            System.out.println("[Mystical] Error loading Configuration file.");
+            System.out.println("[Mystical] Error loading mystical_configuration file.");
             e.printStackTrace();
         }
         return configurationInfo;

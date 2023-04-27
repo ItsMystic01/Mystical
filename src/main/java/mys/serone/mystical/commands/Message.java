@@ -9,21 +9,25 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class Message implements CommandExecutor {
     private final Mystical PLUGIN;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final RanksManager RANKS_MANAGER;
+    private final FileConfiguration LANG_CONFIG;
 
-    public Message(Mystical plugin, RanksManager ranksManager, PlayerInfoManager playerInfoManager) {
+    public Message(Mystical plugin, RanksManager ranksManager, PlayerInfoManager playerInfoManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.RANKS_MANAGER = ranksManager;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
+        this.LANG_CONFIG = langConfig;
     }
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
@@ -32,17 +36,17 @@ public class Message implements CommandExecutor {
 
         Player player = (Player) sender;
 
-        if (!player.hasPermission(MysticalPermission.permissionENUM.MESSAGE.getPermission())) { player.sendMessage(
-                MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage()); return true; }
+        if (!player.hasPermission(MysticalPermission.MESSAGE.getPermission())) { player.sendMessage(
+                MysticalMessage.COMMAND_PERMISSION_ERROR.formatMessage(LANG_CONFIG)); return true; }
         if (args.length < 2) { player.sendMessage(
-                MysticalMessage.messageENUM.INFORMATION.formatMessage("/message <user> <message>")); return true; }
+                MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "/message <user> <message>"), LANG_CONFIG)); return true; }
 
         Player targetPlayer = PLUGIN.getServer().getPlayer(args[0]);
 
         if (targetPlayer == player) { player.sendMessage(
-                MysticalMessage.messageENUM.INFORMATION.formatMessage("You cannot message yourself.")); return true;}
+                MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "You cannot message yourself."), LANG_CONFIG)); return true;}
         if (targetPlayer == null) { player.sendMessage(
-                MysticalMessage.messageENUM.INFORMATION.formatMessage("/message <user> <message>")); return true; }
+                MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "/message <user> <message>"), LANG_CONFIG)); return true; }
 
         String playerUUID = player.getUniqueId().toString();
         String targetUUID = targetPlayer.getUniqueId().toString();

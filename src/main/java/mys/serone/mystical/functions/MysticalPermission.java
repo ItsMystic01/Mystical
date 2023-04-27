@@ -1,8 +1,7 @@
 package mys.serone.mystical.functions;
 
-public class MysticalPermission {
+public enum MysticalPermission {
 
-    public enum permissionENUM {
         FLY("mystical.fly"),
         KIT("mystical.kit"),
         MESSAGE("mystical.message"),
@@ -15,6 +14,7 @@ public class MysticalPermission {
         CHECK_ALL_RANK("mystical.checkallrank"),
         CHECK_PLAYER_RANK("mystical.checkplayerrank"),
         CREATE_RANK("mystical.createrank"),
+        DELETE_ALL_RANK("mystical.deleteallrank"),
         DELETE_RANK("mystical.deleterank"),
         GIVE_PERMISSION("mystical.givepermission"),
         GIVE_RANK("mystical.giverank"),
@@ -23,14 +23,13 @@ public class MysticalPermission {
 
         private final String permission;
 
-        permissionENUM(String permission) {
+        MysticalPermission(String permission) {
             this.permission = permission;
         }
 
         public String getPermission() {
             return permission;
         }
-    }
 
 
 }

@@ -9,18 +9,23 @@ import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Collections;
 
 public class GiveRank implements CommandExecutor {
     private final Mystical PLUGIN;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final RanksManager RANKS_MANAGER;
+    private final FileConfiguration LANG_CONFIG;
 
-    public GiveRank(Mystical plugin, PlayerInfoManager playerInfoManager, RanksManager ranksManager) {
+    public GiveRank(Mystical plugin, PlayerInfoManager playerInfoManager, RanksManager ranksManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
         this.RANKS_MANAGER = ranksManager;
+        this.LANG_CONFIG = langConfig;
     }
 
     @Override
@@ -30,24 +35,30 @@ public class GiveRank implements CommandExecutor {
 
         Player playerSender = (Player) sender;
 
-        if (!playerSender.hasPermission(MysticalPermission.permissionENUM.GIVE_RANK.getPermission())) {
-            playerSender.sendMessage(MysticalMessage.messageENUM.COMMAND_PERMISSION_ERROR.formatMessage());
+        if (!playerSender.hasPermission(MysticalPermission.GIVE_RANK.getPermission())) {
+            playerSender.sendMessage(MysticalMessage.COMMAND_PERMISSION_ERROR.formatMessage(LANG_CONFIG));
             return true;
         }
         if (args.length < 2) {
-            playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("/giveRank <player> <rank name>"));
+            playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "/giveRank <player> <rank name>"), LANG_CONFIG));
             return true;
         }
 
         Player player = PLUGIN.getServer().getPlayer(args[0]);
 
-        if (player == null) { playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Invalid User")); return true; }
+        if (player == null) {
+            playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Invalid User"), LANG_CONFIG));
+            return true;
+        }
 
         String rankName = args[1];
 
         Rank rank = RANKS_MANAGER.getRank(rankName);
 
-        if (rank == null) { playerSender.sendMessage(MysticalMessage.messageENUM.INFORMATION.formatMessage("Rank does not exist")); return true; }
+        if (rank == null) {
+            playerSender.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Rank does not exist"), LANG_CONFIG));
+            return true;
+        }
 
         PLAYER_INFO_MANAGER.addRankToPlayer(player, playerSender, rank.getName());
 
