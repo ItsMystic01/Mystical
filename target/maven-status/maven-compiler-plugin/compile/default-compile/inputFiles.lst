@@ -1,16 +1,13 @@
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\roleCommands\CreateRank.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\listeners\OnFirstJoinListener.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\kitSystem\PersonalKitManager.java
-C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\vault\PersonalVault.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\roleCommands\RemoveRank.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\commands\Fly.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\listeners\ChatListener.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\rankSystem\RanksManager.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\roleCommands\DeleteRank.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\kitSystem\PersonalKit.java
-C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\beta\CustomParticle.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\configurationSystem\ConfigurationManager.java
-C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\kit\Kits.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\functions\MysticalMessage.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\roleCommands\GivePermission.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\commands\MysticalHelp.java
@@ -33,5 +30,6 @@ C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\commands\Kit.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\playerInfoSystem\PlayerInfo.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\functions\CommandAndEventLoader.java
+C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\roleCommands\DeleteAllRank.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\handlers\RankConfigurationHandler.java
 C:\Users\ItsMystic01\Downloads\MyJava\Mystical\src\main\java\mys\serone\mystical\roleCommands\GiveRank.java

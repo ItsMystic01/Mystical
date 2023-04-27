@@ -12,7 +12,7 @@ mys\serone\mystical\roleCommands\CheckAllRank.class
 mys\serone\mystical\configurationSystem\ConfigurationManager.class
 mys\serone\mystical\commands\Fly.class
 mys\serone\mystical\commands\Message.class
-mys\serone\mystical\beta\CustomParticle.class
+mys\serone\mystical\roleCommands\DeleteAllRank.class
 mys\serone\mystical\kit\SetKitPrefix.class
 mys\serone\mystical\listeners\ChatListener.class
 mys\serone\mystical\roleCommands\CheckPlayerRank.class
@@ -23,18 +23,14 @@ mys\serone\mystical\rankSystem\RanksManager$1.class
 mys\serone\mystical\kit\CreateKit$KitCloseListener.class
 mys\serone\mystical\kitSystem\PersonalKitManager$1.class
 mys\serone\mystical\kit\EditKit$KitCloseListener.class
-mys\serone\mystical\vault\PersonalVault.class
 mys\serone\mystical\handlers\ReadMeConfiguration.class
 mys\serone\mystical\kit\DeleteKit.class
 mys\serone\mystical\handlers\RankConfigurationHandler.class
 mys\serone\mystical\kitSystem\KitManager.class
 mys\serone\mystical\kit\CreateKit.class
 mys\serone\mystical\kitSystem\PersonalKit.class
-mys\serone\mystical\kit\Kits.class
-mys\serone\mystical\functions\MysticalPermission$permissionENUM.class
 mys\serone\mystical\roleCommands\GiveRank.class
 mys\serone\mystical\roleCommands\CreateRank.class
-mys\serone\mystical\functions\MysticalMessage$messageENUM.class
 mys\serone\mystical\functions\MysticalMessage.class
 mys\serone\mystical\rankSystem\RanksManager.class
 mys\serone\mystical\roleCommands\RemovePermission.class
