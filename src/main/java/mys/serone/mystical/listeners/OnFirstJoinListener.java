@@ -3,8 +3,10 @@ package mys.serone.mystical.listeners;
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.configurationSystem.Configuration;
 import mys.serone.mystical.configurationSystem.ConfigurationManager;
+import mys.serone.mystical.handlers.RankConfigurationHandler;
 import mys.serone.mystical.playerInfoSystem.PlayerInfo;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
+import mys.serone.mystical.rankSystem.Rank;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -35,6 +37,7 @@ public class OnFirstJoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
 
+        new RankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
         if (CHECK_RANKS_FILE.length() == 0) {
             List<String> newRankPermission = new ArrayList<>();
             newRankPermission.add("mystical.help");
@@ -76,7 +79,9 @@ public class OnFirstJoinListener implements Listener {
             PlayerInfo playerInfo = allPlayerInfo.get(uuid);
             List<String> playerJoinedRankList = playerInfo.getUserRankList();
             for (String rank : playerJoinedRankList) {
-                for (String rankPerm : RANKS_MANAGER.getRank(rank).getPermissions()) {
+                Rank rankToGet = RANKS_MANAGER.getRank(rank);
+                if (rankToGet == null) { continue; }
+                for (String rankPerm : rankToGet.getPermissions()) {
                     player.addAttachment(PLUGIN, rankPerm, true);
                 }
             }

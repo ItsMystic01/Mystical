@@ -75,6 +75,7 @@ public class PlayerInfoManager {
 
     public List<String> getPlayerRankList(String UUID) {
         PlayerInfo playerInfo = PLAYER_INFO.get(UUID);
+        if (playerInfo == null) { return null; }
         return playerInfo.getUserRankList();
     }
 

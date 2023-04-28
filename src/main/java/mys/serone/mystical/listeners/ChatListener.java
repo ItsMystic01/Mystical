@@ -26,8 +26,16 @@ public class ChatListener implements Listener {
         String playerUUID = player.getUniqueId().toString();
 
         List<String> playerRankList = PLAYER_INFO_MANAGER.getPlayerRankList(playerUUID);
-
         String prefix;
+
+        if (playerRankList == null) {
+            prefix = "&4[&cRank Not Found&4]";
+            String displayName = prefix + " " + player.getDisplayName();
+            String formattedMessage = ChatColor.translateAlternateColorCodes('&',  displayName + ": " + message);
+            event.setFormat(formattedMessage);
+            return;
+        }
+
         try {
             prefix = RANKS_MANAGER.getRank(playerRankList.get(0)).getPrefix();
             if (prefix == null) {

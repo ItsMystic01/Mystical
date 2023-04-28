@@ -42,7 +42,7 @@ public class CommandAndEventLoader {
                 new CheckAllRank(ranksManager, langConfig),
                 new CheckPlayerRank(plugin, playerInfoManager, ranksManager, langConfig),
                 new CreateRank(ranksManager, playerInfoManager, langConfig),
-                new DeleteAllRank(ranksManager, langConfig),
+                new DeleteAllRank(ranksManager, langConfig, playerInfoManager),
                 new DeleteRank(ranksManager, playerInfoManager, langConfig),
                 new GivePermission(plugin, playerInfoManager, langConfig),
                 new GiveRank(plugin, playerInfoManager, ranksManager, langConfig),

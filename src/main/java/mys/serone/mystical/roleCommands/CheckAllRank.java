@@ -37,14 +37,16 @@ public class CheckAllRank implements CommandExecutor {
         }
 
         for (UUID rank : allRanks.keySet()) {
-            String rankPrefix = allRanks.get(rank).getPrefix();
+            Rank rankAccount = allRanks.get(rank);
+            String rankName = rankAccount.getName();
+            String rankPrefix = rankAccount.getPrefix();
 
             if (rankPrefix == null) {
                 rankPrefix = "&c[&fInvalid Rank&c]";
                 System.out.println("[Mystical] Incomplete/Invalid rank format in ranks.yml");
             }
 
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', rankPrefix));
+            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l- &7" + rankName + ": " + rankPrefix));
         }
 
         return true;

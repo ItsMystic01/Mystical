@@ -50,7 +50,7 @@ public class RanksManager {
             }
             ranks = mapper.readValue(RANKS_FILE, new TypeReference<HashMap<UUID, Rank>>() {});
             for (Rank rank : ranks.values()) {
-                rank.setId(UUID.randomUUID());
+                rank.setId(rank.getId());
             }
         } catch (JsonParseException e) {
             System.out.println("[Mystical] ranks file has invalid formatting.");
@@ -112,6 +112,15 @@ public class RanksManager {
     public void deleteAllRank() {
         RANKS_BY_NAME.clear();
         RANKS_BY_ID.clear();
+        saveRanksToFile();
+    }
+
+    public void deleteAllRank(List<String> name) {
+        for (String rankNameToRemove : name) {
+            UUID id = RANKS_BY_NAME.get(rankNameToRemove);
+            RANKS_BY_ID.remove(id);
+            RANKS_BY_NAME.remove(rankNameToRemove);
+        }
         saveRanksToFile();
     }
 
