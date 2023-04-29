@@ -1,5 +1,6 @@
 package mys.serone.mystical.commands;
 
+import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
 import org.bukkit.ChatColor;
@@ -16,15 +17,30 @@ import java.awt.*;
 import java.util.Collections;
 import java.util.Map;
 
+/**
+ * Class for showcasing the features, commands, and format of the plugin
+ */
 public class MysticalHelp implements CommandExecutor {
     private final JavaPlugin PLUGIN;
     private final FileConfiguration LANG_CONFIG;
 
-    public MysticalHelp(JavaPlugin javaPlugin, FileConfiguration langConfig) {
-        this.PLUGIN = javaPlugin;
+    /**
+     * @param plugin : Mystical Plugin
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see MysticalMessage
+     */
+    public MysticalHelp(Mystical plugin, FileConfiguration langConfig) {
+        this.PLUGIN = plugin;
         this.LANG_CONFIG = langConfig;
     }
 
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -81,6 +97,13 @@ public class MysticalHelp implements CommandExecutor {
         return true;
     }
 
+    /**
+     * @param hexColor1 : Starting hex color
+     * @param hexColor2 : Ending hex color
+     * @param steps : Number of steps from starting to ending hex color
+     * @param currentStep : Current step at
+     * @return String : Gradient Color of the String
+     */
     private String gradientColor(String hexColor1, String hexColor2, int steps, int currentStep) {
 
         Color color1 = Color.decode(hexColor1);
@@ -98,6 +121,10 @@ public class MysticalHelp implements CommandExecutor {
         return String.format("#%06x", color.getRGB() & 0xFFFFFF);
     }
 
+    /**
+     * @param name : Display name of the item
+     * @return StringBuilder
+     */
     private StringBuilder displayName(String name) {
 
         StringBuilder displayName = new StringBuilder();

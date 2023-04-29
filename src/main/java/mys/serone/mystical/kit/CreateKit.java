@@ -25,18 +25,35 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Class for Creating Kits that are saved in personal_kit_configuration.yml
+ */
 public class CreateKit implements CommandExecutor {
 
     private final Mystical PLUGIN;
     private final PersonalKitManager PERSONAL_KIT_MANAGER;
     private final FileConfiguration LANG_CONFIG;
 
+    /**
+     * @param plugin : Mystical Plugin
+     * @param personalKitManager : Personal Kit Manager used in accessing its functions.
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see PersonalKitManager
+     * @see MysticalMessage
+     */
     public CreateKit(Mystical plugin, PersonalKitManager personalKitManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.PERSONAL_KIT_MANAGER = personalKitManager;
         this.LANG_CONFIG = langConfig;
     }
 
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -73,6 +90,9 @@ public class CreateKit implements CommandExecutor {
         return true;
     }
 
+    /**
+     * Class for checks in inventory closing of the user indicating its end on creation of a kit
+     */
     private static class KitCloseListener implements org.bukkit.event.Listener {
         private final Player PLAYER;
         private final Inventory KIT_INVENTORY;
@@ -82,6 +102,17 @@ public class CreateKit implements CommandExecutor {
         public String kitNameCode;
         private final FileConfiguration LANG_CONFIG;
 
+        /**
+         * @param player : Player provided by the onCommand Event
+         * @param kitInventory : Inventory provided by the onCommand Event
+         * @param kitFile : Kit File provided by the onCommand Event
+         * @param kitName : Kit Name provided by the onCommand Event
+         * @param kitNameCode : Kit Name Code provided by the onCommand Event
+         * @param personalKitManager : Personal Kit Manager used in accessing its functions.
+         * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+         * @see PersonalKitManager
+         * @see MysticalMessage
+         */
         public KitCloseListener(Player player, Inventory kitInventory, File kitFile, String kitName, String kitNameCode, PersonalKitManager personalKitManager, FileConfiguration langConfig) {
             this.PLAYER = player;
             this.KIT_INVENTORY = kitInventory;
@@ -92,6 +123,9 @@ public class CreateKit implements CommandExecutor {
             this.LANG_CONFIG = langConfig;
         }
 
+        /**
+         * @param event : Event responsible for receiving inventory closing calls
+         */
         @EventHandler
         public void onInventoryClose(InventoryCloseEvent event) {
 

@@ -3,10 +3,23 @@ package mys.serone.mystical.handlers;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+
+/**
+ * Class for creating a README.txt file in the Mystical Plugin Data Folder
+ */
 public class ReadMeConfiguration {
 
     private final File READ_ME_FILE;
+
+    /**
+     * @param readMeFile : README.txt located by the onEnable Function in Mystical Main Class
+     * @see mys.serone.mystical.Mystical
+     */
     public ReadMeConfiguration(File readMeFile) { this.READ_ME_FILE = readMeFile; }
+
+    /**
+     * Writes the README.txt file in plugin's folder
+     */
     public void writeToFile() {
 
         String[] messageList = {
@@ -44,26 +57,25 @@ public class ReadMeConfiguration {
                 "================================================",
                 "player_info.yml (Sample)",
                 " ",
-                "- playerUUID: \"853b37d5-591e-4546-a7f4-d23dc84122d8\"",
-                "  userCoins: 1000.0",
+                "853b37d5-591e-4546-a7f4-d23dc84122d8:",
                 "  userRankList:",
                 "  - \"Admin\"",
                 "  - \"Moderator\"",
                 "  - \"Member\"",
+                "  userAdditionalPermission: ",
+                "  - mystical.*",
                 " ",
-                "* playerUUID is the player's UUID",
-                "* userCoins represents the currency and amount they have, it must have a decimal.",
-                "* userRankList is a list of ranks, it will sort the rank list by priority set in the ranks.yml, every server restart or reload.",
+                "* the 853b37d5-591e-4546-a7f4-d23dc84122d8 represents the player's UUID",
+                "* userRankList is list of ranks, it will sort the rank list by priority set in the ranks.yml, every server restart or reload.",
+                "* userAdditionalPermission is list of permissions that would be given to the user upon joining.",
                 " ",
                 "================================================",
                 "mystical_configuration (Sample)",
                 " ",
                 "- defaultRank: \"Member\"",
-                "  defaultCoins: 1000.0",
                 " ",
                 "* mystical_configuration only requires 2 configuration as of now.",
                 "* defaultRank is the rank to be given to every player that joins on their first time. The rank must be present in the ranks.yml for it to be given properly and the player's rank won't be null.",
-                "* defaultCoins is the default amount of coins to be given to the user upon joining. Must have a decimal point."
         };
 
         try {

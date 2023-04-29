@@ -16,12 +16,24 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Collections;
 
+/**
+ * Class for claiming kits
+ */
 public class Kit implements CommandExecutor {
     private final Mystical PLUGIN;
     private final KitManager KIT_MANAGER;
     private final RanksManager RANKS_MANAGER;
     private final FileConfiguration LANG_CONFIG;
 
+    /**
+     * @param plugin : Mystical Plugin
+     * @param kitManager : Kit Manager used in gathering the kits from the Kits Folder
+     * @param ranksManager : Ranks Manager used in accessing its functions.
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages.
+     * @see KitManager
+     * @see RanksManager
+     * @see MysticalMessage
+     */
     public Kit(Mystical plugin, KitManager kitManager, RanksManager ranksManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.KIT_MANAGER = kitManager;
@@ -29,6 +41,13 @@ public class Kit implements CommandExecutor {
         LANG_CONFIG = langConfig;
     }
 
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -47,11 +66,10 @@ public class Kit implements CommandExecutor {
         Rank rank = RANKS_MANAGER.getRank(rankKitToGet);
         File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits"  + File.separator + rankKitToGet + ".yml");
 
-        if (rank != null) { KIT_MANAGER.kitOne(player, args); }
-        else if (kitFile.exists()) { KIT_MANAGER.claimKit(player, rankKitToGet); }
+        if (rank != null) { KIT_MANAGER.getRankKit(player, args); return true; }
+        else if (kitFile.exists()) { KIT_MANAGER.claimKit(player, rankKitToGet); return true; }
         else {
             player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Kit does not exist."), LANG_CONFIG));
-            return true;
         }
 
         return true;

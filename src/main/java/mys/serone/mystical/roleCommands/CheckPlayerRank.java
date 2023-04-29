@@ -3,7 +3,6 @@ package mys.serone.mystical.roleCommands;
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
-import mys.serone.mystical.handlers.RankConfigurationHandler;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.ChatColor;
@@ -16,12 +15,24 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+/**
+ * Class for checking all ranks present of a user
+ */
 public class CheckPlayerRank implements CommandExecutor {
     private final Mystical PLUGIN;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final RanksManager RANKS_MANAGER;
     private final FileConfiguration LANG_CONFIG;
 
+    /**
+     * @param plugin : Mystical Plugin
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
+     * @param ranksManager : Player Info Manager used in accessing its functions.
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see PlayerInfoManager
+     * @see RanksManager
+     * @see MysticalMessage
+     */
     public CheckPlayerRank(Mystical plugin, PlayerInfoManager playerInfoManager, RanksManager ranksManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
@@ -29,6 +40,13 @@ public class CheckPlayerRank implements CommandExecutor {
         this.LANG_CONFIG = langConfig;
     }
 
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -65,8 +83,6 @@ public class CheckPlayerRank implements CommandExecutor {
                 newMap.put(playerRank, rankPriority);
                 playerRankPriority.add(newMap);
             } catch (Exception e) {
-                new RankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
-
                 System.out.println("[Mystical] " + player.getDisplayName() + " has invalid ranks on player_info.yml");
                 player.sendMessage(MysticalMessage.USER_INVALID_RANK_CONFIGURATION_ERROR.formatMessage(Collections.singletonMap("player", player.getDisplayName()), LANG_CONFIG));
                 return true;

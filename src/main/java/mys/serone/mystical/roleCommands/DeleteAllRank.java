@@ -2,7 +2,6 @@ package mys.serone.mystical.roleCommands;
 
 import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
-import mys.serone.mystical.handlers.RankConfigurationHandler;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.Rank;
 import mys.serone.mystical.rankSystem.RanksManager;
@@ -15,18 +14,36 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+/**
+ * Class responsible for rank deletion of all or some ranks
+ */
 public class DeleteAllRank implements CommandExecutor {
 
     private final RanksManager RANKS_MANAGER;
-    private final FileConfiguration LANG_CONFIG;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
+    private final FileConfiguration LANG_CONFIG;
 
-    public DeleteAllRank(RanksManager ranksManager, FileConfiguration langConfig, PlayerInfoManager playerInfoManager) {
+    /**
+     * @param ranksManager : Ranks Manager used in accessing its functions.
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see RanksManager
+     * @see PlayerInfoManager
+     * @see MysticalMessage
+     */
+    public DeleteAllRank(RanksManager ranksManager, PlayerInfoManager playerInfoManager, FileConfiguration langConfig) {
         this.RANKS_MANAGER = ranksManager;
-        this.LANG_CONFIG = langConfig;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
+        this.LANG_CONFIG = langConfig;
     }
 
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -51,7 +68,6 @@ public class DeleteAllRank implements CommandExecutor {
             case "all":
                 RANKS_MANAGER.deleteAllRank();
                 player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "All ranks has been deleted successfully."), LANG_CONFIG));
-                new RankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
                 return true;
             case "name": {
                 if (args.length < 2) {
@@ -81,7 +97,6 @@ public class DeleteAllRank implements CommandExecutor {
                     return true;
                 }
                 player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", String.valueOf(listOfRemovedRanks)), LANG_CONFIG));
-                new RankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
                 break;
             }
             case "char": {
@@ -114,7 +129,6 @@ public class DeleteAllRank implements CommandExecutor {
                     return true;
                 }
                 player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", String.valueOf(listOfRemovedRanks)), LANG_CONFIG));
-                new RankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
                 break;
             }
             case "priority": {
@@ -154,17 +168,19 @@ public class DeleteAllRank implements CommandExecutor {
                     return true;
                 }
                 player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", String.valueOf(listOfRemovedRanks)), LANG_CONFIG));
-                new RankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
                 break;
             }
             default:
                 usageText(player);
                 break;
         }
-
+        if (listOfRankNamesToRemove.size() > 0) { PLAYER_INFO_MANAGER.updatePlayerRankList(listOfRankNamesToRemove); }
         return true;
     }
 
+    /**
+     * @param player : Player provided by the onCommand Event
+     */
     public void usageText(Player player) {
         List<String> usageText = new ArrayList<>();
         usageText.add("&7Usage: /deleteallrank <name | char | priority | all> [name: name | char: first character | priority: number]");

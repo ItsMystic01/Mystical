@@ -14,12 +14,28 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
+/**
+ * Class for renaming items
+ */
 public class Rename implements CommandExecutor {
 
     private final FileConfiguration LANG_CONFIG;
+
+    /**
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see MysticalMessage
+     */
     public Rename(FileConfiguration langConfig) {
         LANG_CONFIG = langConfig;
     }
+
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 

@@ -16,6 +16,9 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import java.io.File;
 import java.util.*;
 
+/**
+ * Class responsible for joining events and first-time joining events
+ */
 public class OnFirstJoinListener implements Listener {
     private final Mystical PLUGIN;
     private final ConfigurationManager CONFIGURATION_MANAGER;
@@ -24,6 +27,19 @@ public class OnFirstJoinListener implements Listener {
     private final RanksManager RANKS_MANAGER;
     private final File CHECK_RANKS_FILE;
 
+    /**
+     * @param plugin : Mystical Plugin
+     * @param configurationManager : Configuration used in accessing its function in managing mystical_configuration.yml
+     * @param configuration : Configuration used in accessing data in mystical_configuration.yml
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
+     * @param ranksManager : Ranks Manager used in accessing its functions.
+     * @param ranksFile : ranks.yml located by the onEnable Function in Mystical Main Class
+     * @see ConfigurationManager
+     * @see Configuration
+     * @see PlayerInfoManager
+     * @see RanksManager
+     * @see Mystical
+     */
     public OnFirstJoinListener(Mystical plugin, ConfigurationManager configurationManager, Configuration configuration,
                                PlayerInfoManager playerInfoManager, RanksManager ranksManager, File ranksFile) {
         this.PLUGIN = plugin;
@@ -34,6 +50,9 @@ public class OnFirstJoinListener implements Listener {
         this.CHECK_RANKS_FILE = ranksFile;
     }
 
+    /**
+     * @param event : Event responsible for receiving join calls
+     */
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
 

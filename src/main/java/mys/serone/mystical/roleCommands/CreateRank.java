@@ -2,8 +2,6 @@ package mys.serone.mystical.roleCommands;
 
 import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
-import mys.serone.mystical.handlers.RankConfigurationHandler;
-import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.Rank;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.command.Command;
@@ -15,18 +13,32 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.*;
 
+/**
+ * Class responsible for rank creation
+ */
 public class CreateRank implements CommandExecutor {
 
     private final RanksManager RANKS_MANAGER;
-    private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final FileConfiguration LANG_CONFIG;
 
-    public CreateRank(RanksManager ranksManager, PlayerInfoManager playerInfoManager, FileConfiguration langConfig) {
+    /**
+     * @param ranksManager : Ranks Manager used in accessing its functions.
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see RanksManager
+     * @see MysticalMessage
+     */
+    public CreateRank(RanksManager ranksManager, FileConfiguration langConfig) {
         this.RANKS_MANAGER = ranksManager;
-        this.PLAYER_INFO_MANAGER = playerInfoManager;
         this.LANG_CONFIG = langConfig;
     }
 
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -57,7 +69,6 @@ public class CreateRank implements CommandExecutor {
         RANKS_MANAGER.createRank(UUID.randomUUID(), args[0], args[1], Integer.parseInt(args[2]), finalizedArguments, null, null);
         player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", args[0] + " Rank has been created successfully."), LANG_CONFIG));
 
-        new RankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
         return true;
     }
 }

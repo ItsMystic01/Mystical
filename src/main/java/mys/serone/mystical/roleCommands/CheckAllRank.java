@@ -15,14 +15,31 @@ import org.jetbrains.annotations.NotNull;
 import java.util.HashMap;
 import java.util.UUID;
 
+/**
+ * Class for checking all ranks in ranks.yml
+ */
 public class CheckAllRank implements CommandExecutor {
     private final RanksManager RANKS_MANAGER;
     private final FileConfiguration LANG_CONFIG;
 
+    /**
+     * @param ranksManager : Ranks Manager used in accessing its functions.
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see RanksManager
+     * @see MysticalMessage
+     */
     public CheckAllRank(RanksManager ranksManager, FileConfiguration langConfig) {
         this.RANKS_MANAGER = ranksManager;
         this.LANG_CONFIG = langConfig;
     }
+
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 

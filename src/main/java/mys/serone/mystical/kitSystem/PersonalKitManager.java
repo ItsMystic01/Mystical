@@ -14,12 +14,21 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Class responsible for managing kits
+ */
 public class PersonalKitManager {
 
     private final File KIT_FILE;
     private final List<PersonalKit> KITS;
     private final FileConfiguration LANG_CONFIG;
 
+    /**
+     * @param kitFile : personal_kit_configuration.yml located by the onEnable Function in Mystical Main Class
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see mys.serone.mystical.Mystical
+     * @see MysticalMessage
+     */
     public PersonalKitManager(File kitFile, FileConfiguration langConfig) {
         this.KIT_FILE = kitFile;
         this.LANG_CONFIG = langConfig;
@@ -39,6 +48,9 @@ public class PersonalKitManager {
         this.KITS = loadKitsFromFile();
     }
 
+    /**
+     * @return List<PersonalKit> : All personal kits in personal_kit_configuration.yml
+     */
     private List<PersonalKit> loadKitsFromFile() {
         List<PersonalKit> kits = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
@@ -60,10 +72,17 @@ public class PersonalKitManager {
         return kits;
     }
 
+    /**
+     * @return List of PersonalKit : All personal kits in personal_kit_configuration.yml
+     */
     public List<PersonalKit> getKITS() {
         return KITS;
     }
 
+    /**
+     * @param name : name of the kit placed in the parameter by the CommandExecutor.
+     * @return PersonalKit
+     */
     public PersonalKit getKit(String name) {
         return KITS.stream()
                 .filter(kit -> kit.getKitName().equalsIgnoreCase(name))
@@ -71,6 +90,11 @@ public class PersonalKitManager {
                 .orElse(null);
     }
 
+    /**
+     * @param player : CommandExecutor
+     * @param kitName : Kit Name to be updated
+     * @param newPrefix : Prefix to be set for the kit
+     */
     public void setKitPrefix(Player player, String kitName, String newPrefix) {
         PersonalKit kitInYML = getKit(kitName);
         kitInYML.setKitCodeName(newPrefix);
@@ -78,6 +102,11 @@ public class PersonalKitManager {
         player.sendMessage(MysticalMessage.SET_KIT_PREFIX_SUCCESSFUL.formatMessage(Collections.singletonMap("kit", kitName), LANG_CONFIG));
     }
 
+    /**
+     * @param player : CommandExecutor
+     * @param kitName : Kit name to be created
+     * @param kitCodeName : Prefix to be set for the kit
+     */
     public void createKit(Player player, String kitName, String kitCodeName) {
         PersonalKit personalKit = new PersonalKit();
         personalKit.setKitName(kitName);
@@ -87,11 +116,17 @@ public class PersonalKitManager {
         player.sendMessage(MysticalMessage.CREATE_KIT_SUCCESSFUL.formatMessage(Collections.singletonMap("kit", kitName), LANG_CONFIG));
     }
 
+    /**
+     * @param kitName : Name of the kit to delete from personal_kit_configuration.yml
+     */
     public void deleteKit(PersonalKit kitName) {
         KITS.remove(kitName);
         saveKitsToFile();
     }
 
+    /**
+     * Saves all changes in personal_kit_configuration.yml
+     */
     public void saveKitsToFile() {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {

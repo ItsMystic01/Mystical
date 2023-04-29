@@ -9,15 +9,27 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import java.util.List;
 
+/**
+ * Class for updating chat messages
+ */
 public class ChatListener implements Listener {
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final RanksManager RANKS_MANAGER;
 
+    /**
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
+     * @param ranksManager : Ranks Manager used in accessing its functions.
+     * @see PlayerInfoManager
+     * @see RanksManager
+     */
     public ChatListener(PlayerInfoManager playerInfoManager, RanksManager ranksManager) {
         this.PLAYER_INFO_MANAGER = playerInfoManager;
         this.RANKS_MANAGER = ranksManager;
     }
 
+    /**
+     * @param event : Event responsible for collecting chat messages calls before sending it to the server
+     */
     @EventHandler
     public void onChat(AsyncPlayerChatEvent event) {
 

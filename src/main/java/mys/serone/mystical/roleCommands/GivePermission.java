@@ -16,17 +16,34 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Class responsible for permission granting to user
+ */
 public class GivePermission implements CommandExecutor {
     private final Mystical PLUGIN;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final FileConfiguration LANG_CONFIG;
 
+    /**
+     * @param plugin : Mystical Plugin
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see PlayerInfoManager
+     * @see MysticalMessage
+     */
     public GivePermission(Mystical plugin, PlayerInfoManager playerInfoManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
         this.LANG_CONFIG = langConfig;
     }
 
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 

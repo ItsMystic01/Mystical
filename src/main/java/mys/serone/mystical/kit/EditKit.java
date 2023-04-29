@@ -27,16 +27,31 @@ import java.util.Collections;
 import java.util.Map;
 import java.util.Objects;
 
+/**
+ * Class for Editing Kits that are available in personal_kit_configuration.yml
+ */
 public class EditKit implements CommandExecutor {
 
     private final Mystical PLUGIN;
     private final FileConfiguration LANG_CONFIG;
 
+    /**
+     * @param plugin : Mystical Plugin
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see MysticalMessage
+     */
     public EditKit(Mystical plugin, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.LANG_CONFIG = langConfig;
     }
 
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -107,6 +122,9 @@ public class EditKit implements CommandExecutor {
         return true;
     }
 
+    /**
+     * Class for checks in inventory closing of the user indicating its end on edit of a kit
+     */
     private static class KitCloseListener implements Listener {
         private final Player PLAYER;
         private final Inventory KIT_INVENTORY;
@@ -115,6 +133,15 @@ public class EditKit implements CommandExecutor {
         public String kitNameCode;
         private final FileConfiguration LANG_CONFIG;
 
+        /**
+         * @param player : Player provided by the onCommand Event
+         * @param kitInventory : Inventory provided by the onCommand Event
+         * @param kitFile : Kit File provided by the onCommand Event
+         * @param kitName : Kit Name provided by the onCommand Event
+         * @param kitNameCode : Kit Name Code provided by the onCommand Event
+         * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+         * @see MysticalMessage
+         */
         public KitCloseListener(Player player, Inventory kitInventory, File kitFile, String kitName, String kitNameCode, FileConfiguration langConfig) {
             this.PLAYER = player;
             this.KIT_INVENTORY = kitInventory;
@@ -124,6 +151,10 @@ public class EditKit implements CommandExecutor {
             this.LANG_CONFIG = langConfig;
         }
 
+        /**
+         * @param event : Event responsible for inventory closing calls
+         * @throws IOException : Error handler for Inventory Close Event calls
+         */
         @EventHandler
         public void onInventoryClose(InventoryCloseEvent event) throws IOException {
 

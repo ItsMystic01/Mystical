@@ -7,8 +7,17 @@ import mys.serone.mystical.rankSystem.RanksManager;
 import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * Class for updating player information in player_info.yml and updating ranks in ranks.yml
+ */
 public class RankConfigurationHandler {
 
+    /**
+     * @param ranksManager : Ranks Manager used in accessing its functions.
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
+     * @see RanksManager
+     * @see PlayerInfoManager
+     */
     public RankConfigurationHandler(RanksManager ranksManager, PlayerInfoManager playerInfoManager) {
 
         HashMap<UUID, Rank> allRanks = ranksManager.getRanks();
@@ -38,6 +47,7 @@ public class RankConfigurationHandler {
             Integer value2 = Collections.max(o2.values());
             return value1.compareTo(value2);
         });
+
 
         for (Map<String, Integer> stringIntegerMap : playerRankPriority) {
             String rankSort = stringIntegerMap.keySet().toString();

@@ -15,12 +15,24 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
+/**
+ * Class responsible for rank granting to user
+ */
 public class GiveRank implements CommandExecutor {
     private final Mystical PLUGIN;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final RanksManager RANKS_MANAGER;
     private final FileConfiguration LANG_CONFIG;
 
+    /**
+     * @param plugin : Mystical Plugin
+     * @param ranksManager : Ranks Manager used in accessing its functions.
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see RanksManager
+     * @see PlayerInfoManager
+     * @see MysticalMessage
+     */
     public GiveRank(Mystical plugin, PlayerInfoManager playerInfoManager, RanksManager ranksManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
@@ -28,6 +40,13 @@ public class GiveRank implements CommandExecutor {
         this.LANG_CONFIG = langConfig;
     }
 
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 

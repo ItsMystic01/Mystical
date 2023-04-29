@@ -2,7 +2,7 @@ package mys.serone.mystical;
 
 import mys.serone.mystical.configurationSystem.Configuration;
 import mys.serone.mystical.configurationSystem.ConfigurationManager;
-import mys.serone.mystical.functions.CommandAndEventLoader;
+import mys.serone.mystical.functions.CommandEventDataLoader;
 import mys.serone.mystical.kitSystem.KitManager;
 import mys.serone.mystical.kitSystem.PersonalKitManager;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
@@ -17,8 +17,17 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 
+/**
+ * @author ItsMystic01
+ * @version 1.0
+ * Main Mystical Class
+ */
 public final class Mystical extends JavaPlugin {
 
+    /**
+     * (non-Javadoc)
+     * @see org.bukkit.plugin.java.JavaPlugin#onEnable()
+     */
     @Override
     public void onEnable() {
 
@@ -58,17 +67,21 @@ public final class Mystical extends JavaPlugin {
         RanksManager ranksManager = new RanksManager(ranksFile, langConfig);
         PersonalKitManager personalKitManager = new PersonalKitManager(kitFile, langConfig);
         ConfigurationManager configurationManager = new ConfigurationManager(configurationFile);
-        PlayerInfoManager playerInfoManager = new PlayerInfoManager(ranksManager, playerInfoFile, langConfig);
+        PlayerInfoManager playerInfoManager = new PlayerInfoManager(playerInfoFile, langConfig);
         Configuration configuration = new Configuration();
         KitManager kitManager = new KitManager(this, ranksManager, playerInfoManager, personalKitManager, langConfig);
 
-        CommandAndEventLoader commandAndEventLoader = new CommandAndEventLoader();
+        CommandEventDataLoader commandAndEventLoader = new CommandEventDataLoader();
 
         commandAndEventLoader.registerCommands(this, ranksManager, personalKitManager, playerInfoManager, kitManager, langConfig);
         commandAndEventLoader.registerEvents(this, playerInfoManager, ranksManager, configurationManager, configuration, ranksFile);
         commandAndEventLoader.registerOrLoadData(readMeFile, ranksManager, playerInfoManager);
     }
 
+    /**
+     * (non-Javadoc)
+     * @see org.bukkit.plugin.java.JavaPlugin#onDisable()
+     */
     @Override
     public void onDisable() {
         Bukkit.getLogger().info("[Mystical] Shutting down");

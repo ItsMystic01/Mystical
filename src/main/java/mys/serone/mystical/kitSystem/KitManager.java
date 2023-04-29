@@ -19,6 +19,9 @@ import org.bukkit.inventory.meta.ItemMeta;
 import java.io.File;
 import java.util.*;
 
+/**
+ * Class responsible in the creation of kits
+ */
 public class KitManager {
 
     private final Mystical PLUGIN;
@@ -27,6 +30,17 @@ public class KitManager {
     private final PersonalKitManager PERSONAL_KIT_MANAGER;
     private final FileConfiguration LANG_CONFIG;
 
+    /**
+     * @param plugin : Mystical Plugin
+     * @param ranksManager : Ranks Manager used in accessing its functions.
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
+     * @param personalKitManager : Personal Kit Manager used in accessing its functions
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see RanksManager
+     * @see PlayerInfoManager
+     * @see PersonalKitManager
+     * @see MysticalMessage
+     */
     public KitManager(Mystical plugin, RanksManager ranksManager, PlayerInfoManager playerInfoManager,
                       PersonalKitManager personalKitManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
@@ -36,7 +50,11 @@ public class KitManager {
         this.LANG_CONFIG = langConfig;
     }
 
-    public void kitOne(Player player, String[] args) {
+    /**
+     * @param player : CommandExecutor
+     * @param args : List of strings to supply the missing parameters for the function
+     */
+    public void getRankKit(Player player, String[] args) {
 
         List<String> list = PLAYER_INFO_MANAGER.getPlayerRankList(player.getUniqueId().toString());
 
@@ -93,6 +111,12 @@ public class KitManager {
         }
     }
 
+    /**
+     * @param material : Material of the item indicated in the personal_kit_configuration for the kit
+     * @param kitName : Name of the kit to gather materials from
+     * @param itemName : Name to be set for the item
+     * @return ItemStack
+     */
     private ItemStack createMysticalItem(Material material, String kitName, String itemName) {
         ItemStack item = new ItemStack(material);
         ItemMeta meta = item.getItemMeta();
@@ -103,6 +127,14 @@ public class KitManager {
         return item;
     }
 
+    /**
+     * @param player : CommandExecutor
+     * @param item : Material to give to the Command Executor
+     * @param kitName : Name of the kit to gather materials from
+     * @param enchantment : String list of enchantments to be given on the material
+     * @param level : Integer list of level per enchantment to give on the material
+     * @param itemName : Name to be set for the item
+     */
     private void giveMysticalKit(Player player, Material item, String kitName, List<String> enchantment, List<Integer> level, String itemName) {
         Inventory inventory = player.getInventory();
 
@@ -112,6 +144,11 @@ public class KitManager {
         inventory.addItem(itemToAdd);
     }
 
+    /**
+     * @param item : Item from the kit, in personal_kit_configuration.yml requested by the CommandExecutor, to be enchanted
+     * @param toEnchant : String list of enchantments to enchant the items
+     * @param level : Integer list of level to implement on certain enchantments
+     */
     public void setMaxEnchantments(ItemStack item, List<String> toEnchant, List<Integer> level) {
         Enchantment[] enchantments = Enchantment.values();
 
@@ -124,6 +161,10 @@ public class KitManager {
         }
     }
 
+    /**
+     * @param player : CommandExecutor
+     * @param kitName : Name of the kit to get
+     */
     public void claimKit(Player player, String kitName) {
         File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits" + File.separator + ".yml");
 

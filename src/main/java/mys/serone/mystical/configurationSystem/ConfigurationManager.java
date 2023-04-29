@@ -9,10 +9,16 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Class for the functions of Default Configuration of the plugin for the server
+ */
 public class ConfigurationManager {
     private final List<Configuration> CONFIG_INFO;
     private final File CONFIGURATION_FILE;
 
+    /**
+     * @param configurationFile : mystical_configuration.yml that contains all default configuration for the server
+     */
     public ConfigurationManager(File configurationFile) {
         this.CONFIGURATION_FILE = configurationFile;
         if (!CONFIGURATION_FILE.exists()) {
@@ -30,6 +36,9 @@ public class ConfigurationManager {
         this.CONFIG_INFO = loadPlayerInfoFromFile();
     }
 
+    /**
+     * @return List<Configuration>
+     */
     private List<Configuration> loadPlayerInfoFromFile() {
         List<Configuration> configurationInfo = new ArrayList<>();
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
@@ -49,15 +58,24 @@ public class ConfigurationManager {
         return configurationInfo;
     }
 
+    /**
+     * @return List of Configuration : Returns all configuration from mystical_configuration.yml
+     */
     public List<Configuration> getAllConfiguration() {
         return CONFIG_INFO;
     }
 
+    /**
+     * @param configurationInfo : Information needed in creating the default configuration for the server
+     */
     public void createConfigurationInfo(Configuration configurationInfo) {
         CONFIG_INFO.add(configurationInfo);
         saveConfigurationInfoToFile();
     }
 
+    /**
+     * Saves all changes in mystical_configuration.yml
+     */
     public void saveConfigurationInfoToFile() {
         ObjectMapper mapper = new ObjectMapper(new YAMLFactory());
         try {

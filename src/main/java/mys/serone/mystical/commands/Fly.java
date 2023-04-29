@@ -11,12 +11,28 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 
+/**
+ * Class for enabling or disabling flight
+ */
 public class Fly implements CommandExecutor {
 
     private final FileConfiguration LANG_CONFIG;
+
+    /**
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages.
+     * @see MysticalMessage
+     */
     public Fly(FileConfiguration langConfig) {
         LANG_CONFIG = langConfig;
     }
+
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
@@ -29,10 +45,10 @@ public class Fly implements CommandExecutor {
 
         if (player.getAllowFlight()) {
             player.setAllowFlight(false);
-            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Flight off!"), LANG_CONFIG));
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Flight disabled!"), LANG_CONFIG));
         } else {
             player.setAllowFlight(true);
-            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Flight on!"), LANG_CONFIG));
+            player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Flight enabled!"), LANG_CONFIG));
         }
 
         return true;

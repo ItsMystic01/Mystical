@@ -15,18 +15,35 @@ import org.jetbrains.annotations.NotNull;
 import java.io.File;
 import java.util.Collections;
 
+/**
+ * Class for Deleting Kits that are saved in personal_kit_configuration.yml
+ */
 public class DeleteKit implements CommandExecutor {
 
     private final Mystical PLUGIN;
     private final PersonalKitManager PERSONAL_KIT_MANAGER;
     private final FileConfiguration LANG_CONFIG;
 
+    /**
+     * @param plugin : Mystical Plugin
+     * @param personalKitManager : Personal Kit Manager used in accessing its functions.
+     * @param langConfig : langConfig (lang.yml) used for its ENUM messages in MysticalMessage.
+     * @see PersonalKitManager
+     * @see MysticalMessage
+     */
     public DeleteKit(Mystical plugin, PersonalKitManager personalKitManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.PERSONAL_KIT_MANAGER = personalKitManager;
         this.LANG_CONFIG = langConfig;
     }
 
+    /**
+     * @param sender : CommandExecutor
+     * @param command : Command Used
+     * @param label : Aliases
+     * @param args : String List Arguments
+     * @return boolean true or false
+     */
     @Override
     public boolean onCommand(@NotNull CommandSender sender, @NotNull Command command, @NotNull String label, @NotNull String[] args) {
 
