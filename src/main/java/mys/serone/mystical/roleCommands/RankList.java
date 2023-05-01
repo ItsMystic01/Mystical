@@ -18,7 +18,7 @@ import java.util.UUID;
 /**
  * Class for checking all ranks in ranks.yml
  */
-public class CheckAllRank implements CommandExecutor {
+public class RankList implements CommandExecutor {
     private final RanksManager RANKS_MANAGER;
     private final FileConfiguration LANG_CONFIG;
 
@@ -28,7 +28,7 @@ public class CheckAllRank implements CommandExecutor {
      * @see RanksManager
      * @see MysticalMessage
      */
-    public CheckAllRank(RanksManager ranksManager, FileConfiguration langConfig) {
+    public RankList(RanksManager ranksManager, FileConfiguration langConfig) {
         this.RANKS_MANAGER = ranksManager;
         this.LANG_CONFIG = langConfig;
     }
@@ -48,7 +48,7 @@ public class CheckAllRank implements CommandExecutor {
         HashMap<UUID, Rank> allRanks = RANKS_MANAGER.getRanks();
         Player player = (Player) sender;
 
-        if (!player.hasPermission(MysticalPermission.CHECK_ALL_RANK.getPermission())) {
+        if (!player.hasPermission(MysticalPermission.RANK_LIST.getPermission())) {
             player.sendMessage(MysticalMessage.COMMAND_PERMISSION_ERROR.formatMessage(LANG_CONFIG));
             return true;
         }

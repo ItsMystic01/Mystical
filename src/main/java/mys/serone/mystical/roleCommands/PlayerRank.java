@@ -18,7 +18,7 @@ import java.util.*;
 /**
  * Class for checking all ranks present of a user
  */
-public class CheckPlayerRank implements CommandExecutor {
+public class PlayerRank implements CommandExecutor {
     private final Mystical PLUGIN;
     private final PlayerInfoManager PLAYER_INFO_MANAGER;
     private final RanksManager RANKS_MANAGER;
@@ -33,7 +33,7 @@ public class CheckPlayerRank implements CommandExecutor {
      * @see RanksManager
      * @see MysticalMessage
      */
-    public CheckPlayerRank(Mystical plugin, PlayerInfoManager playerInfoManager, RanksManager ranksManager, FileConfiguration langConfig) {
+    public PlayerRank(Mystical plugin, PlayerInfoManager playerInfoManager, RanksManager ranksManager, FileConfiguration langConfig) {
         this.PLUGIN = plugin;
         this.PLAYER_INFO_MANAGER = playerInfoManager;
         this.RANKS_MANAGER = ranksManager;
@@ -54,7 +54,7 @@ public class CheckPlayerRank implements CommandExecutor {
 
         Player playerSender = (Player) sender;
 
-        if (!playerSender.hasPermission(MysticalPermission.CHECK_PLAYER_RANK.getPermission())) {
+        if (!playerSender.hasPermission(MysticalPermission.PLAYER_RANK.getPermission())) {
             playerSender.sendMessage(MysticalMessage.COMMAND_PERMISSION_ERROR.formatMessage(LANG_CONFIG));
             return true;
         }

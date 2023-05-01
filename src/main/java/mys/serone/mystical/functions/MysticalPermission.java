@@ -44,11 +44,11 @@ public enum MysticalPermission {
         /**
          * Command Permission For Check All Rank : /checkallrank
          */
-        CHECK_ALL_RANK("mystical.checkallrank"),
+        RANK_LIST("mystical.ranklist"),
         /**
          * Command Permission For Check Player Rank : /checkplayerrank
          */
-        CHECK_PLAYER_RANK("mystical.checkplayerrank"),
+        PLAYER_RANK("mystical.playerrank"),
         /**
          * Command Permission For Create Rank : /createrank
          */
