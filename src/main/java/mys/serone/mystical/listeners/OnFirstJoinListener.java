@@ -3,7 +3,6 @@ package mys.serone.mystical.listeners;
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.configurationSystem.Configuration;
 import mys.serone.mystical.configurationSystem.ConfigurationManager;
-import mys.serone.mystical.handlers.RankConfigurationHandler;
 import mys.serone.mystical.playerInfoSystem.PlayerInfo;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.Rank;
@@ -56,7 +55,7 @@ public class OnFirstJoinListener implements Listener {
     @EventHandler
     public void onJoin(PlayerJoinEvent event) {
 
-        new RankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
+        RANKS_MANAGER.rankConfigurationHandler(RANKS_MANAGER, PLAYER_INFO_MANAGER);
         if (CHECK_RANKS_FILE.length() == 0) {
             List<String> newRankPermission = new ArrayList<>();
             newRankPermission.add("mystical.help");

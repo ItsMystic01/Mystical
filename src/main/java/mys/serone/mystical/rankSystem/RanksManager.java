@@ -5,12 +5,16 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
 import mys.serone.mystical.functions.MysticalMessage;
+import mys.serone.mystical.playerInfoSystem.PlayerInfo;
+import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * Class responsible for managing ranks
@@ -139,9 +143,11 @@ public class RanksManager {
     }
 
     /**
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
      * @param rank : rank name provided to be removed from the rank list in ranks.yml
      */
-    public void removeRank(String rank) {
+    public void removeRank(PlayerInfoManager playerInfoManager, String rank) {
+        rankRemovalPerPlayer(playerInfoManager, rank);
         Rank toRemove = getRank(rank);
         RANKS_BY_ID.remove(toRemove.getId());
         RANKS_BY_NAME.remove(toRemove.getName());
@@ -150,22 +156,26 @@ public class RanksManager {
 
     /**
      * Deletes all listed ranks in ranks.yml
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
      */
-    public void deleteAllRank() {
+    public void deleteAllRank(PlayerInfoManager playerInfoManager) {
         RANKS_BY_NAME.clear();
         RANKS_BY_ID.clear();
+        rankRemovalPerPlayer(playerInfoManager);
         saveRanksToFile();
     }
 
 
     /**
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
      * @param name : deletes all listed rank in string list from ranks.yml
      */
-    public void deleteAllRank(List<String> name) {
+    public void deleteAllRank(PlayerInfoManager playerInfoManager, List<String> name) {
         for (String rankNameToRemove : name) {
             UUID id = RANKS_BY_NAME.get(rankNameToRemove);
             RANKS_BY_ID.remove(id);
             RANKS_BY_NAME.remove(rankNameToRemove);
+            rankRemovalPerPlayer(playerInfoManager, rankNameToRemove);
         }
         saveRanksToFile();
     }
@@ -179,6 +189,104 @@ public class RanksManager {
             mapperForID.writeValue(RANKS_FILE, RANKS_BY_ID);
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
+     * @param rank : String name of the rank to remove
+     */
+    public void rankRemovalPerPlayer(PlayerInfoManager playerInfoManager, String rank) {
+        HashMap<String, PlayerInfo> allPlayerInfo = playerInfoManager.getAllPlayerInfo();
+        for (Map.Entry<String, PlayerInfo> playerInfo : allPlayerInfo.entrySet()) {
+            PlayerInfo playerInfoValues = playerInfo.getValue();
+            List<String> playerRankList = playerInfoValues.getUserRankList();
+
+            if (!playerRankList.contains(rank)) { continue; }
+            playerRankList.remove(rank);
+            playerInfoValues.setUserRankList(playerRankList);
+
+            UUID uuidOfPlayer = UUID.fromString(playerInfo.getKey());
+            Player rankPlayer = Bukkit.getServer().getPlayer(uuidOfPlayer);
+            if (rankPlayer == null) { return; }
+            if (rankPlayer.isOnline()) {
+                rankPlayer.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", rank + " rank has been removed from you due to its deletion"), LANG_CONFIG));
+            }
+
+        }
+    }
+
+    /**
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
+     */
+    public void rankRemovalPerPlayer(PlayerInfoManager playerInfoManager) {
+        HashMap<String, PlayerInfo> allPlayerInfo = playerInfoManager.getAllPlayerInfo();
+        for (Map.Entry<String, PlayerInfo> playerInfo : allPlayerInfo.entrySet()) {
+            PlayerInfo playerInfoValues = playerInfo.getValue();
+            List<String> playerRankList = playerInfoValues.getUserRankList();
+            playerRankList.clear();
+            playerInfoValues.setUserRankList(playerRankList);
+
+            UUID uuidOfPlayer = UUID.fromString(playerInfo.getKey());
+            Player rankPlayer = Bukkit.getServer().getPlayer(uuidOfPlayer);
+            if (rankPlayer == null) { return; }
+            if (rankPlayer.isOnline()) {
+                rankPlayer.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message",  "All of your ranks has been removed due to its deletion"), LANG_CONFIG));
+            }
+        }
+    }
+
+    /**
+     * @param ranksManager : Ranks Manager used in accessing its functions.
+     * @param playerInfoManager : Player Info Manager used in accessing its functions.
+     * @see RanksManager
+     * @see PlayerInfoManager
+     */
+    public void rankConfigurationHandler(RanksManager ranksManager, PlayerInfoManager playerInfoManager) {
+
+        HashMap<UUID, Rank> allRanks = ranksManager.getRanks();
+        List<Map<String, Integer>> playerRankPriority = new ArrayList<>();
+        List<String> playerSortedRankList = new ArrayList<>();
+        HashMap<String, PlayerInfo> allPlayerInfo = playerInfoManager.getAllPlayerInfo();
+
+        for (UUID rankId : allRanks.keySet()) {
+            if (rankId == null) {
+                System.out.println("[Mystical] Invalid Rank Format at ranks.yml");
+            }
+        }
+
+        try {
+            HashMap<UUID, Rank> rankPriority = ranksManager.getRanks();
+            for (UUID rankToCheck : rankPriority.keySet()) {
+                Map<String, Integer> newMap = new HashMap<>();
+                newMap.put(rankPriority.get(rankToCheck).getName(), rankPriority.get(rankToCheck).getPriority());
+                playerRankPriority.add(newMap);
+            }
+        } catch (Exception e) {
+            System.out.println("[Mystical] A problem has occurred in the ranks.yml");
+        }
+
+        playerRankPriority.sort((o1, o2) -> {
+            Integer value1 = Collections.min(o1.values());
+            Integer value2 = Collections.max(o2.values());
+            return value1.compareTo(value2);
+        });
+
+
+        for (Map<String, Integer> stringIntegerMap : playerRankPriority) {
+            String rankSort = stringIntegerMap.keySet().toString();
+            playerSortedRankList.add(rankSort.replace("[", "").replace("]", ""));
+        }
+
+        for (Map.Entry<String, PlayerInfo> playerInfo : allPlayerInfo.entrySet()) {
+            PlayerInfo playerInfoValues = playerInfo.getValue();
+            List<String> playerInfoValuesUserRankList = playerInfoValues.getUserRankList();
+            List<String> playerInfoValuesUserSortedRankList = playerInfoValuesUserRankList.stream()
+                    .filter(playerSortedRankList::contains)
+                    .sorted(Comparator.comparingInt(playerSortedRankList::indexOf))
+                    .collect(Collectors.toList());
+            playerInfoValues.setUserRankList(playerInfoValuesUserSortedRankList);
+            playerInfoManager.savePlayerInfoToFile();
         }
     }
 }

@@ -2,7 +2,6 @@ package mys.serone.mystical.roleCommands;
 
 import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
-import mys.serone.mystical.playerInfoSystem.PlayerInfo;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.Rank;
 import mys.serone.mystical.rankSystem.RanksManager;
@@ -14,9 +13,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 /**
  * Class responsible for rank deletion
@@ -73,17 +69,8 @@ public class DeleteRank implements CommandExecutor {
             return true;
         }
 
-        RANKS_MANAGER.removeRank(rankToRemove);
+        RANKS_MANAGER.removeRank(PLAYER_INFO_MANAGER, rankToRemove);
         player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", rankToRemove + " Rank has been deleted successfully."), LANG_CONFIG));
-
-        HashMap<String, PlayerInfo> allPlayerInfo = PLAYER_INFO_MANAGER.getAllPlayerInfo();
-        for (Map.Entry<String, PlayerInfo> playerInfo : allPlayerInfo.entrySet()) {
-            PlayerInfo playerInfoValues = playerInfo.getValue();
-            List<String> playerRankList = playerInfoValues.getUserRankList();
-            if(playerRankList.contains(rankToRemove)) {
-                playerRankList.remove(args[0]);
-            }
-        }
 
         PLAYER_INFO_MANAGER.updatePlayerRankList(rankToRemove);
 

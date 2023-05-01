@@ -75,7 +75,7 @@ public final class Mystical extends JavaPlugin {
 
         commandAndEventLoader.registerCommands(this, ranksManager, personalKitManager, playerInfoManager, kitManager, langConfig);
         commandAndEventLoader.registerEvents(this, playerInfoManager, ranksManager, configurationManager, configuration, ranksFile);
-        commandAndEventLoader.registerOrLoadData(readMeFile, ranksManager, playerInfoManager);
+        commandAndEventLoader.registerOrLoadData(readMeFile);
     }
 
     /**

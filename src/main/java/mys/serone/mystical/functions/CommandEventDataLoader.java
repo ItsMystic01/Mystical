@@ -4,7 +4,6 @@ import mys.serone.mystical.Mystical;
 import mys.serone.mystical.commands.*;
 import mys.serone.mystical.configurationSystem.Configuration;
 import mys.serone.mystical.configurationSystem.ConfigurationManager;
-import mys.serone.mystical.handlers.RankConfigurationHandler;
 import mys.serone.mystical.handlers.ReadMeConfiguration;
 import mys.serone.mystical.kit.CreateKit;
 import mys.serone.mystical.kit.DeleteKit;
@@ -96,15 +95,10 @@ public class CommandEventDataLoader {
     /**
      * Used in registering, updating and loading for the plugin
      * @param readMeFile : README.txt located by the onEnable Function in Mystical Main Class
-     * @param ranksManager : Ranks Manager used in accessing its functions.
-     * @param playerInfoManager : Player Info Manager used in accessing its functions.
      * @see Mystical
-     * @see RanksManager
-     * @see PlayerInfoManager
      */
-    public void registerOrLoadData(File readMeFile, RanksManager ranksManager, PlayerInfoManager playerInfoManager) {
+    public void registerOrLoadData(File readMeFile) {
         new ReadMeConfiguration(readMeFile).writeToFile();
-        new RankConfigurationHandler(ranksManager, playerInfoManager);
     }
 
 }
