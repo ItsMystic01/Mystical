@@ -91,7 +91,6 @@ public class CommandEventDataLoader {
                                ConfigurationManager configurationManager, Configuration configuration, File ranksFile) {
         Bukkit.getServer().getPluginManager().registerEvents(new ChatListener(playerInfoManager, ranksManager), plugin);
         Bukkit.getServer().getPluginManager().registerEvents(new OnFirstJoinListener(plugin, configurationManager, configuration, playerInfoManager, ranksManager, ranksFile), plugin);
-
     }
 
     /**

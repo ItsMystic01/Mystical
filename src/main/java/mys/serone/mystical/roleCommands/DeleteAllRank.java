@@ -91,12 +91,13 @@ public class DeleteAllRank implements CommandExecutor {
                     listOfRemovedRanks.append(rankName).append("\n");
                 }
 
-                RANKS_MANAGER.deleteAllRank(listOfRankNamesToRemove);
                 if (listOfRemovedRanks.length() == 23) {
                     player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "No rank has a name that contains " + args[1]), LANG_CONFIG));
                     return true;
                 }
-                player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", String.valueOf(listOfRemovedRanks)), LANG_CONFIG));
+                RANKS_MANAGER.deleteAllRank(listOfRankNamesToRemove);
+                player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "List of ranks that have been removed: \n" + listOfRemovedRanks), LANG_CONFIG));
+                player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "&c" + listOfRankNamesToRemove.size() + " &7ranks have been deleted"), LANG_CONFIG));
                 break;
             }
             case "char": {
@@ -123,12 +124,13 @@ public class DeleteAllRank implements CommandExecutor {
                     listOfRemovedRanks.append(rankName).append("\n");
                 }
 
-                RANKS_MANAGER.deleteAllRank(listOfRankNamesToRemove);
                 if (listOfRemovedRanks.length() == 23) {
                     player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "No rank has a name that starts with letter: " + args[1]), LANG_CONFIG));
                     return true;
                 }
-                player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", String.valueOf(listOfRemovedRanks)), LANG_CONFIG));
+                RANKS_MANAGER.deleteAllRank(listOfRankNamesToRemove);
+                player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "List of ranks that have been removed: \n" + listOfRemovedRanks), LANG_CONFIG));
+                player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "&c" + listOfRankNamesToRemove.size() + " &7ranks have been deleted"), LANG_CONFIG));
                 break;
             }
             case "priority": {
@@ -162,12 +164,13 @@ public class DeleteAllRank implements CommandExecutor {
                     listOfRemovedRanks.append(rankName).append("\n");
                 }
 
-                RANKS_MANAGER.deleteAllRank(listOfRankNamesToRemove);
                 if (listOfRemovedRanks.length() == 23) {
                     player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "No rank has a priority equal or above the number " + args[1]), LANG_CONFIG));
                     return true;
                 }
-                player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", String.valueOf(listOfRemovedRanks)), LANG_CONFIG));
+                RANKS_MANAGER.deleteAllRank(listOfRankNamesToRemove);
+                player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "List of ranks that have been removed: \n" + listOfRemovedRanks), LANG_CONFIG));
+                player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "&c" + listOfRankNamesToRemove.size() + " &7ranks have been deleted"), LANG_CONFIG));
                 break;
             }
             default:

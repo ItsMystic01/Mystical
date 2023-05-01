@@ -157,6 +157,7 @@ public class RanksManager {
         saveRanksToFile();
     }
 
+
     /**
      * @param name : deletes all listed rank in string list from ranks.yml
      */
