@@ -67,7 +67,7 @@ public class SetKitPrefix implements CommandExecutor {
 
         String rankKitToGet = args[0];
         Rank rank = RANKS_MANAGER.getRank(rankKitToGet);
-        File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits" + File.separator + ".yml");
+        File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits" + File.separator + rankKitToGet + ".yml");
 
         if (rank != null) { RANKS_MANAGER.setKitName(player, rankKitToGet, args[1]); }
         else if (kitFile.exists()) { PERSONAL_KIT_MANAGER.setKitPrefix(player, rankKitToGet, args[1]); }

@@ -26,39 +26,39 @@ public enum MysticalMessage {
     /**
      * Kit Creation Successful Message Format
      */
-    CREATE_KIT_SUCCESSFUL("&3[&bMystical&3] &l| &r{kit} kit has been created successfully.", "create_kit_successful", true),
+    CREATE_KIT_SUCCESSFUL("&3[&bMystical&3] &l| &r{kit} &rkit has been created successfully.", "create_kit_successful", true),
     /**
      * Kit Deletion Error Message Format
      */
-    DELETE_KIT_RANK_DOES_NOT_EXIST_ERROR("&3[&bMystical&3] &l| &r{kit} rank kit does not exist.", "delete_kit_rank_does_not_exist_error", true),
+    DELETE_KIT_RANK_DOES_NOT_EXIST_ERROR("&3[&bMystical&3] &l| &r{kit} &rrank kit does not exist.", "delete_kit_rank_does_not_exist_error", true),
     /**
      * Kit Deletion Successful Message Format
      */
-    DELETE_KIT_SUCCESSFUL("&3[&bMystical&3] &l| &r{kit} kit has been deleted successfully.", "delete_kit_successful", true),
+    DELETE_KIT_SUCCESSFUL("&3[&bMystical&3] &l| &r{kit} &rkit has been deleted successfully.", "delete_kit_successful", true),
     /**
      * Kit Deletion Unsuccessful Message Format
      */
-    DELETE_KIT_UNSUCCESSFUL("&3[&bMystical&3] &l| &r{kit} kit has been deleted unsuccessfully.", "delete_kit_unsuccessful", true),
+    DELETE_KIT_UNSUCCESSFUL("&3[&bMystical&3] &l| &r{kit} &rkit has been deleted unsuccessfully.", "delete_kit_unsuccessful", true),
     /**
      * Kit Modification Successful Message Format
      */
-    EDIT_KIT_SUCCESSFUL("&3[&bMystical&3] &l| &a{kit} kit saved successfully.", "edit_kit_successful", false),
+    EDIT_KIT_SUCCESSFUL("&3[&bMystical&3] &l| &a{kit} &rkit saved successfully.", "edit_kit_successful", true),
     /**
      * Kit Claim Successful Message Format
      */
-    CLAIM_KIT_SUCCESSFUL("&3[&bMystical&3] &l| &rYou have claimed {kit} kit.", "claim_kit_successful", true),
+    CLAIM_KIT_SUCCESSFUL("&3[&bMystical&3] &l| &rYou have claimed &r{kit} &rkit.", "claim_kit_successful", true),
     /**
      * Kit Prefix Update Successful Message Format
      */
-    SET_KIT_PREFIX_SUCCESSFUL("&3[&bMystical&3] &l| &rPrefix for {kit} has been set successfully.", "set_kit_prefix_successful", false),
+    SET_KIT_PREFIX_SUCCESSFUL("&3[&bMystical&3] &l| &rPrefix for {kit} &rhas been set successfully.", "set_kit_prefix_successful", true),
     /**
      * Player Invalid Rank Configuration Error Message Format
      */
-    USER_INVALID_RANK_CONFIGURATION_ERROR("&3[&bMystical&3] &l| &r{player} has invalid ranks on player_info.yml", "user_invalid_rank_configuration_error", true),
+    USER_INVALID_RANK_CONFIGURATION_ERROR("&3[&bMystical&3] &l| &r{player} &rhas invalid ranks on player_info.yml", "user_invalid_rank_configuration_error", true),
     /**
      * No Existing Kit For Rank Message Format
      */
-    RANK_HAS_NO_EXISTING_KIT_CONFIGURATION_ERROR("&3[&bMystical&3] &l| &r{rank} does not have an existing kit. " +
+    RANK_HAS_NO_EXISTING_KIT_CONFIGURATION_ERROR("&3[&bMystical&3] &l| &r{rank} &rdoes not have an existing kit. " +
             "(Read the README.txt file in the Mystical Folder in the Plugins Folder)", "rank_has_no_existing_kit_configuration_error", true);
 
     private final String MESSAGE;

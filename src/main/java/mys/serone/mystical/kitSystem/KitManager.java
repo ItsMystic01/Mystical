@@ -166,7 +166,7 @@ public class KitManager {
      * @param kitName : Name of the kit to get
      */
     public void claimKit(Player player, String kitName) {
-        File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits" + File.separator + ".yml");
+        File kitFile = new File(PLUGIN.getDataFolder(), "kits" + File.separator + kitName + ".yml");
 
         if (!kitFile.exists()) {
             player.sendMessage(MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Kit does not exist."), LANG_CONFIG));

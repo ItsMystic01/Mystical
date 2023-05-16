@@ -275,6 +275,7 @@ public class RanksManager {
 
         for (Map<String, Integer> stringIntegerMap : playerRankPriority) {
             String rankSort = stringIntegerMap.keySet().toString();
+
             playerSortedRankList.add(rankSort.replace("[", "").replace("]", ""));
         }
 
