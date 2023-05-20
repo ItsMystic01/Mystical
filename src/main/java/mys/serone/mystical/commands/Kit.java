@@ -64,6 +64,7 @@ public class Kit implements CommandExecutor {
 
         String rankKitToGet = args[0];
         Rank rank = RANKS_MANAGER.getRank(rankKitToGet);
+
         File kitFile = new File(PLUGIN.getDataFolder().getAbsolutePath(), "kits"  + File.separator + rankKitToGet + ".yml");
 
         if (rank != null) { KIT_MANAGER.getRankKit(player, args); return true; }

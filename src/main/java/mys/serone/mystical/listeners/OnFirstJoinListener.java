@@ -96,6 +96,12 @@ public class OnFirstJoinListener implements Listener {
         if (uuidList.contains(uuid)) {
             PlayerInfo playerInfo = allPlayerInfo.get(uuid);
             List<String> playerJoinedRankList = playerInfo.getUserRankList();
+
+            if (playerJoinedRankList.size() == 0) {
+                playerJoinedRankList.add(finalDefaultRank);
+                PLAYER_INFO_MANAGER.savePlayerInfoToFile();
+            }
+
             for (String rank : playerJoinedRankList) {
                 Rank rankToGet = RANKS_MANAGER.getRank(rank);
                 if (rankToGet == null) { continue; }
@@ -117,6 +123,7 @@ public class OnFirstJoinListener implements Listener {
             defaultRank.add(finalDefaultRank);
             PLAYER_INFO_MANAGER.createPlayerInfo(uuid, defaultRank, defaultAdditionalPermission);
             PlayerInfo playerInfo = allPlayerInfo.get(uuid);
+
             List<String> playerJoinedRankList = playerInfo.getUserRankList();
 
             for (String rank : playerJoinedRankList) {

@@ -58,11 +58,11 @@ public final class Mystical extends JavaPlugin {
 
         FileConfiguration langConfig = YamlConfiguration.loadConfiguration(langFile);
 
-        File configurationFile = new File(getDataFolder().getAbsolutePath() + File.separator + "mystical_configuration.yml");
-        File readMeFile = new File(getDataFolder().getAbsolutePath() + File.separator + "README.txt");
-        File kitFile = new File(getDataFolder().getAbsolutePath() + File.separator + "personal_kit_configuration.yml");
-        File ranksFile = new File(getDataFolder().getAbsolutePath() + File.separator + "ranks.yml");
-        File playerInfoFile = new File(getDataFolder().getAbsolutePath() + File.separator + "player_info.yml");
+        File configurationFile = new File(getDataFolder() + File.separator + "mystical_configuration.yml");
+        File readMeFile = new File(getDataFolder() + File.separator + "README.txt");
+        File kitFile = new File(getDataFolder() + File.separator + "personal_kit_configuration.yml");
+        File ranksFile = new File(getDataFolder() + File.separator + "ranks.yml");
+        File playerInfoFile = new File(getDataFolder() + File.separator + "player_info.yml");
 
         RanksManager ranksManager = new RanksManager(ranksFile, langConfig);
         PersonalKitManager personalKitManager = new PersonalKitManager(kitFile, langConfig);

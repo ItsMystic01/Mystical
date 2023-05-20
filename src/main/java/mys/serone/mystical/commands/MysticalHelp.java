@@ -3,6 +3,7 @@ package mys.serone.mystical.commands;
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
+import mys.serone.mystical.handlers.Gradient;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -13,7 +14,6 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.jetbrains.annotations.NotNull;
 
-import java.awt.*;
 import java.util.Collections;
 import java.util.Map;
 
@@ -62,7 +62,7 @@ public class MysticalHelp implements CommandExecutor {
                 String cmdName = entry.getKey();
                 Map<String, Object> cmdInfo = entry.getValue();
                 String description = (String) cmdInfo.get("description");
-                StringBuilder cmdInfoTextGradient = displayName("Command Info");
+                StringBuilder cmdInfoTextGradient = Gradient.displayName("Command Info", "#fb4444", "#0c5fff", false);
 
                 if (!cmdName.equalsIgnoreCase(givenCommand)) { continue; }
 
@@ -79,7 +79,7 @@ public class MysticalHelp implements CommandExecutor {
                     MysticalMessage.INFORMATION.formatMessage(Collections.singletonMap("message", "Command not found."), LANG_CONFIG));
 
         } else {
-            StringBuilder cmdListTextGradient = displayName("Command List");
+            StringBuilder cmdListTextGradient = Gradient.displayName("Command List", "#fb4444", "#0c5fff", false);
 
             textToSend.append(ChatColor.translateAlternateColorCodes('&', "&6================== " + cmdListTextGradient + " &6==================\n"));
 
@@ -95,49 +95,5 @@ public class MysticalHelp implements CommandExecutor {
         }
 
         return true;
-    }
-
-    /**
-     * @param hexColor1 : Starting hex color
-     * @param hexColor2 : Ending hex color
-     * @param steps : Number of steps from starting to ending hex color
-     * @param currentStep : Current step at
-     * @return String : Gradient Color of the String
-     */
-    private String gradientColor(String hexColor1, String hexColor2, int steps, int currentStep) {
-
-        Color color1 = Color.decode(hexColor1);
-        Color color2 = Color.decode(hexColor2);
-        float[] rgb1 = color1.getRGBComponents(null);
-        float[] rgb2 = color2.getRGBComponents(null);
-        float[] result = new float[3];
-
-        for (int i = 0; i < 3; i++) {
-            result[i] = rgb1[i] + (rgb2[i] - rgb1[i]) * currentStep / (float) steps;
-        }
-
-        Color color = new Color(result[0], result[1], result[2]);
-
-        return String.format("#%06x", color.getRGB() & 0xFFFFFF);
-    }
-
-    /**
-     * @param name : Display name of the item
-     * @return StringBuilder
-     */
-    private StringBuilder displayName(String name) {
-
-        StringBuilder displayName = new StringBuilder();
-        int nameLength = name.length();
-
-        for (int i = 0; i < nameLength; i++) {
-            String hexColor1 = "#fb4444";
-            String hexColor2 = "#0c5fff";
-            String hexColor = gradientColor(hexColor1, hexColor2, nameLength - 1, i);
-            char c = name.charAt(i);
-            displayName.append(net.md_5.bungee.api.ChatColor.of(hexColor)).append(c);
-        }
-
-        return displayName;
     }
 }

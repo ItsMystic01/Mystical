@@ -1,5 +1,6 @@
 package mys.serone.mystical.listeners;
 
+import mys.serone.mystical.handlers.Gradient;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.ChatColor;
@@ -7,6 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
+
 import java.util.List;
 
 /**
@@ -48,18 +50,28 @@ public class ChatListener implements Listener {
             return;
         }
 
-        try {
-            prefix = RANKS_MANAGER.getRank(playerRankList.get(0)).getPrefix();
-            if (prefix == null) {
+        String startingHexCode = RANKS_MANAGER.getRank(playerRankList.get(0)).getStartingHexColor();
+        String endingHexCode = RANKS_MANAGER.getRank(playerRankList.get(0)).getEndingHexColor();
+        if (startingHexCode != null && endingHexCode != null) {
+            String rankName = RANKS_MANAGER.getRank(playerRankList.get(0)).getName();
+            String gradientRank = String.valueOf(Gradient.displayName(rankName, startingHexCode, endingHexCode, false));
+            String formattedMessage = ChatColor.translateAlternateColorCodes('&', "&7&l[" + gradientRank + "&7&l] &7" + player.getDisplayName() + "&7: " + message);
+            event.setFormat(formattedMessage);
+
+        } else {
+            try {
+                prefix = RANKS_MANAGER.getRank(playerRankList.get(0)).getPrefix();
+                if (prefix == null) {
+                    prefix = "&4[&cRank Not Found&4]";
+                }
+            } catch (Exception e) {
                 prefix = "&4[&cRank Not Found&4]";
             }
-        } catch (Exception e) {
-            prefix = "&4[&cRank Not Found&4]";
-        }
 
-        String displayName = prefix + " " + player.getDisplayName();
-        String formattedMessage = ChatColor.translateAlternateColorCodes('&',  displayName + ": " + message);
-        event.setFormat(formattedMessage);
+            String displayName = prefix + " " + player.getDisplayName();
+            String formattedMessage = ChatColor.translateAlternateColorCodes('&', displayName + ": " + message);
+            event.setFormat(formattedMessage);
+        }
     }
 }
 

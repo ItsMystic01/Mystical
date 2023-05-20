@@ -20,6 +20,7 @@ public class ReadMeConfiguration {
     /**
      * Writes the README.txt file in plugin's folder
      */
+
     public void writeToFile() {
 
         String[] messageList = {
@@ -31,7 +32,6 @@ public class ReadMeConfiguration {
                 "  permissions:",
                 "  - \"mystical.kill\"",
                 "  - \"mystical.op\"",
-                "  isDefault: false",
                 "  kit:",
                 "    - netherite_helmet:",
                 "      - \"protection:4\"",
@@ -48,11 +48,15 @@ public class ReadMeConfiguration {
                 "    - netherite_pickaxe:",
                 "      - \"efficiency:5\"",
                 "  kitName: \"&4[&cAdmin&4]\"",
+                "  startingHexColor: \"#000000\"",
+                "  endingHexColor: \"#000000\"",
                 " ",
                 "* The lower the number on the priority, the higher it is in the tier list.",
                 "* permissions per rank are automatically applied to every users that has the rank. You can add permissions from other plugins in the permission list for it will be applied as well.",
                 "* kit item must be minecraft format, as well as its enchantments.",
                 "* kit name is just like the prefix for a rank.",
+                "* startingHexColor and endingHexColor will only accept valid HEX Codes, if not, then will automatically set either to null",
+                "* if both hex colors were provided, it will override the prefix, and set the rank prefix to the gradient one",
                 " ",
                 "================================================",
                 "player_info.yml (Sample)",

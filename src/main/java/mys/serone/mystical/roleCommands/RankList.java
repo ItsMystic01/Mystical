@@ -2,6 +2,7 @@ package mys.serone.mystical.roleCommands;
 
 import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
+import mys.serone.mystical.handlers.Gradient;
 import mys.serone.mystical.rankSystem.Rank;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.ChatColor;
@@ -53,18 +54,25 @@ public class RankList implements CommandExecutor {
             return true;
         }
 
+        StringBuilder rankList = new StringBuilder();
+        rankList.append("&e&lAll Existing Ranks for the Server!\n");
         for (UUID rank : allRanks.keySet()) {
             Rank rankAccount = allRanks.get(rank);
             String rankName = rankAccount.getName();
             String rankPrefix = rankAccount.getPrefix();
 
-            if (rankPrefix == null) {
+            String startingHexCode = RANKS_MANAGER.getRank(rankName).getStartingHexColor();
+            String endingHexCode = RANKS_MANAGER.getRank(rankName).getEndingHexColor();
+            if (startingHexCode != null && endingHexCode != null) {
+                String gradientRank = String.valueOf(Gradient.displayName(rankName, startingHexCode, endingHexCode, false));
+                rankPrefix = ChatColor.translateAlternateColorCodes('&', "&7&l[" + gradientRank + "&7&l]");
+            } else if (rankPrefix == null) {
                 rankPrefix = "&c[&fInvalid Rank&c]";
                 System.out.println("[Mystical] Incomplete/Invalid rank format in ranks.yml");
             }
-
-            player.sendMessage(ChatColor.translateAlternateColorCodes('&', "&e&l- &7" + rankName + ": " + rankPrefix));
+            rankList.append("&e&l- &7").append(rankName).append(": ").append(rankPrefix).append("\n");
         }
+        player.sendMessage(ChatColor.translateAlternateColorCodes('&', String.valueOf(rankList)));
 
         return true;
     }

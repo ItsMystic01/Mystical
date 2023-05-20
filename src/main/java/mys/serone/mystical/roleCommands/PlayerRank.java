@@ -3,6 +3,7 @@ package mys.serone.mystical.roleCommands;
 import mys.serone.mystical.Mystical;
 import mys.serone.mystical.functions.MysticalMessage;
 import mys.serone.mystical.functions.MysticalPermission;
+import mys.serone.mystical.handlers.Gradient;
 import mys.serone.mystical.playerInfoSystem.PlayerInfoManager;
 import mys.serone.mystical.rankSystem.RanksManager;
 import org.bukkit.ChatColor;
@@ -105,7 +106,13 @@ public class PlayerRank implements CommandExecutor {
         StringBuilder userRank = new StringBuilder();
         for ( String perRank : playerSortedRankList ) {
             String rankPrefix;
-            if (RANKS_MANAGER.getRank(perRank) == null || RANKS_MANAGER.getRank(perRank).getPrefix() == null) {
+
+            String startingHexCode = RANKS_MANAGER.getRank(perRank).getStartingHexColor();
+            String endingHexCode = RANKS_MANAGER.getRank(perRank).getEndingHexColor();
+            if (startingHexCode != null && endingHexCode != null) {
+                String gradientRank = String.valueOf(Gradient.displayName(perRank, startingHexCode, endingHexCode, false));
+                rankPrefix = ChatColor.translateAlternateColorCodes('&', "&7&l[" + gradientRank + "&7&l]");
+            } else if (RANKS_MANAGER.getRank(perRank) == null || RANKS_MANAGER.getRank(perRank).getPrefix() == null) {
                 rankPrefix = "&c[&fInvalid Rank&c]";
             } else {
                 rankPrefix = RANKS_MANAGER.getRank(perRank).getPrefix();

@@ -50,6 +50,25 @@ public class RanksManager {
         for (Rank rank : RANKS_BY_ID.values()) {
             RANKS_BY_NAME.put(rank.getName(), rank.getId());
         }
+
+        for (Rank rank : RANKS_BY_ID.values()) {
+            Rank newRank = new Rank();
+            newRank.setId(rank.getId());
+            newRank.setName(rank.getName());
+            newRank.setPrefix(rank.getPrefix());
+            newRank.setPriority(rank.getPriority());
+            newRank.setPermissions(rank.getPermissions());
+            newRank.setKit(rank.getKit());
+            newRank.setKitName(rank.getKitName());
+            newRank.setStartingHexColor(rank.getStartingHexColor());
+            newRank.setEndingHexColor(rank.getEndingHexColor());
+
+            RANKS_BY_ID.put(newRank.getId(), newRank);
+            RANKS_BY_NAME.put(newRank.getName(), newRank.getId());
+
+            saveRanksToFile();
+        }
+
     }
 
     /**
@@ -64,9 +83,6 @@ public class RanksManager {
                 return ranks;
             }
             ranks = mapper.readValue(RANKS_FILE, new TypeReference<HashMap<UUID, Rank>>() {});
-            for (Rank rank : ranks.values()) {
-                rank.setId(rank.getId());
-            }
         } catch (JsonParseException e) {
             System.out.println("[Mystical] ranks file has invalid formatting.");
             System.out.println(e.getMessage());
@@ -137,6 +153,8 @@ public class RanksManager {
         rank.setPermissions(newRankPermission);
         rank.setKit(kit);
         rank.setKitName(kitName);
+        rank.setStartingHexColor(null);
+        rank.setEndingHexColor(null);
         RANKS_BY_ID.put(rank.getId(), rank);
         RANKS_BY_NAME.put(rank.getName(), rank.getId());
         saveRanksToFile();

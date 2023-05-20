@@ -3,6 +3,8 @@ package mys.serone.mystical.rankSystem;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Class for setters and getters for Ranks
@@ -15,6 +17,8 @@ public class Rank {
     private List<String> permissions;
     private List<Map<String, Object>> kit;
     private String kitName;
+    private String startingHexColor;
+    private String endingHexColor;
 
     /**
      * @return id : Generated UUID for the rank
@@ -60,6 +64,16 @@ public class Rank {
     public String getKitName() { return kitName; }
 
     /**
+     * @return startingHexColor
+     */
+    public String getStartingHexColor() { return startingHexColor; }
+
+    /**
+     * @return endingHexColor
+     */
+    public String getEndingHexColor() { return endingHexColor; }
+
+    /**
      * @param id : To set the UUID generated ID for the rank
      */
     public void setId(UUID id) { this.id = id; }
@@ -95,5 +109,37 @@ public class Rank {
      * @param kitName : To set the kit name for the rank
      */
     public void setKitName(String kitName) { this.kitName = kitName; }
+
+    /**
+     * @param startingHexColor : To set the starting HEX color for the name of the rank
+     */
+    public void setStartingHexColor(String startingHexColor) {
+
+        if (startingHexColor == null) { this.startingHexColor = null; return; }
+
+        Pattern pattern = Pattern.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$");
+        Matcher matcher = pattern.matcher(startingHexColor);
+
+        if (matcher.matches() && startingHexColor.length() > 0) {
+            this.startingHexColor = startingHexColor;
+        } else {
+            this.startingHexColor = null;
+        }
+    }
+    /**
+     * @param endingHexColor : To set the ending HEX color for the name of the rank
+     */
+    public void setEndingHexColor(String endingHexColor) {
+        if (endingHexColor == null) { this.endingHexColor = null; return; }
+
+        Pattern pattern = Pattern.compile("^#([A-Fa-f0-9]{6}|[A-Fa-f0-9]{3})$");
+        Matcher matcher = pattern.matcher(endingHexColor);
+
+        if (matcher.matches() && endingHexColor.length() > 0) {
+            this.endingHexColor = endingHexColor;
+        } else {
+            this.endingHexColor = null;
+        }
+    }
 }
 

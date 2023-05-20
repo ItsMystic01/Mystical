@@ -2,175 +2,141 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
-  <modelVersion>4.0.0</modelVersion>
+    <modelVersion>4.0.0</modelVersion>
 
-  <groupId>mys.serone</groupId>
-  <artifactId>Mystical</artifactId>
-  <version>1.0</version>
-  <packaging>jar</packaging>
+    <groupId>mys.serone</groupId>
+    <artifactId>Mystical</artifactId>
+    <version>1.0</version>
+    <packaging>jar</packaging>
 
-  <name>Mystical</name>
+    <name>Mystical</name>
 
-  <properties>
-    <java.version>1.8</java.version>
-    <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-  </properties>
+    <properties>
+        <java.version>1.8</java.version>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
-  <build>
-    <plugins>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-compiler-plugin</artifactId>
-        <version>3.8.1</version>
-        <configuration>
-          <source>${java.version}</source>
-          <target>${java.version}</target>
-            <compilerArgs>
-                <arg>-parameters</arg>
-            </compilerArgs>
-        </configuration>
-      </plugin>
-      <plugin>
-        <groupId>org.apache.maven.plugins</groupId>
-        <artifactId>maven-shade-plugin</artifactId>
-        <version>3.2.4</version>
-        <executions>
-          <execution>
-            <phase>package</phase>
-            <goals>
-              <goal>shade</goal>
-            </goals>
-            <configuration>
-              <createDependencyReducedPom>false</createDependencyReducedPom>
-              <outputFile>C:\Users\ItsMystic01\Downloads\MyJava\Minecraft Server (1.18.2)\plugins\Mystical.jar</outputFile>
-                <shadedArtifactAttached>true</shadedArtifactAttached>
-                <shadedClassifierName>shaded</shadedClassifierName>
-                <filters>
-                    <filter>
-                        <artifact>*:*</artifact>
-                        <excludes>
-                            <exclude>META-INF/*.SF</exclude>
-                            <exclude>META-INF/*.DSA</exclude>
-                            <exclude>META-INF/*.RSA</exclude>
-                            <exclude>META-INF/LICENSE</exclude>
-                            <exclude>META-INF/NOTICE</exclude>
-                            <exclude>META-INF/services/com.fasterxml.jackson.core.JsonFactory</exclude>
-                            <exclude>META-INF/services/com.fasterxml.jackson.core.ObjectCodec</exclude>
-                            <exclude>META-INF/MANIFEST.MF</exclude>
-                            <exclude>META-INF/versions/11/module-info.class</exclude>
-                            <exclude>module-info.class</exclude>
-                        </excludes>
-                    </filter>
-                </filters>
-                <transformers>
-                    <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
-                        <mainClass>com.example.MainClass</mainClass>
-                    </transformer>
-                </transformers>
-                <artifactSet>
-                    <excludes>
-                        <exclude>org.jetbrains:annotations:META-INF/versions/9/module-info.class</exclude>
-                        <exclude>com.example:examination-api:META-INF/versions/9/module-info.class</exclude>
-                        <exclude>com.example:examination-string:META-INF/versions/9/module-info.class</exclude>
-                    </excludes>
-                </artifactSet>
-            </configuration>
-          </execution>
-          </executions>
-          <configuration>
-              <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
-          </configuration>
-      </plugin>
-    </plugins>
-    <resources>
-      <resource>
-        <directory>src/main/resources</directory>
-        <filtering>true</filtering>
-      </resource>
-    </resources>
-  </build>
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>3.8.1</version>
+                <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
+                    <compilerArgs>
+                        <arg>-parameters</arg>
+                    </compilerArgs>
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-shade-plugin</artifactId>
+                <version>3.2.4</version>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>shade</goal>
+                        </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                            <outputFile>C:\Users\ItsMystic01\Downloads\Mystical Versions\Mystical.jar</outputFile>
+<!--                            <outputFile>C:\Users\ItsMystic01\Downloads\MyJava\Minecraft Server (1.18.2)\plugins\Mystical.jar</outputFile>-->
+                            <shadedArtifactAttached>true</shadedArtifactAttached>
+                            <shadedClassifierName>shaded</shadedClassifierName>
+                            <filters>
+                                <filter>
+                                    <artifact>*:*</artifact>
+                                    <excludes>
+                                        <exclude>META-INF/*.SF</exclude>
+                                        <exclude>META-INF/*.DSA</exclude>
+                                        <exclude>META-INF/*.RSA</exclude>
+                                        <exclude>META-INF/LICENSE</exclude>
+                                        <exclude>META-INF/NOTICE</exclude>
+                                        <exclude>META-INF/services/com.fasterxml.jackson.core.JsonFactory</exclude>
+                                        <exclude>META-INF/services/com.fasterxml.jackson.core.ObjectCodec</exclude>
+                                        <exclude>META-INF/MANIFEST.MF</exclude>
+                                        <exclude>META-INF/versions/11/module-info.class</exclude>
+                                        <exclude>module-info.class</exclude>
+                                    </excludes>
+                                </filter>
+                            </filters>
+                            <transformers>
+                                <transformer implementation="org.apache.maven.plugins.shade.resource.ManifestResourceTransformer">
+                                    <mainClass>com.example.MainClass</mainClass>
+                                </transformer>
+                            </transformers>
+                            <artifactSet>
+                                <excludes>
+                                    <exclude>org.jetbrains:annotations:META-INF/versions/9/module-info.class</exclude>
+                                    <exclude>com.example:examination-api:META-INF/versions/9/module-info.class</exclude>
+                                    <exclude>com.example:examination-string:META-INF/versions/9/module-info.class</exclude>
+                                </excludes>
+                            </artifactSet>
+                        </configuration>
+                    </execution>
+                </executions>
+                <configuration>
+                    <dependencyReducedPomLocation>${project.build.directory}/dependency-reduced-pom.xml</dependencyReducedPomLocation>
+                </configuration>
+            </plugin>
+        </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
+    </build>
 
-  <repositories>
-      <repository>
-          <id>spigotmc-repo</id>
-          <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
-      </repository>
-      <repository>
-          <id>sonatype</id>
-          <url>https://oss.sonatype.org/content/groups/public/</url>
-      </repository>
-      <repository>
-          <id>worldedit-repo</id>
-          <url>https://maven.enginehub.org/repo</url>
-      </repository>
-      <repository>
-          <id>aikar</id>
-          <url>https://repo.aikar.co/content/groups/aikar/</url>
-      </repository>
-  </repositories>
+    <repositories>
+        <repository>
+            <id>spigotmc-repo</id>
+            <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
+        </repository>
+        <repository>
+            <id>sonatype</id>
+            <url>https://oss.sonatype.org/content/groups/public/</url>
+        </repository>
+        <repository>
+            <id>worldedit-repo</id>
+            <url>https://maven.enginehub.org/repo</url>
+        </repository>
+        <repository>
+            <id>aikar</id>
+            <url>https://repo.aikar.co/content/groups/aikar/</url>
+        </repository>
+    </repositories>
 
-  <dependencies>
-      <dependency>
-          <groupId>org.spigotmc</groupId>
-          <artifactId>spigot-api</artifactId>
-          <version>1.18.1-R0.1-SNAPSHOT</version>
-          <scope>provided</scope>
-      </dependency>
-      <dependency>
-          <groupId>com.fasterxml.jackson.dataformat</groupId>
-          <artifactId>jackson-dataformat-yaml</artifactId>
-          <version>2.13.1</version>
-      </dependency>
-      <dependency>
-          <groupId>org.ow2.asm</groupId>
-          <artifactId>asm</artifactId>
-          <version>9.2</version>
-      </dependency>
-      <dependency>
-          <groupId>org.jetbrains</groupId>
-          <artifactId>annotations</artifactId>
-          <version>24.0.0</version>
-          <scope>compile</scope>
-      </dependency>
-      <dependency>
-          <groupId>cloud.commandframework</groupId>
-          <artifactId>cloud-bukkit</artifactId>
-          <version>1.8.0</version>
-      </dependency>
-<!--      <dependency>-->
-<!--          <groupId>cloud.commandframework</groupId>-->
-<!--          <artifactId>cloud-minecraft-extras</artifactId>-->
-<!--          <version>1.8.0</version>-->
-<!--      </dependency>-->
-<!--      <dependency>-->
-<!--          <groupId>net.kyori</groupId>-->
-<!--          <artifactId>adventure-platform-bukkit</artifactId>-->
-<!--          <version>4.2.0</version>-->
-<!--      </dependency>-->
-      <!--      <dependency>-->
-      <!--          <groupId>me.lucko</groupId>-->
-      <!--          <artifactId>commodore</artifactId>-->
-      <!--          <version>1.9</version>-->
-      <!--      </dependency>-->
-      <!--      <dependency>-->
-      <!--          <groupId>cloud.commandframework</groupId>-->
-      <!--          <artifactId>cloud-core</artifactId>-->
-      <!--          <version>1.7.1</version>-->
-      <!--      </dependency>-->
-      <!--      <dependency>-->
-      <!--          <groupId>cloud.commandframework</groupId>-->
-      <!--          <artifactId>cloud-annotations</artifactId>-->
-      <!--          <version>1.8.3</version>-->
-      <!--      </dependency>-->
-      <!--      <dependency>-->
-      <!--          <groupId>cloud.commandframework</groupId>-->
-      <!--          <artifactId>cloud-bukkit</artifactId>-->
-      <!--          <version>1.8.3</version>-->
-      <!--      </dependency>-->
-      <!--      <dependency>-->
-      <!--          <groupId>cloud.commandframework</groupId>-->
-      <!--          <artifactId>cloud-paper</artifactId>-->
-      <!--          <version>1.8.3</version>-->
-      <!--      </dependency>-->
-  </dependencies>
+    <dependencies>
+        <dependency>
+            <groupId>org.spigotmc</groupId>
+            <artifactId>spigot-api</artifactId>
+            <version>1.18.2-R0.1-SNAPSHOT</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.dataformat</groupId>
+            <artifactId>jackson-dataformat-yaml</artifactId>
+            <version>2.13.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.ow2.asm</groupId>
+            <artifactId>asm</artifactId>
+            <version>9.2</version>
+        </dependency>
+        <dependency>
+            <groupId>org.jetbrains</groupId>
+            <artifactId>annotations</artifactId>
+            <version>24.0.0</version>
+            <scope>compile</scope>
+        </dependency>
+        <dependency>
+            <groupId>cloud.commandframework</groupId>
+            <artifactId>cloud-bukkit</artifactId>
+            <version>1.8.0</version>
+        </dependency>
+    </dependencies>
 </project>
